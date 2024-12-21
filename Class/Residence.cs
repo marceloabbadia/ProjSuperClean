@@ -1,4 +1,4 @@
-﻿namespace ProjSuperClean
+﻿namespace ProjSuperClean.Class
 {
     public class Residence
     {

@@ -1,9 +1,15 @@
-﻿namespace ProjSuperClean;
+﻿using System.Security.Cryptography.X509Certificates;
+using ProjSuperClean.Class;
+using static ProjSuperClean.Utils.Utils;
+using static ProjSuperClean.Class.User;
+
+namespace ProjSuperClean;
 
 public class Program
 {
     static void Main(string[] args)
     {
+        LoadUsersFromFile();
         MainMenu();
     }
 
@@ -67,15 +73,14 @@ public class Program
             switch (GetOption(1, 5))
             {
                 case 1:
-                    Console.WriteLine("MENU UTILIZADOR SUPERCLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("Criacao de Usuario");
-                    Console.WriteLine();
+                    HeaderProgramUser(1);
                     Console.WriteLine("Digite o nome do seu novo usuário (máximo 8 caracteres):");
                     string name = Console.ReadLine();
                     try
                     {
                         User newUser = User.CreateUser(name);
+                        PrintSucessMessage();
+                        WaitForUser();
 
                     }
                     catch (ArgumentException ex)
@@ -87,14 +92,20 @@ public class Program
                     break;
 
                 case 2:
+                    HeaderProgramUser(2);
                     User.DisplayInfoUser();
+                    Console.WriteLine();
+                    PrintSucessMessage();
+                    WaitForUser();
                     break;
 
                 case 3:
+                    HeaderProgramUser(3);
                     Console.WriteLine();
                     break;
 
                 case 4:
+                    HeaderProgramUser(4);
                     Console.WriteLine();
                     break;
 
@@ -150,28 +161,10 @@ public class Program
 
 
 
-    public static void WaitForUser()
-    {
-        Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
-        Console.ReadKey();
-        Console.Clear();
-    }
-    public static void PrintErrorMessage(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Erro: {message}");
-        Console.ResetColor();
-    }
-    public static int GetOption(int min, int max)
-    {
-        int opcao;
-        while (true)
-        {
-            if (int.TryParse(Console.ReadLine(), out opcao) && opcao >= min && opcao <= max)
-                return opcao;
 
-            Console.WriteLine($"Opção inválida. Por favor, escolha uma opção entre {min} e {max}.");
-        }
-    }
+
 }
+
+
+
 
