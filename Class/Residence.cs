@@ -3,17 +3,19 @@
     public class Residence
     {
         public string ResidenceName { get; set; }
-        public List<Floor> ResidenceFloor { get; set; }
 
-        public Residence(string name)
+        public List<Floor> ResidenceFloors { get; set; }
+
+        public Residence(string residenceName)
         {
-            ResidenceName = name;
-            ResidenceFloor = new List<Floor>();
+            ResidenceName = residenceName;
+            ResidenceFloors = new List<Floor>();
         }
 
         public void AddFloor(Floor floor)
         {
-            ResidenceFloor.Add(floor);
+            ResidenceFloors.Add(floor);
         }
+
     }
 }

@@ -3,17 +3,19 @@
     public class Floor
     {
         public string FloorName { get; set; }
-        public List<Room> RoomSpace { get; set; }
+        public List<Room> Rooms { get; set; }
 
-        public Floor(string name)
+        public Floor(string floorName)
         {
-            FloorName = name;
-            RoomSpace = new List<Room>();
+            FloorName = floorName;
+            Rooms = new List<Room>();
         }
+
+        public Floor() { }
 
         public void AddRoom(Room room)
         {
-            RoomSpace.Add(room);
+            Rooms.Add(room);
         }
     }
 }

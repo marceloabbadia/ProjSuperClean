@@ -1,12 +1,56 @@
 [
   {
-    "Username": "Joao",
-    "Residence": null,
-    "UserId": "4360423c-7040-4b9a-89d9-7b5e6c33faa2"
-  },
-  {
-    "Username": "marcelo",
-    "Residence": null,
-    "UserId": "98bd4646-7ed5-417a-9e50-adff70f1e8a2"
+    "Username": "carlos",
+    "Residence": {
+      "ResidenceName": "Home",
+      "ResidenceFloors": [
+        {
+          "FloorName": "1 piso",
+          "Rooms": [
+            {
+              "RoomName": "sala",
+              "CleanTime": 10,
+              "CleanInterval": 7
+            },
+            {
+              "RoomName": "quarto principal",
+              "CleanTime": 14,
+              "CleanInterval": 7
+            },
+            {
+              "RoomName": "cozinha",
+              "CleanTime": 5,
+              "CleanInterval": 7
+            }
+          ]
+        },
+        {
+          "FloorName": "2 piso",
+          "Rooms": [
+            {
+              "RoomName": "quarto visita",
+              "CleanTime": 10,
+              "CleanInterval": 7
+            },
+            {
+              "RoomName": "quarto criancas",
+              "CleanTime": 20,
+              "CleanInterval": 7
+            }
+          ]
+        },
+        {
+          "FloorName": "3 piso",
+          "Rooms": [
+            {
+              "RoomName": "terraco",
+              "CleanTime": 30,
+              "CleanInterval": 5
+            }
+          ]
+        }
+      ]
+    },
+    "UserId": "6e8be53b-38cd-4a60-b06c-a81903b429a3"
   }
 ]

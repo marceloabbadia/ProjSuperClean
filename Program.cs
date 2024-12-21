@@ -10,12 +10,157 @@ public class Program
     static void Main(string[] args)
     {
         LoadUsersFromFile();
-        MainMenu();
+        HeaderProgramUserStart();
+
     }
 
-    public static void MainMenu()
+    public static void MainMenuUser(Guid userId, string utilizador)
     {
         Console.WriteLine("MENU PRINCIPAL SUPERCLEAN");
+        Console.WriteLine();
+
+        while (true)
+        {
+
+            Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
+
+            Console.WriteLine("1 - Menu Utilizador");
+            Console.WriteLine("2 - Menu Residencia");
+            Console.WriteLine("3 - Listagem completa do seu Utilizador");
+            Console.WriteLine("4 - Sair");
+
+
+
+            switch (GetOption(1, 4))
+            {
+                case 1:
+                    Console.Clear();
+                    UserMenu(userId, utilizador);
+                    break;
+
+                case 2:
+                    Console.Clear();
+                     ResidenceMenu(userId, utilizador);
+                    break;
+
+                case 3:
+                    Console.Clear();
+                    HeaderProgramUserAdmin(5);
+                    DisplayInfoCompleteAdmin();
+                    Console.WriteLine();
+                    PrintSucessMessage();
+                    WaitForUser();
+                    break;
+
+                case 4:
+                    Console.Clear();
+                    Console.WriteLine("Saindo...");
+                    return;
+
+            }
+        }
+    }
+
+    public static void UserMenu(Guid userId, string utilizador)
+    {
+
+        Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+        Console.WriteLine();
+
+        while (true)
+        {
+
+            Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
+
+            Console.WriteLine("1 - Alterar nome do seu Utilizador");
+            Console.WriteLine("2 - Apagar seu Utilizador");
+            Console.WriteLine("3 - Voltar Menu Principal");
+
+
+
+            switch (GetOption(1, 3))
+            {
+                case 1:
+                    HeaderProgramUserAdmin(1);
+                    Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres):");
+                    string name = Console.ReadLine();
+                    try
+                    {
+                        User newUser = User.CreateUser(name);
+                        PrintSucessMessage();
+                        WaitForUser();
+
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        PrintErrorMessage(ex.Message);
+                        WaitForUser();
+                    }
+
+                    break;
+
+                case 2:
+                    HeaderProgramUserAdmin(2);
+                    DisplayInfoUser();
+                    Console.WriteLine();
+                    PrintSucessMessage();
+                    WaitForUser();
+                    break;
+
+                case 3:
+                    Console.Clear();
+                    Console.WriteLine("Retornando...");
+                    return;
+
+            }
+        }
+    }
+
+    public static void ResidenceMenu(Guid userId, string utilizador)
+    {
+
+        Console.WriteLine("MENU RESIDENCIA SUPERCLEAN");
+        Console.WriteLine();
+
+        while (true)
+        {
+
+            Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
+
+            Console.WriteLine("1 - Editar Nome da Residencia");
+            Console.WriteLine("2 - Editar Pisos");
+            Console.WriteLine("3 - Editar Area");
+            Console.WriteLine("4 - Voltar Menu Principal");
+
+
+
+            switch (GetOption(1, 4))
+            {
+                case 1:
+                    Console.WriteLine();
+                    break;
+
+                case 2:
+                    Console.WriteLine();
+                    break;
+
+                case 3:
+                    Console.WriteLine();
+                    break;
+
+                case 4:
+                    Console.Clear();
+                    Console.WriteLine("Retornando...");
+                    return;
+            }
+        }
+    }
+
+    // -------------------------------------------//
+
+    public static void MainMenuAdmin()
+    {
+        Console.WriteLine("MENU PRINCIPAL ADMIN SUPERCLEAN");
         Console.WriteLine();
 
         while (true)
@@ -25,23 +170,33 @@ public class Program
 
             Console.WriteLine("1 - Menu Utilizador");
             Console.WriteLine("2 - Menu Residencia");
-            Console.WriteLine("3 - Sair");
+            Console.WriteLine("3 - Listagem completa");
+            Console.WriteLine("4 - Sair");
 
 
 
-            switch (GetOption(1, 3))
+            switch (GetOption(1, 4))
             {
                 case 1:
                     Console.Clear();
-                    UserMenu();
+                    UserMenuAdmin();
                     break;
 
                 case 2:
                     Console.Clear();
-                    ResidenceMenu();
+                    ResidenceMenuAdmin();
                     break;
 
                 case 3:
+                    Console.Clear();
+                    HeaderProgramUserAdmin(5);
+                    DisplayInfoCompleteAdmin();
+                    Console.WriteLine();
+                    PrintSucessMessage();
+                    WaitForUser();
+                    break;
+
+                case 4:
                     Console.Clear();
                     Console.WriteLine("Saindo...");
                     return;
@@ -50,11 +205,10 @@ public class Program
         }
     }
 
-
-    public static void UserMenu()
+    public static void UserMenuAdmin()
     {
 
-        Console.WriteLine("MENU UTILIZADOR SUPERCLEAN");
+        Console.WriteLine("MENU ADMIN UTILIZADOR SUPERCLEAN");
         Console.WriteLine();
 
         while (true)
@@ -73,7 +227,7 @@ public class Program
             switch (GetOption(1, 5))
             {
                 case 1:
-                    HeaderProgramUser(1);
+                    HeaderProgramUserAdmin(1);
                     Console.WriteLine("Digite o nome do seu novo usuário (máximo 8 caracteres):");
                     string name = Console.ReadLine();
                     try
@@ -92,20 +246,20 @@ public class Program
                     break;
 
                 case 2:
-                    HeaderProgramUser(2);
-                    User.DisplayInfoUser();
+                    HeaderProgramUserAdmin(2);
+                    DisplayInfoUser();
                     Console.WriteLine();
                     PrintSucessMessage();
                     WaitForUser();
                     break;
 
                 case 3:
-                    HeaderProgramUser(3);
+                    HeaderProgramUserAdmin(3);
                     Console.WriteLine();
                     break;
 
                 case 4:
-                    HeaderProgramUser(4);
+                    HeaderProgramUserAdmin(4);
                     Console.WriteLine();
                     break;
 
@@ -118,11 +272,10 @@ public class Program
         }
     }
 
-
-    public static void ResidenceMenu()
+    public static void ResidenceMenuAdmin()
     {
 
-        Console.WriteLine("MENU RESIDENCIA SUPERCLEAN");
+        Console.WriteLine("MENU ADMIN RESIDENCIA SUPERCLEAN");
         Console.WriteLine();
 
         while (true)
@@ -158,6 +311,8 @@ public class Program
             }
         }
     }
+
+
 
 
 

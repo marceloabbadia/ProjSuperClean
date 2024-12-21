@@ -10,14 +10,14 @@
 
         public Room(string name, int cleanTime, int cleanInterval)
         {
-            if (name.Length > 10)
-                throw new ArgumentException("O nome da comodo deve ter no máximo 10 caracteres.");
 
             RoomName = name;
             CleanTime = cleanTime;
             CleanInterval = cleanInterval;
 
         }
+
+        public Room() { }
     }
 }
 
