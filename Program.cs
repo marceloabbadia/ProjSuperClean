@@ -298,6 +298,7 @@ public class Program
 
                 case 2:
                     Console.WriteLine();
+                    //Room.CleanDone();
                     break;
 
                 case 3:

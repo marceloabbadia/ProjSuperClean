@@ -9,15 +9,23 @@ public class User
 {
     public string Username { get; set; }
     public Residence? Residence { get; set; }
-    public Guid UserId { get; private set; }
+    public Guid UserId { get;  set; }
 
     private static List<User> users = new List<User>();
 
     public User(string username)
     {
         Username = username;
-        UserId = Guid.NewGuid();
+        if (UserId == Guid.Empty)
+        {
+            UserId = Guid.NewGuid();
+        }
     }
+    public User() { }
+
+
+
+
 
     public static User CreateUserAdmin(string username)
     {
@@ -117,33 +125,56 @@ public class User
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
         var filePath = Path.Combine(dirPath, "users.json");
 
-
-        if (!Directory.Exists(dirPath))
+        try
         {
-            Directory.CreateDirectory(dirPath);
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
+            string updatedUsersJson = System.Text.Json.JsonSerializer.Serialize(users, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+
+            File.WriteAllText(filePath, updatedUsersJson);
+            Console.WriteLine("Usuários salvos com sucesso no arquivo.");
         }
-
-
-        string updatedUsersJson = System.Text.Json.JsonSerializer.Serialize(users, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, updatedUsersJson);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao salvar usuários no arquivo: {ex.Message}");
+        }
     }
+
 
     public static void LoadUsersFromFile()
     {
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
         var filePath = Path.Combine(dirPath, "users.json");
 
+        try
+        {
+            if (File.Exists(filePath))
+            {
+                string usersJson = File.ReadAllText(filePath);
+                Console.WriteLine("Arquivo encontrado. Carregando usuários...");
 
-        if (File.Exists(filePath))
-        {
-            string usersJson = File.ReadAllText(filePath);
-            users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
+                users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
+
+                Console.WriteLine($"Usuários carregados com sucesso. Total: {users.Count}");
+           
+
+            }
+            else
+            {
+                Console.WriteLine("Arquivo não encontrado. Criando lista vazia de usuários.");
+                users = new List<User>();
+            }
         }
-        else
+        catch (Exception ex)
         {
+            Console.WriteLine($"Erro ao carregar usuários do arquivo: {ex.Message}");
             users = new List<User>();
         }
     }
+
 
 
     public static void DisplayInfoUser()
@@ -169,6 +200,7 @@ public class User
     public static void DisplayInfoCompleteAdmin()
     {
         bool found = false;
+        int counter = 1;
 
         foreach (var user in users)
         {
@@ -181,13 +213,38 @@ public class User
                 {
                     foreach (var floor in user.Residence.ResidenceFloors)
                     {
-                        Console.WriteLine($"Floor: {floor.FloorName}");
+                        Console.WriteLine($"\t - Floor: {floor.FloorName}");
 
                         if (floor.Rooms != null && floor.Rooms.Count > 0)
                         {
                             foreach (var room in floor.Rooms)
                             {
-                                Console.WriteLine($"\t{room.RoomName}");
+                                string counterFormatted = counter.ToString("D2");
+                                string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+                                counter++;
+
+
+                                int[] pipes = Room.GenerationPypes(room);
+                                int greenPipe = pipes[0];
+                                int yellowPipe = pipes[1];
+                                int redPipe = pipes[2];
+
+                                string greenBars = new string('|', greenPipe);
+                                string yellowBars = new string('|', yellowPipe);
+                                string redBars = new string('|', redPipe);
+
+                                Console.Write($"\t\t{roomInfo}\t");
+
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write(greenBars);
+
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write(yellowBars);
+
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(redBars);
+
+                                Console.ResetColor();
                             }
                         }
                     }
@@ -199,9 +256,11 @@ public class User
 
         if (!found)
         {
-            Console.WriteLine("Nenhum usuário válido encontrado.");
+            Console.WriteLine("No valid users found.");
         }
     }
+
+
 
 
 

@@ -12,6 +12,8 @@
             ResidenceFloors = new List<Floor>();
         }
 
+        public Residence() { }
+
         public void AddFloor(Floor floor)
         {
             ResidenceFloors.Add(floor);

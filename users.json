@@ -1,56 +1,111 @@
 [
   {
-    "Username": "carlos",
+    "Username": "joao",
     "Residence": {
       "ResidenceName": "Home",
       "ResidenceFloors": [
         {
-          "FloorName": "1 piso",
+          "FloorName": "0",
           "Rooms": [
             {
-              "RoomName": "sala",
-              "CleanTime": 10,
-              "CleanInterval": 7
-            },
-            {
-              "RoomName": "quarto principal",
-              "CleanTime": 14,
-              "CleanInterval": 7
-            },
-            {
-              "RoomName": "cozinha",
-              "CleanTime": 5,
-              "CleanInterval": 7
-            }
-          ]
-        },
-        {
-          "FloorName": "2 piso",
-          "Rooms": [
-            {
-              "RoomName": "quarto visita",
-              "CleanTime": 10,
-              "CleanInterval": 7
-            },
-            {
-              "RoomName": "quarto criancas",
-              "CleanTime": 20,
-              "CleanInterval": 7
-            }
-          ]
-        },
-        {
-          "FloorName": "3 piso",
-          "Rooms": [
-            {
-              "RoomName": "terraco",
+              "RoomName": "Garagem",
               "CleanTime": 30,
-              "CleanInterval": 5
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "ef6fb90d-8169-42f5-a8ca-524b66cbe3f5",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "1",
+          "Rooms": [
+            {
+              "RoomName": "Quarto Criancas",
+              "CleanTime": 30,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "69af15f7-0b23-4992-bd5d-36633a82e67a",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Quarto Casal",
+              "CleanTime": 30,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "beb0e076-c73a-4585-b6ed-594eedfa38ef",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Sala Estar",
+              "CleanTime": 20,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 4,
+              "RoomId": "b85feb15-1d26-49ee-b117-5a5a719c2d32",
+              "NextClean": "2024-12-26T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Cozinha",
+              "CleanTime": 30,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "250a26b4-b530-4eb6-987e-0d9303bfa6a2",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Sala Jantar",
+              "CleanTime": 10,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 4,
+              "RoomId": "1e35b031-bd02-4416-9750-f8dafc4ce43d",
+              "NextClean": "2024-12-26T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "2",
+          "Rooms": [
+            {
+              "RoomName": "Suite 1",
+              "CleanTime": 30,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "c33749c2-f012-4e38-9304-b0429ab312a5",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Suite 2",
+              "CleanTime": 30,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "21644bf0-b2c4-4ca8-bf8d-7873a70ce5da",
+              "NextClean": "2024-12-27T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Lavabo",
+              "CleanTime": 10,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 2,
+              "RoomId": "4dfe8290-d914-4333-8111-c2dee08f30f9",
+              "NextClean": "2024-12-24T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "3",
+          "Rooms": [
+            {
+              "RoomName": "Terraco",
+              "CleanTime": 40,
+              "DayClean": "2024-12-22T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "0abfda12-4da6-403a-87a2-6647f0836a80",
+              "NextClean": "2024-12-27T00:00:00+00:00"
             }
           ]
         }
       ]
     },
-    "UserId": "6e8be53b-38cd-4a60-b06c-a81903b429a3"
+    "UserId": "eb96e56a-bc43-40a1-8a4e-ac30d977c479"
   }
 ]
