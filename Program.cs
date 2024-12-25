@@ -48,7 +48,7 @@ public class Program
                     HeaderProgramUserAdmin(5);
                     DisplayInfoCompleteAdmin();
                     Console.WriteLine();
-                    PrintSucessMessage();
+                    PrintSucessMessage("Listagem Realizada com Sucesso.");
                     WaitForUser();
                     break;
 
@@ -87,7 +87,7 @@ public class Program
                     try
                     {
                         User newUser = User.CreateUser(name);
-                        PrintSucessMessage();
+                        PrintSucessMessage("Utilizador criado com sucesso!");
                         WaitForUser();
 
                     }
@@ -103,7 +103,7 @@ public class Program
                     HeaderProgramUserAdmin(2);
                     DisplayInfoUser();
                     Console.WriteLine();
-                    PrintSucessMessage();
+                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
                     WaitForUser();
                     break;
 
@@ -192,7 +192,7 @@ public class Program
                     HeaderProgramUserAdmin(5);
                     DisplayInfoCompleteAdmin();
                     Console.WriteLine();
-                    PrintSucessMessage();
+                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
                     WaitForUser();
                     break;
 
@@ -233,7 +233,7 @@ public class Program
                     try
                     {
                         User newUser = User.CreateUser(name);
-                        PrintSucessMessage();
+                        PrintSucessMessage("Utilizador criado com sucesso!");
                         WaitForUser();
 
                     }
@@ -249,7 +249,7 @@ public class Program
                     HeaderProgramUserAdmin(2);
                     DisplayInfoUser();
                     Console.WriteLine();
-                    PrintSucessMessage();
+                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
                     WaitForUser();
                     break;
 

@@ -13,7 +13,7 @@ namespace ProjSuperClean.Class
         public DateTime DayClean { get; set; }
         public int CleanInterval { get; set; }
 
-        public Guid RoomId { get; private set; }
+        public Guid RoomId { get; set; }
         public DateTime NextClean { get; set; }
 
         public static List<Room> rooms = new List<Room>();
@@ -55,15 +55,16 @@ namespace ProjSuperClean.Class
             }
 
         }
+
         public static int[] GenerationPypes(Room room)
         {
-            DateTime today = DateTime.Today.AddDays(5);
+            DateTime today = DateTime.Today.AddDays(7);
 
             DateTime dayClean = room.DayClean;
-            DateTime nextClean = dayClean.AddDays(room.CleanInterval); 
+            DateTime nextClean = dayClean.AddDays(room.CleanInterval);
 
-            int daysSinceClean = (today - dayClean).Days; 
-            int totalBars = Math.Min(daysSinceClean, 20); 
+            int daysSinceClean = (today - dayClean).Days;
+            int totalBars = Math.Min(daysSinceClean, 20);
 
             int greenPipe = 0, yellowPipe = 0, redPipe = 0;
 
@@ -79,9 +80,13 @@ namespace ProjSuperClean.Class
             else
             {
                 greenPipe = room.CleanInterval - 1;
-                yellowPipe = 2; 
+                yellowPipe = 2;
                 redPipe = totalBars - (greenPipe + yellowPipe);
             }
+
+            greenPipe = Math.Abs(greenPipe);
+            yellowPipe = Math.Abs(yellowPipe);
+            redPipe = Math.Abs(redPipe);
 
             return new int[] { greenPipe, yellowPipe, redPipe };
         }

@@ -9,7 +9,7 @@ public class User
 {
     public string Username { get; set; }
     public Residence? Residence { get; set; }
-    public Guid UserId { get;  set; }
+    public Guid UserId { get; set; }
 
     private static List<User> users = new List<User>();
 
@@ -22,9 +22,6 @@ public class User
         }
     }
     public User() { }
-
-
-
 
 
     public static User CreateUserAdmin(string username)
@@ -43,82 +40,108 @@ public class User
 
     public static User CreateUser(string username)
     {
-        if (UserExists(username))
-        {
-            Utils.PrintErrorMessage($"O nome do usuario {username} ja esta em uso!");
-            return null;
-        }
-
-        Console.WriteLine($"Informe o nome da residência para o utilizador '{username}':");
+        Console.WriteLine($"Informe o nome da morada para o utilizador '{username}':");
         string residenceName = Console.ReadLine();
 
         User newUser = new User(username);
+        Residence residence = new Residence(residenceName);
 
-        if (newUser.Residence != null)
+        bool addFloors = true;
+
+        while (addFloors)
         {
-            Utils.PrintErrorMessage($"O utilizador '{username}' já possui uma residência!");
-            return null;
-        }
-        else
-        {
-            Residence residence = new Residence(residenceName);
+            Console.WriteLine("Por favor, informe o número do piso usando sempre 2 dígitos (ou digite 'fim' para encerrar):");
+            Console.WriteLine("*** Exemplo: '01' para o primeiro piso, '02' para o segundo, e assim por diante. ***");
 
-            bool addFloors = true;
+            string floorName = Console.ReadLine()?.Trim();
 
-            while (addFloors)
+
+            if (floorName.ToLower() == "fim")
             {
-                Console.WriteLine("Informe o nome do piso (ou 'fim' para terminar):");
-                string floorName = Console.ReadLine();
+                Utils.PrintSucessMessage("Encerrando a entrada de pisos.");
+                addFloors = false;
+            }
+            else if (!string.IsNullOrEmpty(floorName) && floorName.Length == 2)
+            {
+                Floor floor = new Floor(floorName);
+                bool addRooms = true;
 
-                if (floorName.ToLower() == "fim")
+                while (addRooms)
                 {
-                    addFloors = false;
-                }
-                else
-                {
-                    Floor floor = new Floor(floorName);
+                    Console.WriteLine($"Informe o nome da divisão no piso {floorName} (ou 'fim' para voltar ao piso):");
+                    Console.WriteLine("*** Exemplo: Quarto ou Sala de Jantar ***");
+                    Console.WriteLine();
 
-                    bool addRooms = true;
+                    string roomName = Console.ReadLine();
 
-                    while (addRooms)
+                    if (roomName.ToLower() == "fim")
                     {
-                        Console.WriteLine($"Informe o nome da divisão no piso {floorName} (ou 'fim' para terminar):");
-                        string roomName = Console.ReadLine();
-                        if (roomName.ToLower() == "fim")
-                        {
-                            addRooms = false;
-                        }
-                        else
+                        addRooms = false;
+                    }
+                    else
+                    {
+                        bool isCleanTime = false;
+                        int cleanTime = 0;
+
+
+                        while (!isCleanTime)
                         {
                             Console.WriteLine("Informe o tempo de limpeza (em minutos):");
-                            int cleanTime = int.Parse(Console.ReadLine());
+                            Console.WriteLine();
 
-                            Console.WriteLine("Informe o intervalo de limpeza (em dias):");
-                            int cleanInterval = int.Parse(Console.ReadLine());
-
-                            Room room = new Room(roomName, cleanTime, cleanInterval);
-
-                            floor.AddRoom(room);
+                            if (int.TryParse(Console.ReadLine(), out cleanTime))
+                            {
+                                Utils.PrintSucessMessage($"Tempo de limpeza definido: {cleanTime} minutos.");
+                                Console.WriteLine();
+                                isCleanTime = true;
+                            }
+                            else
+                            {
+                                Utils.PrintErrorMessage("Entrada inválida! Por favor, insira um número inteiro.");
+                            }
                         }
+
+                        bool isCleanIntervalValid = false;
+                        int cleanInterval = 0;
+
+
+                        while (!isCleanIntervalValid)
+                        {
+                            Console.WriteLine("Informe o intervalo de limpeza (em dias):");
+
+                            if (int.TryParse(Console.ReadLine(), out cleanInterval))
+                            {
+                                Utils.PrintSucessMessage($"Intervalo de limpeza definido: {cleanInterval} dias.");
+                                isCleanIntervalValid = true;
+                            }
+                            else
+                            {
+                                Utils.PrintErrorMessage("Entrada inválida! Por favor, insira um número inteiro.");
+                            }
+                        }
+
+
+                        Room room = new Room(roomName, cleanTime, cleanInterval);
+                        floor.AddRoom(room);
                     }
-
-                    residence.AddFloor(floor);
-
                 }
+
+
+                residence.AddFloor(floor);
             }
-
-            newUser.Residence = residence;
-
-            users.Add(newUser);
-            SaveUsersToFile();
-            Utils.PrintSucessMessage();
-
-            return newUser;
-
-
         }
 
+
+        newUser.Residence = residence;
+
+
+        users.Add(newUser);
+        SaveUsersToFile();
+        Utils.PrintSucessMessage("Utilizador adicionado com sucesso!");
+
+        return newUser;
     }
+
 
     public static void SaveUsersToFile()
     {
@@ -143,7 +166,6 @@ public class User
         }
     }
 
-
     public static void LoadUsersFromFile()
     {
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
@@ -158,8 +180,8 @@ public class User
 
                 users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
 
-                Console.WriteLine($"Usuários carregados com sucesso. Total: {users.Count}");
-           
+                //Console.WriteLine($"Usuários carregados com sucesso. Total: {users.Count}");
+
 
             }
             else
@@ -174,7 +196,6 @@ public class User
             users = new List<User>();
         }
     }
-
 
 
     public static void DisplayInfoUser()
@@ -220,7 +241,7 @@ public class User
                             foreach (var room in floor.Rooms)
                             {
                                 string counterFormatted = counter.ToString("D2");
-                                string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+                                string roomInfo = $" - {counterFormatted} {room.RoomName} - {room.RoomId}".PadRight(20);
                                 counter++;
 
 
@@ -245,6 +266,8 @@ public class User
                                 Console.WriteLine(redBars);
 
                                 Console.ResetColor();
+
+
                             }
                         }
                     }
@@ -256,17 +279,17 @@ public class User
 
         if (!found)
         {
-            Console.WriteLine("No valid users found.");
+
+            Console.WriteLine("Nenhum Utilizador foi encontrado!");
         }
     }
-
-
 
 
 
     public static bool UserExists(string username)
     {
         return users.Exists(u => string.Equals(u.Username, username, StringComparison.Ordinal));
+
     }
 
     public static Guid GetUserId(string username)

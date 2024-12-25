@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using ProjSuperClean.Class;
@@ -24,10 +25,10 @@ public static class Utils
         Console.ResetColor();
     }
 
-    public static void PrintSucessMessage()
+    public static void PrintSucessMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Realizado com Sucesso");
+        Console.WriteLine(message);
         Console.ResetColor();
     }
     public static int GetOption(int min, int max)
@@ -97,9 +98,12 @@ public static class Utils
     {
         Console.WriteLine("BEM VINDO AO SUPERCLEAN");
         Console.WriteLine();
-        Console.WriteLine("Informe seu Utilizador:");
-        Console.WriteLine("Caso nao exista iremos criar automaticamente!");
+        Console.WriteLine("Informe o nome de seu Utilizador:");
+        Console.WriteLine("- Para criar um novo, digite um nome.");
+        Console.WriteLine("- O nome deve ter no máximo 8 caracteres e não pode estar vazio.");
+        Console.WriteLine("- Exemplo: joao123.");
         Console.WriteLine();
+
 
         string utilizador = string.Empty;
 
@@ -109,15 +113,13 @@ public static class Utils
 
             if (string.IsNullOrEmpty(utilizador))
             {
-                PrintErrorMessage("O nome de usuário não pode ser vazio.");
-                WaitForUser();
-                return;
+                showMessageandRetry("O nome do utilizador não pode ser vazio.");
+
             }
             else if (utilizador.Length > 8)
             {
-                PrintErrorMessage("O nome de usuário não pode ter mais de 8 caracteres.");
-                WaitForUser();
-                return;
+                showMessageandRetry("O nome do utilizador não pode ter mais de 8 caracteres.");
+
             }
             else if (utilizador == "admin")
             {
@@ -130,16 +132,23 @@ public static class Utils
                 Guid userId = User.GetUserId(utilizador);
                 Console.Clear();
                 Program.MainMenuUser(userId, utilizador);
+                return;
             }
             else
             {
                 User.CreateUser(utilizador);
-                break;
+                return;
             }
         }
 
+    }
 
-
+    public static void showMessageandRetry(string message)
+    {
+        PrintErrorMessage(message);
+        Console.WriteLine("Tente novamente: ");
+        Console.WriteLine();
+       
     }
 }
 
