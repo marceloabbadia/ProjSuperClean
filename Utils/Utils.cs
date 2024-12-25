@@ -88,19 +88,26 @@ public static class Utils
             {
                 Console.Clear();
                 Program.MainMenuAdmin();
-                return;
+
             }
             else if (User.UserExists(utilizador))
             {
                 Guid userId = User.GetUserId(utilizador);
                 Console.Clear();
                 Program.MainMenuUser(userId, utilizador);
-                return;
+
             }
             else
             {
-                User.CreateUser(utilizador);
-                return;
+                if (User.CreateUser(utilizador) != null)
+                {
+
+                    WaitForUser();
+                    Guid userId = User.GetUserId(utilizador);
+                    Program.MainMenuUser(userId, utilizador);
+                }
+
+
             }
         }
 
@@ -122,7 +129,6 @@ public static class Utils
         catch (ArgumentException ex)
         {
             PrintErrorMessage(ex.Message);
-            WaitForUser();
             return null;
         }
     }
@@ -130,6 +136,7 @@ public static class Utils
     public static int GetOption(int min, int max)
     {
         int opcao;
+
         while (true)
         {
             if (int.TryParse(Console.ReadLine(), out opcao) && opcao >= min && opcao <= max)
@@ -140,21 +147,21 @@ public static class Utils
 
 
     }
-   
+
     public static void WaitForUser()
     {
         Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
         Console.ReadKey();
         Console.Clear();
     }
-    
+
     public static void PrintErrorMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"Erro: {message}");
         Console.ResetColor();
     }
-    
+
     public static void PrintSucessMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Green;

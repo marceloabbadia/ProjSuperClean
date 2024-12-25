@@ -2,6 +2,7 @@
 using ProjSuperClean.Class;
 using static ProjSuperClean.Utils.Utils;
 using static ProjSuperClean.Class.User;
+using System.Diagnostics.Metrics;
 
 namespace ProjSuperClean;
 
@@ -16,11 +17,12 @@ public class Program
 
     public static void MainMenuUser(Guid userId, string utilizador)
     {
-        Console.WriteLine("MENU PRINCIPAL SUPERCLEAN");
-        Console.WriteLine();
+
 
         while (true)
         {
+            Console.WriteLine("MENU PRINCIPAL SUPERCLEAN");
+            Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
             Console.WriteLine();
@@ -44,9 +46,10 @@ public class Program
                     break;
 
                 case 3:
-                    Console.Clear();
-                    HeaderProgramUserAdmin(5);
-                    DisplayInfoCompleteAdmin();
+                    Console.WriteLine();
+                    Console.WriteLine("LISTAGEM COMPLETA DO UTILIZADOR");
+                    Console.WriteLine();
+                    DisplayInfoUser(utilizador);
                     Console.WriteLine();
                     PrintSucessMessage("Listagem Realizada com Sucesso.");
                     WaitForUser();
@@ -54,8 +57,12 @@ public class Program
 
                 case 4:
                     Console.Clear();
-                    Console.WriteLine("Saindo...");
-                    return;
+                    SaveUsersToFile();
+                    Console.WriteLine("Fechando o programa...");
+                    Console.WriteLine("Clique em qualquer tecla para janela fehcar!");
+                    Environment.Exit(0);
+                    break;
+
 
             }
         }
@@ -64,26 +71,40 @@ public class Program
     public static void UserMenu(Guid userId, string utilizador)
     {
 
-        Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
-        Console.WriteLine();
 
         while (true)
         {
+            Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+            Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
             Console.WriteLine();
+
             Console.WriteLine("1 - Alterar nome do seu Utilizador");
             Console.WriteLine("2 - Apagar seu Utilizador");
-            Console.WriteLine("3 - Voltar Menu Principal");
+            Console.WriteLine("3 - Criar novo Utilizador");
+            Console.WriteLine("4 - Voltar Menu Principal");
 
+            var user = users.FirstOrDefault(u => u.UserId == userId);
 
+            if (user == null)
+            {
+                PrintErrorMessage("Utilizador não encontrado.");
+                WaitForUser();
+                return;
+            }
 
-            switch (GetOption(1, 3))
+            switch (GetOption(1, 4))
             {
                 case 1:
-                    HeaderProgramUserAdmin(1);
+                    Console.Clear();
+                    Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+                    Console.WriteLine();
+                    Console.WriteLine($"Atual nome do utilizador: {user.Username}");
                     Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres):");
+                    Console.WriteLine();
                     string newName = Console.ReadLine();
+
                     try
                     {
 
@@ -103,17 +124,25 @@ public class Program
                     break;
 
                 case 2:
-                    HeaderProgramUserAdmin(2);
-                    DisplayInfoUser();
+                    Console.Clear();
+                    Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
                     Console.WriteLine();
-                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
+                    DeleteUser(userId);
+                    Console.WriteLine();
                     WaitForUser();
+                    HeaderProgramUserStart();
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("Retornando...");
-                    return;
+                    CreateUser(utilizador);
+                    WaitForUser();
+                    break;
+
+                case 4:
+                    Console.Clear();
+                    MainMenuUser(userId, utilizador);
+                    break;
 
             }
         }
@@ -122,27 +151,159 @@ public class Program
     public static void ResidenceMenu(Guid userId, string utilizador)
     {
 
-        Console.WriteLine("MENU RESIDENCIA SUPERCLEAN");
-        Console.WriteLine();
 
         while (true)
         {
+            Console.WriteLine("MENU RESIDÊNCIA SUPERCLEAN");
+            Console.WriteLine();
 
-            Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
+            Console.WriteLine($"Escolha uma opção abaixo, {utilizador}:");
+            Console.WriteLine();
 
-            Console.WriteLine("1 - Editar Nome da Residencia");
-            Console.WriteLine("2 - Editar Pisos");
-            Console.WriteLine("3 - Editar Area");
-            Console.WriteLine("4 - Voltar Menu Principal");
+            Console.WriteLine("1 - Editar nome da residência");
+            Console.WriteLine("2 - Editar pisos");
+            Console.WriteLine("3 - Editar área");
+            Console.WriteLine("4 - Voltar ao menu principal");
 
+            var user = users.FirstOrDefault(u => u.UserId == userId);
+
+            if (user == null || user.Residence == null)
+            {
+                PrintErrorMessage("Utilizador ou residência não encontrado.");
+                WaitForUser();
+                return;
+            }
 
 
             switch (GetOption(1, 4))
             {
                 case 1:
+                    Console.Clear();
+                    Console.WriteLine("MENU RESIDÊNCIA SUPERCLEAN");
+                    Console.WriteLine();
+                    Console.WriteLine($"Atual nome da residência: {user.Residence.ResidenceName}");
+                    Console.WriteLine("Digite o novo nome da residência do seu utilizador: ");
+                    Console.WriteLine();
+                    string newNameResidence = Console.ReadLine();
+
+                    try
+                    {
+                        if (newNameResidence != null)
+                        {
+                            user.Residence.ResidenceName = newNameResidence;
+                            SaveUsersToFile();
+                            PrintSucessMessage("O Nome da sua residência foi alterada com sucesso!");
+                        }
+                        else
+                        {
+                            PrintErrorMessage("Nome da residência inválido (vazia)!");
+
+                        }
+
+                        WaitForUser();
+                        continue;
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        PrintErrorMessage(ex.Message);
+                        WaitForUser();
+                    }
+                    break;
+
+                case 2:
+                    Console.WriteLine();
+                    FloorMenu(userId, utilizador);
+                    break;
+
+                case 3:
                     Console.WriteLine();
                     break;
 
+                case 4:
+                    Console.Clear();
+                    MainMenuUser(userId, utilizador);
+                    break;
+            }
+        }
+    }
+
+    public static void FloorMenu(Guid userId, string utilizador)
+    {
+
+        while (true)
+        {
+            Console.WriteLine("MENU PISO SUPERCLEAN");
+            Console.WriteLine();
+
+            Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
+            Console.WriteLine();
+            Console.WriteLine("1 - Editar Numero do Piso");
+            Console.WriteLine("2 - Incluir Piso");
+            Console.WriteLine("3 - Excluir Piso");
+            Console.WriteLine("4 - Voltar Menu Residencia");
+
+            var user = users.FirstOrDefault(u => u.UserId == userId);
+
+            if (user == null || user.Residence == null)
+            {
+                PrintErrorMessage("Utilizador ou residência não encontrado.");
+                WaitForUser();
+                return;
+            }
+
+            switch (GetOption(1, 4))
+            {
+                case 1:
+                    Console.Clear();
+                    Console.WriteLine("MENU PISO SUPERCLEAN");
+                    Console.WriteLine();
+                    Console.WriteLine("Listagem dos Pisos do utilizador");
+                    Console.WriteLine();
+
+                    int counter = 1;
+
+                    foreach (var floor in user.Residence.ResidenceFloors)
+                    {
+                        Console.WriteLine($"\t - Piso: {floor.FloorName}");
+
+                        if (floor.Rooms != null && floor.Rooms.Count > 0)
+                        {
+                            foreach (var room in floor.Rooms)
+                            {
+                                string counterFormatted = counter.ToString("D2");
+                                string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+                                counter++;
+                            }
+                        }
+                    }
+                    Console.WriteLine();
+                    PrintSucessMessage("Fim da listagem dos pisos.");
+                    Console.WriteLine();
+
+                    Console.WriteLine("Informe o número do piso que gostaria de alterar: ");
+                    string floorNumber = Console.ReadLine();
+                    Console.WriteLine();
+                    Console.WriteLine("Qual o novo número do piso que deseja? ");
+                    string newFloorNumber = Console.ReadLine();
+
+                    var floorToEdit = user.Residence.ResidenceFloors.FirstOrDefault(f => f.FloorName == floorNumber);
+
+                    if (floorToEdit != null)
+                    {
+                        
+                        floorToEdit.FloorName = newFloorNumber;
+                        SaveUsersToFile(); 
+                        PrintSucessMessage("Número do piso alterado com sucesso!");
+                    }
+                    else
+                    {
+                        PrintErrorMessage("Piso não encontrado!");
+                    }
+
+                    WaitForUser();
+                    break;
+
+               
                 case 2:
                     Console.WriteLine();
                     break;
@@ -153,13 +314,14 @@ public class Program
 
                 case 4:
                     Console.Clear();
-                    Console.WriteLine("Retornando...");
-                    return;
+                    ResidenceMenu(userId, utilizador);
+                    break;
             }
         }
     }
-
-    // -------------------------------------------//
+    
+    
+    // -------------------------------------------/-----------------------------//
 
     public static void MainMenuAdmin()
     {
@@ -250,9 +412,9 @@ public class Program
 
                 case 2:
                     HeaderProgramUserAdmin(2);
-                    DisplayInfoUser();
+                    //DisplayInfoUserAdmin();
                     Console.WriteLine();
-                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
+                    PrintSucessMessage("Listagem do Utilizador criada com sucesso!");
                     WaitForUser();
                     break;
 
