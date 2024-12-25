@@ -166,7 +166,7 @@ public class User
         }
     }
 
-    public static void LoadUsersFromFile()
+    public static List<User> LoadUsersFromFile()
     {
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
         var filePath = Path.Combine(dirPath, "users.json");
@@ -178,7 +178,7 @@ public class User
                 string usersJson = File.ReadAllText(filePath);
                 Console.WriteLine("Arquivo encontrado. Carregando usuários...");
 
-                users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
+                return users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
 
                 //Console.WriteLine($"Usuários carregados com sucesso. Total: {users.Count}");
 
@@ -187,13 +187,13 @@ public class User
             else
             {
                 Console.WriteLine("Arquivo não encontrado. Criando lista vazia de usuários.");
-                users = new List<User>();
+                return users = new List<User>();
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao carregar usuários do arquivo: {ex.Message}");
-            users = new List<User>();
+           return users = new List<User>();
         }
     }
 
@@ -229,7 +229,7 @@ public class User
                 Console.WriteLine($"Username: {user.Username}");
                 Console.WriteLine($"ID: {user.UserId}");
                 Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
-                
+
                 int counter = 1;
 
                 if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
@@ -288,10 +288,22 @@ public class User
     }
 
 
+    public static void UpdateUserName(Guid userId, string newName)
+    {
+        var user = users.FirstOrDefault(u => u.UserId == userId);
+        if (user == null)
+            throw new ArgumentException("Utilizador não encontrado.");
+
+        user.Username = newName;
+        SaveUsersToFile();
+    }
 
     public static bool UserExists(string username)
     {
-        return users.Exists(u => string.Equals(u.Username, username, StringComparison.Ordinal));
+        List<User> users = LoadUsersFromFile();
+        //return users.Exists(u => string.Equals(u.Username, username, StringComparison.Ordinal));
+        return users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
 
     }
 

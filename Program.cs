@@ -23,7 +23,7 @@ public class Program
         {
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
-
+            Console.WriteLine();
             Console.WriteLine("1 - Menu Utilizador");
             Console.WriteLine("2 - Menu Residencia");
             Console.WriteLine("3 - Listagem completa do seu Utilizador");
@@ -40,7 +40,7 @@ public class Program
 
                 case 2:
                     Console.Clear();
-                     ResidenceMenu(userId, utilizador);
+                    ResidenceMenu(userId, utilizador);
                     break;
 
                 case 3:
@@ -71,7 +71,7 @@ public class Program
         {
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
-
+            Console.WriteLine();
             Console.WriteLine("1 - Alterar nome do seu Utilizador");
             Console.WriteLine("2 - Apagar seu Utilizador");
             Console.WriteLine("3 - Voltar Menu Principal");
@@ -83,12 +83,16 @@ public class Program
                 case 1:
                     HeaderProgramUserAdmin(1);
                     Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres):");
-                    string name = Console.ReadLine();
+                    string newName = Console.ReadLine();
                     try
                     {
-                        User newUser = User.CreateUser(name);
-                        PrintSucessMessage("Utilizador criado com sucesso!");
+
+                        ValidationNameUser(newName);
+                        User.UpdateUserName(userId, newName);
+                        PrintSucessMessage("O Nome do seu utilizador foi alterado com sucesso!");
+                        utilizador = newName;
                         WaitForUser();
+                        continue;
 
                     }
                     catch (ArgumentException ex)
@@ -96,7 +100,6 @@ public class Program
                         PrintErrorMessage(ex.Message);
                         WaitForUser();
                     }
-
                     break;
 
                 case 2:

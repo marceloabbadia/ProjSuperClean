@@ -12,39 +12,6 @@ namespace ProjSuperClean.Utils;
 
 public static class Utils
 {
-    public static void WaitForUser()
-    {
-        Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
-        Console.ReadKey();
-        Console.Clear();
-    }
-    public static void PrintErrorMessage(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"Erro: {message}");
-        Console.ResetColor();
-    }
-
-    public static void PrintSucessMessage(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
-    public static int GetOption(int min, int max)
-    {
-        int opcao;
-        while (true)
-        {
-            if (int.TryParse(Console.ReadLine(), out opcao) && opcao >= min && opcao <= max)
-                return opcao;
-
-            Console.WriteLine($"Opção inválida. Por favor, escolha uma opção entre {min} e {max}.");
-        }
-
-
-    }
-
     public static void HeaderProgramUserAdmin(int opcao)
     {
         switch (opcao)
@@ -111,15 +78,11 @@ public static class Utils
         {
             utilizador = Console.ReadLine()?.ToLower();
 
-            if (string.IsNullOrEmpty(utilizador))
-            {
-                showMessageandRetry("O nome do utilizador não pode ser vazio.");
+            string validationResult = ValidationNameUser(utilizador);
 
-            }
-            else if (utilizador.Length > 8)
+            if (validationResult == null)
             {
-                showMessageandRetry("O nome do utilizador não pode ter mais de 8 caracteres.");
-
+                PrintErrorMessage("O nome do utilizador não é válido. Tente novamente.");
             }
             else if (utilizador == "admin")
             {
@@ -143,12 +106,60 @@ public static class Utils
 
     }
 
-    public static void showMessageandRetry(string message)
+    public static string ValidationNameUser(string name)
     {
-        PrintErrorMessage(message);
-        Console.WriteLine("Tente novamente: ");
-        Console.WriteLine();
-       
-    }
-}
+        try
+        {
 
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("O nome do utilizador não pode ser vazio.");
+            if (name.Length > 8)
+                throw new ArgumentException("O nome do utilizador não pode ter mais de 8 caracteres.");
+
+            return name;
+
+        }
+        catch (ArgumentException ex)
+        {
+            PrintErrorMessage(ex.Message);
+            WaitForUser();
+            return null;
+        }
+    }
+
+    public static int GetOption(int min, int max)
+    {
+        int opcao;
+        while (true)
+        {
+            if (int.TryParse(Console.ReadLine(), out opcao) && opcao >= min && opcao <= max)
+                return opcao;
+
+            Console.WriteLine($"Opção inválida. Por favor, escolha uma opção entre {min} e {max}.");
+        }
+
+
+    }
+   
+    public static void WaitForUser()
+    {
+        Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
+        Console.ReadKey();
+        Console.Clear();
+    }
+    
+    public static void PrintErrorMessage(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Erro: {message}");
+        Console.ResetColor();
+    }
+    
+    public static void PrintSucessMessage(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(message);
+        Console.ResetColor();
+    }
+
+}
