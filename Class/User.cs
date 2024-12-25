@@ -221,14 +221,16 @@ public class User
     public static void DisplayInfoCompleteAdmin()
     {
         bool found = false;
-        int counter = 1;
 
         foreach (var user in users)
         {
             if (user != null)
             {
-                Console.WriteLine($"Username: {user.Username}, ID: {user.UserId}");
+                Console.WriteLine($"Username: {user.Username}");
+                Console.WriteLine($"ID: {user.UserId}");
                 Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
+                
+                int counter = 1;
 
                 if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
                 {
@@ -241,7 +243,7 @@ public class User
                             foreach (var room in floor.Rooms)
                             {
                                 string counterFormatted = counter.ToString("D2");
-                                string roomInfo = $" - {counterFormatted} {room.RoomName} - {room.RoomId}".PadRight(20);
+                                string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
                                 counter++;
 
 
@@ -272,6 +274,7 @@ public class User
                         }
                     }
                 }
+                Console.WriteLine();
                 Console.WriteLine();
                 found = true;
             }
