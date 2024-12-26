@@ -61,10 +61,10 @@ namespace ProjSuperClean.Class
             DateTime today = DateTime.Today.AddDays(7);
 
             DateTime dayClean = room.DayClean;
-            DateTime nextClean = dayClean.AddDays(room.CleanInterval);
+            DateTime nextClean = dayClean.AddDays(room.CleanInterval); 
 
-            int daysSinceClean = (today - dayClean).Days;
-            int totalBars = Math.Min(daysSinceClean, 20);
+            int daysSinceClean = (today - dayClean).Days; 
+            int totalBars = Math.Min(daysSinceClean, 20); 
 
             int greenPipe = 0, yellowPipe = 0, redPipe = 0;
 
@@ -80,7 +80,7 @@ namespace ProjSuperClean.Class
             else
             {
                 greenPipe = room.CleanInterval - 1;
-                yellowPipe = 2;
+                yellowPipe = 2; 
                 redPipe = totalBars - (greenPipe + yellowPipe);
             }
 

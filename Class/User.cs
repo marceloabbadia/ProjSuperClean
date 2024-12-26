@@ -201,6 +201,7 @@ public class User
     }
 
 
+
     public static void DisplayInfoUser(string username)
     {
         var user = users.FirstOrDefault(u => string.Equals(u.Username, username, StringComparison.Ordinal));
@@ -257,24 +258,30 @@ public class User
                 }
             }
             Console.WriteLine();
-            Console.WriteLine();
+            Utils.PrintSucessMessage("Listagem Realizada com Sucesso.");
+
         }
     }
-
 
     public static void DisplayInfoCompleteAdmin()
     {
         bool found = false;
+        int count = 0;
+
+        Console.WriteLine($"Total utilizadores carregados:{count}");
+        Console.WriteLine();
 
         foreach (var user in users)
         {
             if (user != null)
             {
-                Console.WriteLine($"Username: {user.Username}");
-                Console.WriteLine($"ID: {user.UserId}");
-                Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
+                count++;
 
+                Console.WriteLine($"Username: {user.Username}, Id: {user.UserId}");
+                Console.WriteLine();
+                Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
                 int counter = 1;
+
 
                 if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
                 {
@@ -332,21 +339,75 @@ public class User
     }
 
 
-    public static void UpdateUserName(Guid userId, string newName)
+
+    public static void ChangeUsername(Guid userId, string utilizador)
     {
+        var user = users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null)
+        {
+            Utils.PrintErrorMessage("Utilizador não encontrado.");
+            Utils.WaitForUser();
+            return;
+        }
+
+        Console.WriteLine($"Atual nome do utilizador: {user.Username}");
+        Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres):");
+        Console.WriteLine();
+        string newName = Console.ReadLine()?.Trim();
+
         try
         {
-            var user = users.FirstOrDefault(u => u.UserId == userId);
+            if (ValidationNameUser(newName))
+            {
+                User.UpdateUserName(userId, newName);
+                Utils.PrintSucessMessage("O nome do utilizador foi alterado com sucesso!");
+            }
+            else
+            {
+                Utils.PrintErrorMessage($"username {newName} vazio ou com mais que 8 caracteres!");
+            }
+        }
 
-            if (user == null)
-                throw new ArgumentException("Utilizador não encontrado.");
-
-            user.Username = newName;
-            SaveUsersToFile();
+        catch (ArgumentException ex)
+        {
+            Utils.PrintErrorMessage($"Erro ao alterar o nome do utilizador: {ex.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erro inesperado: {ex.Message}");
+            Utils.PrintErrorMessage($"Erro inesperado: {ex.Message}");
+        }
+
+        Utils.WaitForUser();
+    }
+
+
+    public static void UpdateUserName(Guid userId, string newName)
+    {
+        var user = users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null)
+            throw new ArgumentException("Utilizador não encontrado.");
+
+        user.Username = newName;
+        SaveUsersToFile();
+
+    }
+
+    public static bool ValidationNameUser(string name)
+    {
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return false;
+        }
+        else if (name.Length > 8)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
@@ -372,8 +433,6 @@ public class User
             Console.WriteLine($"Erro inesperado: {ex.Message}");
         }
     }
-
-
 
     public static bool UserExists(string username)
     {
@@ -403,6 +462,8 @@ public class User
             return user.UserId;
         }
     }
+
+
 
 }
 
