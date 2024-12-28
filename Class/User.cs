@@ -23,20 +23,6 @@ public class User
     }
 
 
-    public static User CreateUserAdmin(string username)
-    {
-        if (UserExists(username))
-        {
-            Console.WriteLine($"O nome do usuario {username} ja esta em uso!");
-            return null;
-        }
-
-        User newUser = new User(username);
-        users.Add(newUser);
-        SaveUsersToFile();
-        return newUser;
-    }
-
     public static User CreateUser(string username)
     {
         Console.WriteLine();
@@ -152,6 +138,7 @@ public class User
 
     public static void SaveUsersToFile()
     {
+
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
         var filePath = Path.Combine(dirPath, "users.json");
 
@@ -161,6 +148,7 @@ public class User
             {
                 Directory.CreateDirectory(dirPath);
             }
+
 
             string updatedUsersJson = System.Text.Json.JsonSerializer.Serialize(users, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
 
@@ -184,19 +172,31 @@ public class User
             if (File.Exists(filePath))
             {
                 string usersJson = File.ReadAllText(filePath);
+                var loadedUsers = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
 
-                return users = System.Text.Json.JsonSerializer.Deserialize<List<User>>(usersJson) ?? new List<User>();
+                users = loadedUsers;
+
+                foreach (var user in users)
+                {
+                    if (user.Residence != null && user.Residence.ResidenceFloors != null)
+                    {
+                        Floor.AutoSortFloors();
+                    }
+                }
+                return users;
             }
             else
             {
-                Console.WriteLine("Arquivo não encontrado. Criando lista vazia de usuários.");
-                return users = new List<User>();
+                Console.WriteLine("Arquivo não encontrado. Criando lista vazia de utilizadores.");
+                users = new List<User>();
+                return users;
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erro ao carregar usuários do arquivo: {ex.Message}");
-            return users = new List<User>();
+            users = new List<User>();
+            return users;
         }
     }
 

@@ -235,45 +235,44 @@ public class Program
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("MENU AREA SUPERCLEAN");
+            Console.WriteLine("MENU ÁREA SUPERCLEAN");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
             Console.WriteLine();
-            Console.WriteLine("1 - Editar Nome da Area");
-            Console.WriteLine("2 - Incluir Area");
-            Console.WriteLine("3 - Excluir Area");
-            Console.WriteLine("4 - Voltar Menu Residencia");
+            Console.WriteLine("1 - Editar nome da área");
+            Console.WriteLine("2 - Incluir área");
+            Console.WriteLine("3 - Excluir área");
+            Console.WriteLine("4 - Voltar ao menu residência");
 
 
             switch (GetOption(1, 4))
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("MENU AREA SUPERCLEAN");
+                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
                     Console.WriteLine();
-                    Console.WriteLine("Editar nome da Area");
+                    Console.WriteLine("Editar nome da área");
                     Console.WriteLine();
                     Floor.ChangeNameRoom(userId, utilizador);
-                    WaitForUser();
                     break;
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine("MENU AREA SUPERCLEAN");
+                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
                     Console.WriteLine();
-                    Console.WriteLine("Adicionar Area à residência do utilizador");
+                    Console.WriteLine("Adicionar área à residência do utilizador");
                     Console.WriteLine();
-                    //Residence.AddFloorUser(userId, utilizador);
+                    Floor.AddRoomUser(userId, utilizador);
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("MENU AREA SUPERCLEAN");
+                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
                     Console.WriteLine();
-                    Console.WriteLine("Remover Area da residência do utilizador");
+                    Console.WriteLine("Remover área da residência do utilizador");
                     Console.WriteLine();
-                    //Residence.DeleteFloorUser(userId, utilizador);
+                    Floor.DeleteRoomUser(userId,utilizador);
                     break;
 
                 case 4:
@@ -285,7 +284,7 @@ public class Program
     }
 
 
-    // -------------------------------------------/-----------------------------//
+    // -----------------------------------/-----------------------------//
 
     public static void MainMenuAdmin()
     {

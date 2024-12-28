@@ -50,6 +50,7 @@ public class Floor
         foreach (var floor in user.Residence.ResidenceFloors)
         {
             roomToEdit = floor.Rooms.FirstOrDefault(r => r.RoomName.Equals(roomName, StringComparison.Ordinal));
+
             if (roomToEdit != null)
                 break;
         }
@@ -81,6 +82,112 @@ public class Floor
         roomToEdit.RoomName = newRoomName;
         User.SaveUsersToFile();
         Utils.PrintSucessMessage("Nome da área alterado com sucesso!");
+    }
+
+
+    public static void AddRoomUser(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            Utils.PrintErrorMessage("Utilizador ou residência não encontrado.");
+            Utils.WaitForUser();
+            return;
+        }
+
+        ListRoom(userId, utilizador);
+
+        Console.WriteLine();
+        Console.WriteLine("Informe qual será o PISO da área que vamos incluir (ex: '03'): ");
+        Console.WriteLine("ATENÇÃO! Deve ser escolhido um piso já existente. Caso o piso desejado não exista, volte ao menu e crie o piso primeiro!");
+        string floorNumber = Console.ReadLine()?.Trim();
+
+        var selectedFloor = user.Residence.ResidenceFloors
+            .FirstOrDefault(f => f.FloorName.Equals(floorNumber, StringComparison.Ordinal));
+
+        if (selectedFloor == null)
+        {
+            Utils.PrintErrorMessage("Número do piso inválido ou não encontrado!");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o nome da área que gostaria de incluir (ex: 'Sala de Jantar'): ");
+        string addRoomName = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(addRoomName))
+        {
+            Utils.PrintErrorMessage("Nome da área inválido!");
+            return;
+        }
+
+        if (selectedFloor.Rooms.Any(room => room.RoomName.Equals(addRoomName, StringComparison.Ordinal)))
+        {
+            Utils.PrintErrorMessage($"O nome '{addRoomName}' já está atribuído a outra área neste piso.");
+            return;
+        }
+
+        Room newRoom = new Room { RoomName = addRoomName };
+
+        selectedFloor.Rooms.Add(newRoom);
+
+
+        User.SaveUsersToFile();
+        Utils.PrintSucessMessage("Nova área incluída com sucesso!");
+    }
+
+
+    public static void DeleteRoomUser(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            Utils.PrintErrorMessage("Utilizador ou residência não encontrado.");
+            Utils.WaitForUser();
+            return;
+        }
+
+        ListRoom(userId, utilizador);
+
+        Console.WriteLine();
+        Console.WriteLine("Informe em qual piso está a área que deseja excluir (ex: '03'): ");
+        Console.WriteLine("ATENÇÃO! Deve ser escolhido um piso já existente.");
+        string floorNumber = Console.ReadLine()?.Trim();
+
+        var selectedFloor = user.Residence.ResidenceFloors
+            .FirstOrDefault(f => f.FloorName.Equals(floorNumber, StringComparison.Ordinal));
+
+        if (selectedFloor == null)
+        {
+            Utils.PrintErrorMessage("Número do piso inválido ou não encontrado!");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o nome da área que gostaria de excluir (ex: 'Sala de Jantar'): ");
+        string roomNameToDelete = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(roomNameToDelete))
+        {
+            Utils.PrintErrorMessage("Nome da área inválido!");
+            return;
+        }
+
+
+        var roomToDelete = selectedFloor.Rooms.FirstOrDefault(room => room.RoomName.Equals(roomNameToDelete, StringComparison.Ordinal));
+
+        if (roomToDelete == null)
+        {
+            Utils.PrintErrorMessage($"A área '{roomNameToDelete}' não foi encontrada no piso {floorNumber}.");
+            return;
+        }
+
+        selectedFloor.Rooms.Remove(roomToDelete);
+
+        User.SaveUsersToFile();
+        Utils.PrintSucessMessage($"A área '{roomNameToDelete}' foi excluída com sucesso!");
     }
 
 
@@ -139,5 +246,21 @@ public class Floor
         Console.WriteLine("Pressione qualquer tecla para voltar ao menu...");
         Console.ReadKey();
     }
+
+
+    public static void AutoSortFloors()
+    {
+        foreach (var user in User.users)
+        {
+            if (user.Residence != null && user.Residence.ResidenceFloors != null)
+            {
+                user.Residence.ResidenceFloors = user.Residence.ResidenceFloors
+                    .OrderBy(f => f.FloorName, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+            }
+        }
+    }
+
+
 
 }

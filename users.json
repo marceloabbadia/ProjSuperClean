@@ -210,6 +210,14 @@
       "ResidenceName": "Casa",
       "ResidenceFloors": [
         {
+          "FloorName": "00",
+          "Rooms": []
+        },
+        {
+          "FloorName": "01",
+          "Rooms": []
+        },
+        {
           "FloorName": "02",
           "Rooms": [
             {
@@ -224,6 +232,14 @@
         },
         {
           "FloorName": "03",
+          "Rooms": []
+        },
+        {
+          "FloorName": "04",
+          "Rooms": []
+        },
+        {
+          "FloorName": "RC",
           "Rooms": []
         }
       ]
