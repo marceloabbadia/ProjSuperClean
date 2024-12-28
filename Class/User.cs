@@ -22,6 +22,51 @@ public class User
         }
     }
 
+    public static void UserStart(string utilizador)
+    {
+
+        while (true)
+        {
+            bool validationResult = User.ValidationNameUser(utilizador);
+
+            if (validationResult == false)
+            {
+                Utils.PrintErrorMessage("O nome do utilizador não é válido. Tente novamente.");
+            }
+            else if (utilizador == "ajuda")
+            {
+                Console.Clear();
+                Help.ExibirManualDoUtilizador();
+                continue;
+            }
+            else if (utilizador == "admin")
+            {
+                Console.Clear();
+                Program.MainMenuAdmin();
+                break;
+
+            }
+            else if (User.UserExists(utilizador))
+            {
+                Guid userId = User.GetUserId(utilizador);
+                Console.Clear();
+                Program.MainMenuUser(userId, utilizador);
+                break;
+
+            }
+            else
+            {
+                if (User.CreateUser(utilizador) != null)
+                {
+
+                    Utils.WaitForUser();
+                    Guid userId = User.GetUserId(utilizador);
+                    Program.MainMenuUser(userId, utilizador);
+                    break;
+                }
+            }
+        }
+    }
 
     public static User CreateUser(string username)
     {
@@ -209,10 +254,9 @@ public class User
 
         if (user != null)
         {
-            Console.WriteLine($"Username: {user.Username}");
-            Console.WriteLine($"ID: {user.UserId}");
+            Console.WriteLine($"Username: {user.Username}, Id: {user.UserId}");
+            Console.WriteLine();
             Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
-
             int counter = 1;
 
             if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
@@ -266,16 +310,11 @@ public class User
     public static void DisplayInfoCompleteAdmin()
     {
         bool found = false;
-        int count = 0;
-
-        Console.WriteLine($"Total utilizadores carregados:{count}");
-        Console.WriteLine();
 
         foreach (var user in users)
         {
             if (user != null)
             {
-                count++;
 
                 Console.WriteLine($"Username: {user.Username}, Id: {user.UserId}");
                 Console.WriteLine();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ProjSuperClean.Utils.Utils;
 
 namespace ProjSuperClean.Class
 {
@@ -116,7 +115,7 @@ namespace ProjSuperClean.Class
             Console.WriteLine("Pressione qualquer tecla para voltar ao menu principal...");
             Console.ReadKey();
             Console.Clear();
-            HeaderProgramUserStart();
+            Program.HeaderProgramUserStart();
 
         }
     }

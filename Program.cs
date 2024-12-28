@@ -15,22 +15,48 @@ public class Program
 
     }
 
+    public static void HeaderProgramUserStart()
+    {
+        Console.Clear();
+        Console.WriteLine("==============================================");
+        Console.WriteLine("          SEJA BEM VINDO AO SUPER CLEAN       ");
+        Console.WriteLine("==============================================");
+        Console.WriteLine();
+        Console.WriteLine("Por favor, informe o nome do seu utilizador:");
+        PrintSucessMessage("- Caso não tenha cadastro, não se preocupe! Vamos criar um novo para você.");
+        Console.WriteLine("- Lembre-se: o nome deve ter no máximo 8 caracteres e não pode estar vazio.");
+        Console.WriteLine("- Exemplo de nome válido: joao#123");
+        Console.WriteLine();
+        PrintSucessMessage("Digite AJUDA para acessar o manual.");
+        Console.WriteLine();
+        Console.WriteLine("Vamos começar! Fique à vontade.");
+        Console.WriteLine();
+
+        string utilizador = Console.ReadLine()?.ToLower();
+
+        UserStart(utilizador);
+
+    }
+
+
     public static void MainMenuUser(Guid userId, string utilizador)
     {
-
-
         while (true)
         {
-            Console.WriteLine("MENU PRINCIPAL SUPERCLEAN");
+            Console.Clear();
+            Console.WriteLine("==============================================");
+            Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+            Console.WriteLine("==============================================");
             Console.WriteLine();
 
-            Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
+            Console.WriteLine($"Escolha uma opção abaixo, Utilizador {utilizador}:");
             Console.WriteLine();
             Console.WriteLine("1 - Menu Utilizador");
-            Console.WriteLine("2 - Menu Residencia");
-            Console.WriteLine("3 - Listagem completa do seu Utilizador");
+            Console.WriteLine("2 - Menu Residência");
+            Console.WriteLine("3 - Listagem Completa do seu Utilizador");
             Console.WriteLine("4 - Sair");
             Console.WriteLine("5 - Ajuda");
+            Console.WriteLine();
 
 
 
@@ -48,9 +74,11 @@ public class Program
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("MENU PRINCIPAL SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("*** Listagem do Utilizador ***");
+                    Console.WriteLine("        *** Listagem do Utilizador ***        ");
                     DisplayInfoUser(utilizador);
                     Console.WriteLine();
                     WaitForUser();
@@ -58,16 +86,22 @@ public class Program
 
                 case 4:
                     Console.Clear();
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
                     SaveUsersToFile();
-                    Console.WriteLine("Fechando o programa...");
-                    Console.WriteLine("Clique em qualquer tecla para fechar a tela!");
+                    Console.WriteLine("Salvando alteracoes.");
+                    Thread.Sleep(1000);
+                    Console.Write("...");
+                    PrintSucessMessage("< Clique em qualquer tecla para fechar a tela! >");
                     Environment.Exit(0);
                     break;
-                    
+
                 case 5:
                     Console.Clear();
                     Help.ExibirManualDoUtilizador();
-                    break;  
+                    break;
 
             }
         }
@@ -76,10 +110,12 @@ public class Program
     public static void UserMenu(Guid userId, string utilizador)
     {
 
-
         while (true)
         {
-            Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+            Console.Clear();
+            Console.WriteLine("==============================================");
+            Console.WriteLine("        MENU DO UTILIZADOR SUPER CLEAN        ");
+            Console.WriteLine("==============================================");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
@@ -96,17 +132,21 @@ public class Program
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("        MENU DO UTILIZADOR SUPER CLEAN        ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("*** Alterar nome do Utilizador ***");
+                    Console.WriteLine("        *** Alterar nome do Utilizador ***    ");
                     ChangeUsername(userId, utilizador);
                     break;
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("        MENU DO UTILIZADOR SUPER CLEAN        ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("*** Apagar Utilizador ***");
+                    Console.WriteLine("        *** Apagar Utilizador ***             ");
                     DeleteUser(userId);
                     Console.WriteLine();
                     WaitForUser();
@@ -115,9 +155,11 @@ public class Program
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("MENU DO UTILIZADOR SUPERCLEAN");
-                    Console.Clear();
-                    Console.WriteLine("*** Criar novo Utilizador ***");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("        MENU DO UTILIZADOR SUPER CLEAN        ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine("        *** Criar novo Utilizador ***         ");
                     HeaderProgramUserStart();
                     WaitForUser();
                     break;
@@ -135,7 +177,10 @@ public class Program
     {
         while (true)
         {
-            Console.WriteLine("MENU RESIDÊNCIA SUPERCLEAN");
+            Console.Clear();
+            Console.WriteLine("==============================================");
+            Console.WriteLine("          MENU RESIDÊNCIA SUPER CLEAN         ");
+            Console.WriteLine("==============================================");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opção abaixo, {utilizador}:");
@@ -150,9 +195,11 @@ public class Program
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("MENU RESIDÊNCIA SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU RESIDÊNCIA SUPER CLEAN         ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("*** Editar nome da residência ***");
+                    Console.WriteLine("        *** Editar nome da residência ***     ");
                     Console.WriteLine();
                     Residence.ChangeNameResidence(userId, utilizador);
                     break;
@@ -181,7 +228,9 @@ public class Program
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("MENU PISO SUPERCLEAN");
+            Console.WriteLine("==============================================");
+            Console.WriteLine("          MENU PISO SUPER CLEAN               ");
+            Console.WriteLine("==============================================");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
@@ -196,9 +245,11 @@ public class Program
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("MENU PISO SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PISO SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Listagem dos pisos do utilizador");
+                    Console.WriteLine("   *** Listagem dos pisos do utilizador ***   ");
                     Console.WriteLine();
                     Residence.ChangeNumberFloor(userId, utilizador);
                     WaitForUser();
@@ -206,18 +257,22 @@ public class Program
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine("MENU PISO SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PISO SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Adicionar pisos à residência do utilizador");
+                    Console.WriteLine("*** Adicionar pisos à residência do utilizador ***");
                     Console.WriteLine();
                     Residence.AddFloorUser(userId, utilizador);
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("MENU PISO SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PISO SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Remover pisos da residência do utilizador");
+                    Console.WriteLine("*** Remover pisos da residência do utilizador ***");
                     Console.WriteLine();
                     Residence.DeleteFloorUser(userId, utilizador);
                     break;
@@ -235,7 +290,9 @@ public class Program
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("MENU ÁREA SUPERCLEAN");
+            Console.WriteLine("==============================================");
+            Console.WriteLine("          MENU ÁREA SUPER CLEAN               ");
+            Console.WriteLine("==============================================");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
@@ -250,29 +307,35 @@ public class Program
             {
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU ÁREA SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Editar nome da área");
+                    Console.WriteLine("    *** Editar nome da área do utilizador *** ");
                     Console.WriteLine();
                     Floor.ChangeNameRoom(userId, utilizador);
                     break;
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU ÁREA SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Adicionar área à residência do utilizador");
+                    Console.WriteLine("*** Adicionar área à residência do utilizador ***");
                     Console.WriteLine();
                     Floor.AddRoomUser(userId, utilizador);
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine("MENU ÁREA SUPERCLEAN");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU ÁREA SUPER CLEAN               ");
+                    Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("Remover área da residência do utilizador");
+                    Console.WriteLine("*** Remover área da residência do utilizador ***");
                     Console.WriteLine();
-                    Floor.DeleteRoomUser(userId,utilizador);
+                    Floor.DeleteRoomUser(userId, utilizador);
                     break;
 
                 case 4:
@@ -284,11 +347,13 @@ public class Program
     }
 
 
-    // -----------------------------------/-----------------------------//
 
     public static void MainMenuAdmin()
     {
-        Console.WriteLine("MENU PRINCIPAL ADMIN SUPERCLEAN");
+        Console.Clear();
+        Console.WriteLine("==============================================");
+        Console.WriteLine("          MENU ADMIN SUPER CLEAN               ");
+        Console.WriteLine("==============================================");
         Console.WriteLine();
 
         while (true)
@@ -305,7 +370,6 @@ public class Program
             {
                 case 1:
                     Console.Clear();
-                    HeaderProgramUserAdmin(5);
                     DisplayInfoCompleteAdmin();
                     Console.WriteLine();
                     PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
@@ -322,7 +386,7 @@ public class Program
                     Thread.Sleep(1000);
                     Console.Clear();
                     HeaderProgramUserStart();
-                    break;  
+                    break;
             }
         }
     }
