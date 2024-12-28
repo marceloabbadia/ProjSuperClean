@@ -38,7 +38,6 @@ public class Program
 
     }
 
-
     public static void MainMenuUser(Guid userId, string utilizador)
     {
         while (true)
@@ -53,7 +52,7 @@ public class Program
             Console.WriteLine();
             Console.WriteLine("1 - Menu Utilizador");
             Console.WriteLine("2 - Menu Residência");
-            Console.WriteLine("3 - Listagem Completa do seu Utilizador");
+            Console.WriteLine("3 - Consulta limpeza com simulador de datas");
             Console.WriteLine("4 - Sair");
             Console.WriteLine("5 - Ajuda");
             Console.WriteLine();
@@ -79,9 +78,9 @@ public class Program
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
                     Console.WriteLine("        *** Listagem do Utilizador ***        ");
+                    Console.WriteLine();
                     DisplayInfoUser(utilizador);
                     Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 4:
@@ -91,10 +90,8 @@ public class Program
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
                     SaveUsersToFile();
-                    Console.WriteLine("Salvando alteracoes.");
                     Thread.Sleep(1000);
-                    Console.Write("...");
-                    PrintSucessMessage("< Clique em qualquer tecla para fechar a tela! >");
+                    PrintSucessMessage("Clique em qualquer tecla para fechar a tela!");
                     Environment.Exit(0);
                     break;
 
@@ -137,7 +134,10 @@ public class Program
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
                     Console.WriteLine("        *** Alterar nome do Utilizador ***    ");
+                    Console.WriteLine();
                     ChangeUsername(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 2:
@@ -147,6 +147,7 @@ public class Program
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
                     Console.WriteLine("        *** Apagar Utilizador ***             ");
+                    Console.WriteLine();
                     DeleteUser(userId);
                     Console.WriteLine();
                     WaitForUser();
@@ -160,7 +161,9 @@ public class Program
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
                     Console.WriteLine("        *** Criar novo Utilizador ***         ");
+                    Console.WriteLine();
                     HeaderProgramUserStart();
+                    Console.WriteLine();
                     WaitForUser();
                     break;
 
@@ -202,6 +205,8 @@ public class Program
                     Console.WriteLine("        *** Editar nome da residência ***     ");
                     Console.WriteLine();
                     Residence.ChangeNameResidence(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 2:
@@ -252,6 +257,7 @@ public class Program
                     Console.WriteLine("   *** Listagem dos pisos do utilizador ***   ");
                     Console.WriteLine();
                     Residence.ChangeNumberFloor(userId, utilizador);
+                    Console.WriteLine();
                     WaitForUser();
                     break;
 
@@ -264,6 +270,8 @@ public class Program
                     Console.WriteLine("*** Adicionar pisos à residência do utilizador ***");
                     Console.WriteLine();
                     Residence.AddFloorUser(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 3:
@@ -275,6 +283,8 @@ public class Program
                     Console.WriteLine("*** Remover pisos da residência do utilizador ***");
                     Console.WriteLine();
                     Residence.DeleteFloorUser(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 4:
@@ -314,6 +324,8 @@ public class Program
                     Console.WriteLine("    *** Editar nome da área do utilizador *** ");
                     Console.WriteLine();
                     Floor.ChangeNameRoom(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 2:
@@ -325,6 +337,8 @@ public class Program
                     Console.WriteLine("*** Adicionar área à residência do utilizador ***");
                     Console.WriteLine();
                     Floor.AddRoomUser(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 3:
@@ -336,6 +350,8 @@ public class Program
                     Console.WriteLine("*** Remover área da residência do utilizador ***");
                     Console.WriteLine();
                     Floor.DeleteRoomUser(userId, utilizador);
+                    Console.WriteLine();
+                    WaitForUser();
                     break;
 
                 case 4:

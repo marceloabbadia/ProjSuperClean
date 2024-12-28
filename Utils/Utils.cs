@@ -13,9 +13,6 @@ namespace ProjSuperClean.Utils;
 
 public static class Utils
 {
-   
-
-
     public static int GetOption(int min, int max)
     {
         int opcao;

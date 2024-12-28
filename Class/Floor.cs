@@ -1,6 +1,7 @@
 ﻿namespace ProjSuperClean.Class;
 
 using System.Diagnostics.Metrics;
+using System.Drawing;
 using ProjSuperClean.Utils;
 
 public class Floor
@@ -99,8 +100,8 @@ public class Floor
         ListRoom(userId, utilizador);
 
         Console.WriteLine();
-        Console.WriteLine("Informe qual será o PISO da área que vamos incluir (ex: '03'): ");
-        Console.WriteLine("ATENÇÃO! Deve ser escolhido um piso já existente. Caso o piso desejado não exista, volte ao menu e crie o piso primeiro!");
+        Console.WriteLine("Informe o número do andar (piso) da área a ser incluída (ex: '03'):");
+        Console.WriteLine("⚠️ ATENÇÃO: O piso deve existir. Se necessário, crie o piso primeiro no menu principal.");
         string floorNumber = Console.ReadLine()?.Trim();
 
         var selectedFloor = user.Residence.ResidenceFloors
@@ -108,7 +109,7 @@ public class Floor
 
         if (selectedFloor == null)
         {
-            Utils.PrintErrorMessage("Número do piso inválido ou não encontrado!");
+            Utils.PrintErrorMessage("Número do andar (piso) inválido ou inexistente.");
             return;
         }
 
@@ -118,17 +119,27 @@ public class Floor
 
         if (string.IsNullOrWhiteSpace(addRoomName))
         {
-            Utils.PrintErrorMessage("Nome da área inválido!");
+            Utils.PrintErrorMessage("O nome da área não pode estar vazio.");
             return;
         }
 
         if (selectedFloor.Rooms.Any(room => room.RoomName.Equals(addRoomName, StringComparison.Ordinal)))
         {
-            Utils.PrintErrorMessage($"O nome '{addRoomName}' já está atribuído a outra área neste piso.");
+            Utils.PrintErrorMessage($"A área '{addRoomName}' já existe neste andar (piso).");
             return;
         }
 
-        Room newRoom = new Room { RoomName = addRoomName };
+        Console.WriteLine();
+        Console.WriteLine("Informe o tempo de limpeza (em minutos):");
+        int cleanTime = User.GetValidIntInput();
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o intervalo de limpeza (em dias):");
+        int cleanInterval = User.GetValidIntInput();
+
+
+
+        Room newRoom = new Room (addRoomName, cleanTime, cleanInterval);
 
         selectedFloor.Rooms.Add(newRoom);
 
