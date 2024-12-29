@@ -26,47 +26,45 @@ public class User
 
     public static void UserStart(string utilizador)
     {
+        utilizador = utilizador.Trim().ToLower();
 
-        while (true)
+        if (utilizador == "admin")
         {
-            bool validationResult = User.ValidationNameUser(utilizador);
+            Console.Clear();
+            Program.MainMenuAdmin();
 
-            if (validationResult == false)
+        }
+        else
+        {
+            while (true)
             {
-                Utils.PrintErrorMessage("O nome do utilizador não é válido. Tente novamente.");
-                Console.WriteLine("Informe um nome válido para o utilizador:");
-                utilizador = Console.ReadLine()?.Trim();
-            }
-            else if (utilizador == "ajuda")
-            {
-                Console.Clear();
-                Help.ExibirManualDoUtilizador();
-                continue;
-            }
-            else if (utilizador == "admin")
-            {
-                Console.Clear();
-                Program.MainMenuAdmin();
-                break;
 
-            }
-            else if (User.UserExists(utilizador))
-            {
-                Guid userId = User.GetUserId(utilizador);
-                Console.Clear();
-                Program.MainMenuUser(userId, utilizador);
-                break;
+                bool validationResult = User.ValidationNameUser(utilizador);
 
-            }
-            else if (User.CreateUser(utilizador) != null)
-            {
-                Utils.WaitForUser();
-                Guid userId = User.GetUserId(utilizador);
-                Program.MainMenuUser(userId, utilizador);
-                break;
+                if (!validationResult)
+                {
+                    Utils.PrintErrorMessage("O nome do utilizador não é válido. Tente novamente.");
+                    Console.WriteLine("Informe um nome válido para o utilizador:");
+                    utilizador = Console.ReadLine()?.Trim();
+                }
+                else if (User.UserExists(utilizador))
+                {
+                    Guid userId = User.GetUserId(utilizador);
+                    Console.Clear();
+                    Program.MainMenuUser(userId, utilizador);
+                    break;
+                }
+                else if (User.CreateUser(utilizador) != null)
+                {
+                    Utils.WaitForUser();
+                    Guid userId = User.GetUserId(utilizador);
+                    Program.MainMenuUser(userId, utilizador);
+                    break;
+                }
             }
         }
     }
+
 
     public static User CreateUser(string username)
     {
