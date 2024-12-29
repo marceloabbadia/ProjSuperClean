@@ -32,7 +32,6 @@ public static class Utils
     {
         Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
         Console.ReadKey();
-        Console.Clear();
     }
 
     public static void PrintErrorMessage(string message)

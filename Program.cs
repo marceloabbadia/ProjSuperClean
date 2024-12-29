@@ -46,11 +46,12 @@ public class Program
 
     public static void MainMenuUser(Guid userId, string utilizador)
     {
+       
 
         while (true)
         {
             Console.Clear();
-
+           
             Console.WriteLine("==============================================");
             Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
             Console.WriteLine("==============================================");
@@ -74,67 +75,69 @@ public class Program
 
 
                 case 1:
-                Console.Clear();
-                Console.WriteLine("==============================================");
-                Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
-                Console.WriteLine("==============================================");
-                Console.WriteLine();
-                Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
-                Console.WriteLine();
-                Room.CleanDone(userId, utilizador);
-                Console.WriteLine();
-                break;
+                    Console.Clear();
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
+                    Console.WriteLine();
+                    Room.CleanDone(userId, utilizador);
+                    Console.WriteLine();
+                    break;
 
-            case 2:
-                Console.Clear();
-                Console.WriteLine("==============================================");
-                Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
-                Console.WriteLine("==============================================");
-                Console.WriteLine();
-                Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
-                Console.WriteLine();
-                DisplayInfoUser(utilizador);
-                Console.WriteLine();
-                break;
+                case 2:
+                    Console.Clear();
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
+                    Console.WriteLine();
+                    DisplayInfoUser(utilizador);
+                    Console.WriteLine();
+                    break;
 
-            case 3:
-                Console.Clear();
-                Console.WriteLine("==============================================");
-                Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
-                Console.WriteLine("==============================================");
-                Console.WriteLine();
-                Console.WriteLine(" *** Consulta Limpeza - Simulador De Datas ***");
-                Console.WriteLine();
-                DisplayInfoUser(utilizador);
-                Console.WriteLine();
-                break;
+                case 3:
+                    Console.Clear();
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine(" *** Consulta Limpeza - Simulador De Datas ***");
+                    Console.WriteLine();
+                    DisplayInfoUser(utilizador);
+                    Console.WriteLine();
+                    break;
 
-            case 4:
-                Console.Clear();
-                UserMenu(userId, utilizador);
-                break;
+                case 4:
+                    Console.Clear();
+                    UserMenu(userId, utilizador);
+                    break;
 
-            case 5:
-                Console.Clear();
-                ResidenceMenu(userId, utilizador);
-                break;
+                case 5:
+                    Console.Clear();
+                    ResidenceMenu(userId, utilizador);
+                    break;
 
-            case 6:
-                Console.Clear();
-                Console.WriteLine("==============================================");
-                Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
-                Console.WriteLine("==============================================");
-                Console.WriteLine();
-                SaveUsersToFile();
-                Thread.Sleep(1000);
-                PrintSucessMessage("Clique em qualquer tecla para fechar a tela!");
-                Environment.Exit(0);
-                break;
+                case 6:
+                    Console.Clear();
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    SaveUsersToFile();
+                    Thread.Sleep(1000);
+                    PrintSucessMessage("Clique em qualquer tecla para fechar a tela!");
+                    Environment.Exit(0);
+                    break;
 
-            case 7:
-                Console.Clear();
-                ExibirManualDoUtilizador(userId, utilizador);
-                break;
+                case 7:
+                    Console.Clear();
+                    Help.ExibirManualDoUtilizador(userId, utilizador);
+                    WaitForUser();
+                    Console.Clear();
+                    break;
 
             }
 
