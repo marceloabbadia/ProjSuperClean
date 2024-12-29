@@ -1,7 +1,0 @@
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.AssemblyInfoInputs.cache
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.AssemblyInfo.cs
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.csproj.CoreCompileInputs.cache
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.sourcelink.json
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.Class.Help.resources
-C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean\obj\Debug\net6.0-windows\ProjSuperClean.csproj.GenerateResource.cache
