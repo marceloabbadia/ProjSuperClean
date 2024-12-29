@@ -3,6 +3,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using ProjSuperClean.Utils;
 
 
@@ -279,9 +280,9 @@ public class User
             Console.WriteLine("==============================================");
             Console.WriteLine();
 
-            Console.WriteLine($"Username: {user.Username}, Id: {user.UserId}");
+            Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
             Console.WriteLine();
-            Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
+            Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
             int counter = 1;
 
 
@@ -353,9 +354,9 @@ public class User
                 Console.WriteLine("==============================================");
                 Console.WriteLine();
                 Console.WriteLine($"Dia atual: {today.ToShortDateString()}");
-                Console.WriteLine($"Username: {user.Username}, Id: {user.UserId}");
+                Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
                 Console.WriteLine();
-                Console.WriteLine($"Residence: {user.Residence?.ResidenceName}");
+                Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
 
                 counter = 1;
 
@@ -553,19 +554,25 @@ public class User
 
     public static bool ValidationNameUser(string name)
     {
-
         if (string.IsNullOrEmpty(name))
         {
             return false;
         }
-        else if (name.Length > 8)
+
+        if (name.Length > 8)
         {
             return false;
         }
-        else
+
+        foreach (char c in name)
         {
-            return true;
+            if (!char.IsLetterOrDigit(c))
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 
     public static void DeleteUser(Guid userId)

@@ -10,18 +10,18 @@
             {
               "RoomName": "Garagem",
               "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
+              "DayClean": "2024-12-29T11:47:38.796611+00:00",
               "CleanInterval": 4,
               "RoomId": "142d7a49-6e43-4323-8dff-c419b0429b7b",
-              "NextClean": "2024-12-29T00:00:00+00:00"
+              "NextClean": "2025-01-02T11:47:38.796611+00:00"
             },
             {
               "RoomName": "Cozinha",
               "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
+              "DayClean": "2024-12-29T11:47:47.2343801+00:00",
               "CleanInterval": 5,
               "RoomId": "16ff759b-1bcb-4d11-a613-960636fac58c",
-              "NextClean": "2024-12-30T00:00:00+00:00"
+              "NextClean": "2025-01-03T11:47:47.2343801+00:00"
             }
           ]
         },
@@ -31,10 +31,10 @@
             {
               "RoomName": "quarto",
               "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
+              "DayClean": "2024-12-29T11:47:25.764825+00:00",
               "CleanInterval": 2,
               "RoomId": "6b6cf314-6c6c-4e4f-8138-1fb688f24dca",
-              "NextClean": "2024-12-27T00:00:00+00:00"
+              "NextClean": "2024-12-31T11:47:25.764825+00:00"
             },
             {
               "RoomName": "QUarto casal",
@@ -664,10 +664,10 @@
             {
               "RoomName": "Garagem",
               "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
+              "DayClean": "2024-12-29T11:32:22.529387+00:00",
               "CleanInterval": 4,
               "RoomId": "d3b8cb72-7f77-4592-8ead-564094a4cd9c",
-              "NextClean": "2025-01-01T00:00:00+00:00"
+              "NextClean": "2025-01-02T11:32:22.529387+00:00"
             }
           ]
         }

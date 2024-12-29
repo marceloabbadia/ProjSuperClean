@@ -40,7 +40,7 @@ public class Floor
             return;
         }
 
-        ListRoom(userId, utilizador);
+        RoomsList(userId, utilizador);
 
         Console.WriteLine();
         Console.WriteLine("Informe o nome da área que gostaria de alterar (ex: 'Quarto casal'): ");
@@ -97,7 +97,7 @@ public class Floor
             return;
         }
 
-        ListRoom(userId, utilizador);
+        RoomsList(userId, utilizador);
 
         Console.WriteLine();
         Console.WriteLine("Informe o número do andar (piso) da área a ser incluída (ex: '03'):");
@@ -160,7 +160,7 @@ public class Floor
             return;
         }
 
-        ListRoom(userId, utilizador);
+        RoomsList(userId, utilizador);
 
         Console.WriteLine();
         Console.WriteLine("Informe em qual piso está a área que deseja excluir (ex: '03'): ");
@@ -202,7 +202,7 @@ public class Floor
     }
 
 
-    public static void ListRoom(Guid userId, string utilizador)
+    public static void RoomsList(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
 
@@ -258,6 +258,62 @@ public class Floor
         Console.ReadKey();
     }
 
+
+    public static void CleaningRoomsList(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            Utils.PrintErrorMessage("Utilizador ou residência não encontrado.");
+            Utils.WaitForUser();
+            return;
+        }
+
+        Console.Clear();
+        Console.WriteLine("==================================================");
+        Console.WriteLine($"<<<  Lista de Áreas para efetuar a limpeza  >>>  ");
+        Console.WriteLine("==================================================");
+        Console.WriteLine();
+        Console.WriteLine($"Utilizador: {utilizador}");
+
+        int counter = 1;
+
+        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+        {
+            foreach (var floor in user.Residence.ResidenceFloors)
+            {
+                Console.WriteLine($"> Piso: {floor.FloorName}");
+                Console.WriteLine();
+
+                if (floor.Rooms != null && floor.Rooms.Count > 0)
+                {
+                    foreach (var room in floor.Rooms)
+                    {
+                        string counterFormatted = counter.ToString("D2");
+                        Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Codigo para limpar: L-{counterFormatted}");
+                        counter++;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("   Nenhuma área cadastrada neste piso.");
+                }
+
+                Console.WriteLine();
+            }
+
+            Utils.PrintSucessMessage("Fim da listagem das áreas.");
+            Console.WriteLine();
+        }
+        else
+        {
+            Utils.PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
+        }
+
+        Console.WriteLine("==================================================");
+        
+    }
 
     public static void AutoSortFloors()
     {

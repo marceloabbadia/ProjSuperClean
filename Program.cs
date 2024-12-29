@@ -25,12 +25,14 @@ public class Program
         Console.WriteLine("Por favor, informe o nome do seu utilizador:");
         PrintSucessMessage("- Caso não tenha cadastro, não se preocupe! Vamos criar um novo para você.");
         Console.WriteLine("- Lembre-se: o nome deve ter no máximo 8 caracteres e não pode estar vazio.");
-        Console.WriteLine("- Exemplo de nome válido: joao#123");
+        Console.WriteLine("- O nome deve conter apenas letras e números (exemplo de nome válido: joao123).");
         Console.WriteLine();
-        PrintSucessMessage("Digite AJUDA para acessar o manual.");
+        PrintSucessMessage("Digite 'AJUDA' para acessar o manual.");
         Console.WriteLine();
         Console.WriteLine("Vamos começar! Fique à vontade.");
         Console.WriteLine();
+        Console.Write("O nome do seu UTILIZADOR: ");
+
 
         string utilizador = Console.ReadLine()?.ToLower();
 
@@ -50,25 +52,42 @@ public class Program
 
             Console.WriteLine($"Escolha uma opção abaixo, Utilizador {utilizador}:");
             Console.WriteLine();
-            Console.WriteLine("1 - Menu Utilizador");
-            Console.WriteLine("2 - Menu Residência");
-            Console.WriteLine("3 - Consulta limpeza com simulador de datas");
-            Console.WriteLine("4 - Sair");
-            Console.WriteLine("5 - Ajuda");
+            Console.WriteLine("1 - Marcar Limpeza da Área");
+            Console.WriteLine("2 - Remover Última Limpeza da Área");
+            Console.WriteLine("3 - Consulta Limpeza - Simulador De Datas");
+            Console.WriteLine("4 - Menu Utilizador");
+            Console.WriteLine("5 - Menu Residência");
+            Console.WriteLine("6 - Sair");
+            Console.WriteLine("7 - Ajuda");
             Console.WriteLine();
 
 
 
-            switch (GetOption(1, 5))
+            switch (GetOption(1, 7))
             {
+
                 case 1:
                     Console.Clear();
-                    UserMenu(userId, utilizador);
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
+                    Console.WriteLine();
+                    Room.CleanDone(userId, utilizador);
+                    Console.WriteLine();
                     break;
 
                 case 2:
                     Console.Clear();
-                    ResidenceMenu(userId, utilizador);
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
+                    Console.WriteLine("==============================================");
+                    Console.WriteLine();
+                    Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
+                    Console.WriteLine();
+                    DisplayInfoUser(utilizador);
+                    Console.WriteLine();
                     break;
 
                 case 3:
@@ -77,13 +96,23 @@ public class Program
                     Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
                     Console.WriteLine("==============================================");
                     Console.WriteLine();
-                    Console.WriteLine("        *** Listagem do Utilizador ***        ");
+                    Console.WriteLine(" *** Consulta Limpeza - Simulador De Datas ***");
                     Console.WriteLine();
                     DisplayInfoUser(utilizador);
                     Console.WriteLine();
                     break;
 
                 case 4:
+                    Console.Clear();
+                    UserMenu(userId, utilizador);
+                    break;
+
+                case 5:
+                    Console.Clear();
+                    ResidenceMenu(userId, utilizador);
+                    break;
+
+                case 6:
                     Console.Clear();
                     Console.WriteLine("==============================================");
                     Console.WriteLine("          MENU PRINCIPAL SUPER CLEAN          ");
@@ -95,7 +124,7 @@ public class Program
                     Environment.Exit(0);
                     break;
 
-                case 5:
+                case 7:
                     Console.Clear();
                     Help.ExibirManualDoUtilizador();
                     break;
