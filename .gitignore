@@ -1,0 +1,13 @@
+# Ignore pastas bin e obj
+bin/
+obj/
+
+# Arquivos de configuração locais
+*.user
+*.suo
+
+# Logs
+*.log
+
+# Pastas de cache
+.vs/
