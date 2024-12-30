@@ -48,4 +48,11 @@ public static class Utils
         Console.ResetColor();
     }
 
+    public static void Title(string title)
+    {
+        Console.WriteLine("=====================================================");
+        Console.WriteLine($"<<< {title}");
+        Console.WriteLine("=====================================================");
+    }
+
 }
