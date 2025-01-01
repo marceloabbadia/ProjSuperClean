@@ -14,8 +14,8 @@ namespace ProjSuperClean.Class
     {
         private static void Options() 
         {
-            Console.WriteLine("1- Incluir e Excluir limpeza");
-            Console.WriteLine("2- Consulta das limpezas das Áreas");
+            Console.WriteLine("1- Atalhos Super R'apidos: Incluir e Excluir limpeza");
+            Console.WriteLine("2- Gerenciar limpeza: Consulta das limpezas das Áreas");
             Console.WriteLine("3- Sobre os Utilizadores");
             Console.WriteLine("4- Sobre as Residências");
             Console.WriteLine("5- Sobre os Andares (Pisos)");
@@ -57,57 +57,59 @@ namespace ProjSuperClean.Class
 
                                 Title("REGISTRAR LIMPEZA DA ÁREA");
                                 Console.WriteLine();
-                                Console.WriteLine("Em todos os menus será possível registrar a limpeza");
-                                Console.WriteLine("da área. Ao acessar essa opção, será apresentada a");
-                                Console.WriteLine("relação das áreas, ordenadas de forma decrescente por");
-                                Console.WriteLine("vencimento. Ou seja, as que têm o vencimento mais");
-                                Console.WriteLine("próximo, ou que já estão vencidas, serão listadas");
-                                Console.WriteLine("primeiro. Basta informar o código da área e a limpeza");
-                                Console.WriteLine("será atualizada com a data do dia automaticamente,");
-                                Console.WriteLine("e a data da próxima limpeza será recalculada de");
-                                Console.WriteLine("acordo com o intervalo de limpeza cadastrado.");
+                                Utils.Utils.PrintSucessMessage("Atalho rápido: Opção 1 - Registrar limpeza.");
+                                Console.WriteLine("Nos menus, você pode registrar a limpeza da área.");
+                                Console.WriteLine("As áreas serão listadas por vencimento, começando pelas");
+                                Console.WriteLine("mais próximas ou já vencidas. Ao informar o código da área,");
+                                Console.WriteLine("a limpeza será registrada automaticamente com a data atual, e");
+                                Console.WriteLine("a próxima será recalculada conforme o intervalo cadastrado.");
+                                Console.WriteLine();
+
                                 Console.WriteLine();
                                 Title("REGISTRAR EXCLUSÃO DA LIMPEZA DA ÁREA");
                                 Console.WriteLine();
-                                Console.WriteLine("Em todos os menus será possível registrar a exclusão");
-                                Console.WriteLine("da última data de limpeza, sendo restabelecida a data");
-                                Console.WriteLine("anterior, de acordo com o intervalo de limpeza");
-                                Console.WriteLine("cadastrado.");
+                                Utils.Utils.PrintSucessMessage("Atalho rápido: Opção 2 - Excluir última limpeza.");
+                                Console.WriteLine("Você também pode excluir a última limpeza registrada,");
+                                Console.WriteLine("restaurando a data anterior conforme o intervalo cadastrado.");
                                 Console.WriteLine();
+                                Console.WriteLine();
+
+
                                 break;
 
                             case 2:
                                 Console.Clear();
 
-                                Title("CONSULTA DE LIMPEZA - SIMULADOR DE DATAS");
+                                Title("AJUDA - GERENCIAR LIMPEZAS");
                                 Console.WriteLine();
-                                Console.WriteLine("Este módulo permite ao utilizador consultar todas as");
-                                Console.WriteLine("suas áreas cadastradas em formato árvore, segmentando");
-                                Console.WriteLine("andares (pisos) e suas divisões (áreas). Ao pressionar");
-                                Console.WriteLine("qualquer tecla direcional (setas) do teclado, será");
-                                Console.WriteLine("possível navegar em um simulador de datas progressivo");
-                                Console.WriteLine("ou regressivo, atualizando automaticamente a simulação");
-                                Console.WriteLine("com barras verticais indicativas de limpeza.");
+                                Console.WriteLine("Este módulo permite ao utilizador gerenciar as limpezas das áreas cadastradas.");
                                 Console.WriteLine();
+                                Console.WriteLine("1 - Consultar Limpezas");
+                                Console.WriteLine("   - Visualiza as limpezas realizadas e as próximas programadas.");
+                                Console.WriteLine( );
+                                Console.WriteLine("2 - Simulador de Datas");
+                                Console.WriteLine("   - Simula datas de limpeza progressivas ou regressivas e visualiza");
+                                Console.WriteLine("     as áreas com barras coloridas indicando o estado de limpeza.");
+                                Console.WriteLine();
+
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("||| BARRAS VERDES");
                                 Console.ResetColor();
-                                Console.WriteLine("- Indicam que a divisão está limpa.");
+                                Console.WriteLine("- Divisão limpa.");
+                                Console.WriteLine("- Barras exibidas até o limite de 20 dias.");
+
                                 Console.WriteLine();
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.WriteLine("||| BARRAS AMARELAS");
                                 Console.ResetColor();
-                                Console.WriteLine("- Indicam que a divisão está entre 1 dia antes da data");
-                                Console.WriteLine("prevista de limpeza e 2 dias após se não foi limpa. ");
-                                Console.WriteLine();
+                                Console.WriteLine("- Divisão entre 1 dia antes e 2 dias após a limpeza.");
+                                Console.WriteLine( );
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("||| BARRAS VERMELHAS");
                                 Console.ResetColor();
-                                Console.WriteLine("- Indicam que a divisão está com a limpeza vencida há ");
-                                Console.WriteLine("mais de 2 dias.");
+                                Console.WriteLine("- Divisão com limpeza vencida há mais de 2 dias.");
 
-                                Console.WriteLine("As barras são exibidas até o limite de 20 dias.");
-
+                                Console.WriteLine("- Barras exibidas até o limite de 20 dias.");
                                 break;
 
                             case 3:

@@ -99,7 +99,6 @@ public class Program
 
                 case 2:
                     User.DisplayInfoUser(userId, utilizador);
-                    WaitForUser();
                     break;
 
                 case 3:
@@ -125,10 +124,10 @@ public class Program
             Console.WriteLine();
             Console.WriteLine("1 - Atalhos Rápidos");
             Console.WriteLine("2 - Gerenciar Limpezas");
-            Console.WriteLine("3 - Configuracoes do Utilizador");
-            Console.WriteLine("4 - Configuracoes da Residência");
-            Console.WriteLine("5 - Sair");
-            Console.WriteLine("6 - Ajuda");
+            Console.WriteLine("3 - Configurações do Utilizador");
+            Console.WriteLine("4 - Configurações da Residência");
+            Console.WriteLine("5 - Ajuda");
+            Console.WriteLine("6 - Sair");
 
             Console.WriteLine();
 
@@ -173,7 +172,10 @@ public class Program
         while (true)
         {
             Console.Clear();
-            Title(" MENU DO UTILIZADOR SUPER CLEAN");
+
+            utilizador = RefreshUserName(userId, utilizador);
+
+            Title("MENU DO UTILIZADOR SUPER CLEAN");
             Console.WriteLine();
 
             Console.WriteLine($"Escolha uma opcao abaixo, Utilizador {utilizador}:");
@@ -235,8 +237,8 @@ public class Program
             Console.WriteLine($"Escolha uma opção abaixo, {utilizador}:");
             Console.WriteLine();
 
-            Console.WriteLine("1 - Marcar Limpeza da Área");
-            Console.WriteLine("2 - Remover Última Limpeza da Área");
+            Console.WriteLine("1 - Atalhos Rápidos");
+            Console.WriteLine("2 - Gerenciar Limpezas");
             Console.WriteLine("3 - Editar nome da residência");
             Console.WriteLine("4 - Editar pisos");
             Console.WriteLine("5 - Editar área");
@@ -245,48 +247,26 @@ public class Program
             switch (GetOption(1, 6))
             {
                 case 1:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
-                    Console.WriteLine();
-                    Room.CleanDone(userId, utilizador);
-                    Console.WriteLine();
+                    FastMenu(userId, utilizador);
                     break;
 
                 case 2:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
-                    Console.WriteLine();
-                    DisplayInfoUser(userId, utilizador);
-                    Console.WriteLine();
+                    CleaningMenu(userId, utilizador);
                     break;
 
                 case 3:
-                    Console.Clear();
-                    Title("MENU RESIDÊNCIA SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("        *** Editar nome da residência ***     ");
-                    Console.WriteLine();
                     Residence.ChangeNameResidence(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 4:
-                    Console.Clear();
                     FloorMenu(userId, utilizador);
                     break;
 
                 case 5:
-                    Console.Clear();
                     RoomMenu(userId, utilizador);
                     break;
 
                 case 6:
-                    Console.Clear();
                     MainMenuUser(userId, utilizador);
                     break;
             }
@@ -304,8 +284,8 @@ public class Program
 
             Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
             Console.WriteLine();
-            Console.WriteLine("1 - Marcar Limpeza da Área");
-            Console.WriteLine("2 - Remover Última Limpeza da Área");
+            Console.WriteLine("1 - Atalhos Rápidos");
+            Console.WriteLine("2 - Gerenciar Limpezas");
             Console.WriteLine("3 - Editar Numero do Piso");
             Console.WriteLine("4 - Incluir Piso");
             Console.WriteLine("5 - Excluir Piso");
@@ -315,60 +295,26 @@ public class Program
             switch (GetOption(1, 6))
             {
                 case 1:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
-                    Console.WriteLine();
-                    Room.CleanDone(userId, utilizador);
-                    Console.WriteLine();
+                    FastMenu(userId, utilizador);
                     break;
 
                 case 2:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
-                    Console.WriteLine();
-                    DisplayInfoUser(userId, utilizador);
-                    Console.WriteLine();
+                    CleaningMenu(userId, utilizador);
                     break;
 
                 case 3:
-                    Console.Clear();
-                    Title("MENU PISO SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("   *** Listagem dos pisos do utilizador ***   ");
-                    Console.WriteLine();
                     Residence.ChangeNumberFloor(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 4:
-                    Console.Clear();
-                    Title("MENU PISO SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("*** Adicionar pisos à residência do utilizador ***");
-                    Console.WriteLine();
                     Residence.AddFloorUser(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 5:
-                    Console.Clear();
-                    Title("MENU PISO SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("*** Remover pisos da residência do utilizador ***");
-                    Console.WriteLine();
                     Residence.DeleteFloorUser(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 6:
-                    Console.Clear();
                     ResidenceMenu(userId, utilizador);
                     break;
             }
@@ -386,7 +332,8 @@ public class Program
             Console.WriteLine($"Escolha uma opcao abaixo, utilizador {utilizador}:");
             Console.WriteLine();
 
-
+            Console.WriteLine("1 - Atalhos Rápidos");
+            Console.WriteLine("2 - Gerenciar Limpezas");
             Console.WriteLine("3 - Editar nome da área");
             Console.WriteLine("4 - Incluir área");
             Console.WriteLine("5 - Excluir área");
@@ -396,60 +343,28 @@ public class Program
             switch (GetOption(1, 6))
             {
                 case 1:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("        *** Marcar Limpeza da Área ***        ");
-                    Console.WriteLine();
-                    Room.CleanDone(userId, utilizador);
-                    Console.WriteLine();
+                    FastMenu(userId, utilizador);
                     break;
 
                 case 2:
-                    Console.Clear();
-                    Title("MENU PRINCIPAL SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("     *** Remover Última Limpeza da Área ***   ");
-                    Console.WriteLine();
-                    DisplayInfoUser(userId, utilizador);
-                    Console.WriteLine();
+                    CleaningMenu(userId, utilizador);
                     break;
 
                 case 3:
-                    Console.Clear();
-                    Title("MENU ÁREA SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("    *** Editar nome da área do utilizador *** ");
-                    Console.WriteLine();
                     Floor.ChangeNameRoom(userId, utilizador);
                     Console.WriteLine();
                     WaitForUser();
                     break;
 
                 case 4:
-                    Console.Clear();
-                    Title("MENU ÁREA SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("*** Adicionar área à residência do utilizador ***");
-                    Console.WriteLine();
-                    Floor.AddRoomUser(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
+                   Floor.AddRoomUser(userId, utilizador);
                     break;
 
                 case 5:
-                    Console.Clear();
-                    Title("MENU ÁREA SUPER CLEAN");
-                    Console.WriteLine();
-                    Console.WriteLine("*** Remover área da residência do utilizador ***");
-                    Console.WriteLine();
                     Floor.DeleteRoomUser(userId, utilizador);
-                    Console.WriteLine();
-                    WaitForUser();
                     break;
 
                 case 6:
-                    Console.Clear();
                     ResidenceMenu(userId, utilizador);
                     break;
             }

@@ -214,9 +214,8 @@ public class Floor
         }
 
         Console.Clear();
-        Console.WriteLine("==================================================");
-        Console.WriteLine($"<<< Listagem de Áreas - Utilizador: {utilizador} >>>");
-        Console.WriteLine("==================================================");
+        
+        Utils.Title($"Listagem de Áreas - Utilizador: {utilizador}");
         Console.WriteLine();
 
         int counter = 1;
@@ -253,9 +252,6 @@ public class Floor
             Utils.PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
         }
 
-        Console.WriteLine("==================================================");
-        Console.WriteLine("Pressione qualquer tecla para voltar ao menu...");
-        Console.ReadKey();
     }
 
 
