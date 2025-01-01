@@ -134,12 +134,6 @@ public class User
             users.Add(newUser);
             SaveUsersToFile();
 
-            Console.Clear();
-            Console.WriteLine("==============================================");
-            Console.WriteLine("<<< DETALHAMENTO DO CADASTRO DO UTILIZADOR >>>");
-            Console.WriteLine("==============================================");
-            Console.WriteLine();
-            DisplayInfoUser(newUser.Username);
             return newUser;
         }
     }
@@ -264,18 +258,18 @@ public class User
     }
 
 
-    public static void DisplayInfoUser(string username)
+    public static void DisplayInfoUser(Guid userId, string username)
     {
-        var user = users.FirstOrDefault(u => string.Equals(u.Username, username, StringComparison.Ordinal));
-
+        var user = users.FirstOrDefault(u =>
+       (userId != Guid.Empty && u.UserId == userId) ||
+       (userId == Guid.Empty && string.Equals(u.Username, username, StringComparison.Ordinal))
+   );
         if (user != null)
         {
             DateTime today = DateTime.Today;
             Console.Clear();
 
-            Console.WriteLine("==============================================");
-            Console.WriteLine("          SIMULADOR DE DATAS SUPER CLEAN          ");
-            Console.WriteLine("==============================================");
+            Utils.Title("SIMULADOR DE DATAS SUPER CLEAN");
             Console.WriteLine();
 
             Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
@@ -347,9 +341,7 @@ public class User
                 }
 
                 Console.Clear();
-                Console.WriteLine("==============================================");
-                Console.WriteLine("          SIMULADOR DE DATAS SUPER CLEAN          ");
-                Console.WriteLine("==============================================");
+                Utils.Title("SIMULADOR DE DATAS SUPER CLEAN");
                 Console.WriteLine();
                 Console.WriteLine($"Dia atual: {today.ToShortDateString()}");
                 Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");

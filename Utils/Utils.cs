@@ -13,6 +13,20 @@ namespace ProjSuperClean.Utils;
 
 public static class Utils
 {
+    public static string RefreshUserName(Guid userId, string currentUsername)
+    {
+        var updatedUser = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (updatedUser == null)
+        {
+            Console.WriteLine("Utilizador não encontrado.");
+            return currentUsername;
+        }
+
+        return updatedUser.Username != currentUsername ? updatedUser.Username : currentUsername;
+
+    }
+
     public static int GetOption(int min, int max)
     {
         int opcao;
