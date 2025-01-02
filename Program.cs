@@ -21,24 +21,22 @@ public class Program
     public static void HeaderProgramUserStart()
     {
 
-        Title("SEJA BEM VINDO AO SUPER CLEAN");
+        Title("SEJA BEM-VINDO(A) AO SUPER CLEAN");
         Console.WriteLine();
-        Console.WriteLine("Por favor, informe o nome do seu utilizador:");
+        Console.WriteLine("Por favor, nos informe o nome do seu utilizador.");
         PrintSucessMessage("- Caso não tenha cadastro, será criado um novo para você.");
         Console.WriteLine("- Lembre-se: Deve ter no máximo 8 caracteres.");
         Console.WriteLine("- Lembre-se: Use apenas letras e números ");
-        Console.WriteLine("- Exemplo de nome válido: joao123).");
-        Console.WriteLine();
+        Console.WriteLine("- Exemplo de nome válido: 'joao123'.");
         Console.WriteLine();
         Console.WriteLine("Vamos começar! Fique à vontade.");
         Console.WriteLine();
-        Console.Write("O nome do seu UTILIZADOR: ");
+        Console.Write("Digite aqui o nome do seu UTILIZADOR: ");
 
 
-        string utilizador = Console.ReadLine()?.ToLower();
+        string utilizador = Console.ReadLine()?.Trim();
 
         UserStart(utilizador);
-
 
     }
 

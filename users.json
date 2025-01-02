@@ -1,57 +1,6 @@
 [
   {
-    "Username": "carlos",
-    "Residence": {
-      "ResidenceName": "Home",
-      "ResidenceFloors": [
-        {
-          "FloorName": "00",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-29T11:47:38.796611+00:00",
-              "CleanInterval": 4,
-              "RoomId": "142d7a49-6e43-4323-8dff-c419b0429b7b",
-              "NextClean": "2025-01-02T11:47:38.796611+00:00"
-            },
-            {
-              "RoomName": "Cozinha",
-              "CleanTime": 10,
-              "DayClean": "2024-12-29T11:47:47.2343801+00:00",
-              "CleanInterval": 5,
-              "RoomId": "16ff759b-1bcb-4d11-a613-960636fac58c",
-              "NextClean": "2025-01-03T11:47:47.2343801+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "quarto",
-              "CleanTime": 10,
-              "DayClean": "2024-12-29T11:47:25.764825+00:00",
-              "CleanInterval": 2,
-              "RoomId": "6b6cf314-6c6c-4e4f-8138-1fb688f24dca",
-              "NextClean": "2024-12-31T11:47:25.764825+00:00"
-            },
-            {
-              "RoomName": "QUarto casal",
-              "CleanTime": 5,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "87326b54-fcb6-4216-8d85-a971bc78983c",
-              "NextClean": "2024-12-29T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "904f6cd8-8159-4c4f-8a1b-884384e32df5"
-  },
-  {
-    "Username": "josue",
+    "Username": "kiko",
     "Residence": {
       "ResidenceName": "Lar",
       "ResidenceFloors": [
@@ -61,294 +10,10 @@
             {
               "RoomName": "Garagem",
               "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "d01cc854-5ec1-47e7-a23b-55606219d6f1",
-              "NextClean": "2024-12-27T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "7e2f671d-6471-4b11-b727-3b7e864c5304"
-  },
-  {
-    "Username": "michel",
-    "Residence": {
-      "ResidenceName": "Home",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "48fcd3d2-3a3d-418d-8880-395e344efd50",
-              "NextClean": "2024-12-29T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "2d7ec987-b7b3-4871-848e-43db068a8b4a"
-  },
-  {
-    "Username": "jonatas",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 3,
-              "RoomId": "b89c8074-7265-4c48-a564-73f22ad26fdc",
-              "NextClean": "2024-12-28T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "d960588b-2f0d-4fcf-a407-15796f7d66af"
-  },
-  {
-    "Username": "joana",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "02",
-          "Rooms": [
-            {
-              "RoomName": "Terraco",
-              "CleanTime": 12,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 12,
-              "RoomId": "18bca8f8-859b-4b62-8ec7-2e497bf3763e",
-              "NextClean": "2025-01-06T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "bbf2e8fc-71a0-46be-befb-275f2ced15d4"
-  },
-  {
-    "Username": "josuec",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "e4954376-3d55-4b0e-b2ca-658394469fe8",
-              "NextClean": "2024-12-27T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "fb0e9836-7970-440b-81bc-71ef443d691e"
-  },
-  {
-    "Username": "VeraCruz",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "fd097b55-7153-4b14-8e8e-49e5e2fdcad5",
-              "NextClean": "2024-12-27T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "1b3fba26-4b38-412a-b2f5-8265645162f2"
-  },
-  {
-    "Username": "maria",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Home",
-              "CleanTime": 10,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "2b42d93c-b052-4c7f-98a7-47d3e067f1f7",
-              "NextClean": "2024-12-27T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "35c4cefb-1518-4dc0-b9be-655ae3303fba"
-  },
-  {
-    "Username": "joao123",
-    "Residence": {
-      "ResidenceName": "Casa",
-      "ResidenceFloors": [
-        {
-          "FloorName": "00",
-          "Rooms": []
-        },
-        {
-          "FloorName": "01",
-          "Rooms": []
-        },
-        {
-          "FloorName": "02",
-          "Rooms": [
-            {
-              "RoomName": "Terraco",
-              "CleanTime": 2,
-              "DayClean": "2024-12-25T00:00:00+00:00",
-              "CleanInterval": 3,
-              "RoomId": "2b6122e5-36d6-482f-ab6b-a99897259c46",
-              "NextClean": "2024-12-28T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "03",
-          "Rooms": []
-        },
-        {
-          "FloorName": "04",
-          "Rooms": []
-        },
-        {
-          "FloorName": "RC",
-          "Rooms": []
-        }
-      ]
-    },
-    "UserId": "39e65644-5c59-4576-9af8-a998b708b1b9"
-  },
-  {
-    "Username": "marcosc",
-    "Residence": {
-      "ResidenceName": "House",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 5,
-              "RoomId": "b1913dab-7dc9-404a-af4d-da838ada5e8e",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "02",
-          "Rooms": [
-            {
-              "RoomName": "Sala de Jantar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "e3fa98e6-ca2f-4540-9fd5-d6e3d4429f34",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Sala de Estar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 5,
-              "RoomId": "79d80bee-9c14-4db9-b3da-4971bad60cd7",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "03",
-          "Rooms": [
-            {
-              "RoomName": "Quarto Solteiro",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "1f6060b0-62d3-4ff0-9737-caaa75d140f6",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            },
-            {
-              "RoomName": "QUarto Casal",
-              "CleanTime": 40,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "3a08846a-5b74-4093-ab72-dcd0231fff7a",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "7084c078-ab2d-43a4-a874-bae613248b27"
-  },
-  {
-    "Username": "jessica",
-    "Residence": {
-      "ResidenceName": "Home",
-      "ResidenceFloors": [
-        {
-          "FloorName": "00",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "2a9bbe74-a7b1-4a92-a097-3afb2e5d33da",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            },
-            {
-              "RoomName": "01",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 5,
-              "RoomId": "a0d1e686-d03a-4980-be0d-3a794ac69b64",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            },
-            {
-              "RoomName": "sala jantar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "b0be20f8-e011-4061-97bc-92a3b610adb6",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            },
-            {
-              "RoomName": "sala Estar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 5,
-              "RoomId": "db063ccf-b19b-42b1-a308-6af729b2cc66",
-              "NextClean": "2024-12-31T00:00:00+00:00"
+              "RoomId": "715c3389-b662-42bc-9378-8121b1b7e452",
+              "NextClean": "2025-01-07T00:00:00+00:00"
             }
           ]
         },
@@ -356,28 +21,12 @@
           "FloorName": "01",
           "Rooms": [
             {
-              "RoomName": "Quarto 1",
+              "RoomName": "Sala",
               "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 5,
-              "RoomId": "668fde88-aa48-41f9-a442-f08ae451267b",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Quarto 2",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "cef28bab-86da-47c9-b894-a472ecfbcc34",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Quarto casal",
-              "CleanTime": 10,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 5,
-              "RoomId": "4122d0c7-a8ad-4944-8352-75b0055cb37a",
-              "NextClean": "2024-12-31T00:00:00+00:00"
+              "RoomId": "48a1e5a5-5384-4886-9a62-bf8089c7a279",
+              "NextClean": "2025-01-07T00:00:00+00:00"
             }
           ]
         },
@@ -386,195 +35,41 @@
           "Rooms": [
             {
               "RoomName": "Terraco",
-              "CleanTime": 30,
-              "DayClean": "2024-12-26T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "18870c81-ac13-4c81-b7ba-73180b8b325b",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "1f0ec9b4-daf7-49db-b7b2-8462bc9b444f"
-  },
-  {
-    "Username": "vinicius",
-    "Residence": {
-      "ResidenceName": "Lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Estacionamento",
               "CleanTime": 60,
-              "DayClean": "2024-12-26T00:00:00+00:00",
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 5,
-              "RoomId": "2236e925-2f1e-467f-b9ca-e9a9f70a0aeb",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "1abdef71-6e76-4ce0-ae80-8fafd2f74c59"
-  },
-  {
-    "Username": "joao",
-    "Residence": {
-      "ResidenceName": "casa",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "fefcc064-6c31-4db8-8783-218f66ed7e85",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "69cc7e43-cdb3-44c8-abf6-71be9b319367"
-  },
-  {
-    "Username": "marcos",
-    "Residence": {
-      "ResidenceName": "lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": []
-        }
-      ]
-    },
-    "UserId": "dc056ef4-c9f8-4a81-8637-e3bde3cab281"
-  },
-  {
-    "Username": "jonata",
-    "Residence": {
-      "ResidenceName": "lar",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Quarto",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 10,
-              "RoomId": "3ca1cead-d594-415d-bfc4-ca6cdaeebe2b",
+              "RoomId": "0668eb2f-0713-4ce0-8264-a29e9b37b2aa",
               "NextClean": "2025-01-07T00:00:00+00:00"
             }
           ]
         }
       ]
     },
-    "UserId": "9e3ee04d-2002-442d-ac16-4c7b6b7a3ef9"
+    "UserId": "ea4fa37e-c42c-43be-81e3-e19e832429ff"
   },
   {
-    "Username": "jessabb",
+    "Username": "jessy",
     "Residence": {
-      "ResidenceName": "AbbeyHouse",
-      "ResidenceFloors": [
-        {
-          "FloorName": "01",
-          "Rooms": [
-            {
-              "RoomName": "Sala com cozinha",
-              "CleanTime": 60,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "39c1d017-7510-48ad-9fe3-75b60fa26e7a",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Banheiro",
-              "CleanTime": 30,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "ff138766-2307-42e9-b11f-ab0ab6f83c59",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Corredor",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "449b2f75-6650-4a67-81c6-87fb4a7972ba",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Academia",
-              "CleanTime": 20,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 3,
-              "RoomId": "d0ef83ff-80d2-49b0-bc10-9b72c91ae815",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Quarto 1",
-              "CleanTime": 30,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "605dbc79-ada9-43b6-9a50-b0d671e8951e",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Quarto Master",
-              "CleanTime": 45,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "99f1f51e-96d0-4de7-87d8-1efde6f7c37b",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            },
-            {
-              "RoomName": "Banheiro Master",
-              "CleanTime": 20,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 7,
-              "RoomId": "c05a5d8c-0d37-46f4-8109-990069d36e33",
-              "NextClean": "2025-01-04T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "02",
-          "Rooms": [
-            {
-              "RoomName": "Varanda",
-              "CleanTime": 0,
-              "DayClean": "0001-01-01T00:00:00",
-              "CleanInterval": 0,
-              "RoomId": "00000000-0000-0000-0000-000000000000",
-              "NextClean": "0001-01-01T00:00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "326ebaa7-93e1-4807-b242-112bb39c185c"
-  },
-  {
-    "Username": "marceloa",
-    "Residence": {
-      "ResidenceName": "House",
+      "ResidenceName": "abbeyhouse",
       "ResidenceFloors": [
         {
           "FloorName": "00",
           "Rooms": [
             {
-              "RoomName": "Garagem",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
+              "RoomName": "saleta\\",
+              "CleanTime": 20,
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 5,
-              "RoomId": "9883f79b-1db4-4a65-8dde-aa86a6db116d",
-              "NextClean": "2025-01-02T00:00:00+00:00"
+              "RoomId": "cdc19a4d-9906-42de-ab1d-e0c3f72eefa3",
+              "NextClean": "2025-01-07T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Banheiro",
+              "CleanTime": 10,
+              "DayClean": "2025-01-02T00:00:00+00:00",
+              "CleanInterval": 4,
+              "RoomId": "af7be7a3-9a9d-4cb0-985a-f995aa45babe",
+              "NextClean": "2025-01-06T00:00:00+00:00"
             }
           ]
         },
@@ -582,127 +77,55 @@
           "FloorName": "01",
           "Rooms": [
             {
-              "RoomName": "quarto",
+              "RoomName": "Quarto 1",
               "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 5,
-              "RoomId": "ef51f556-0dca-4a21-ad5e-9be60f8737c6",
-              "NextClean": "2025-01-02T00:00:00+00:00"
-            },
-            {
-              "RoomName": "quarto suite",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 4,
-              "RoomId": "e14e227a-7bef-4b73-b05e-17caa753db69",
-              "NextClean": "2025-01-01T00:00:00+00:00"
+              "RoomId": "6e6f85f2-9f80-42a3-a90f-e2ffa172d914",
+              "NextClean": "2025-01-06T00:00:00+00:00"
             },
             {
-              "RoomName": "banheiro",
-              "CleanTime": 4,
-              "DayClean": "2024-12-28T00:00:00+00:00",
+              "RoomName": "Quarto 2",
+              "CleanTime": 15,
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 2,
-              "RoomId": "db629f9b-a0ca-4480-aa6d-967245dcb4bd",
-              "NextClean": "2024-12-30T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "02",
-          "Rooms": [
-            {
-              "RoomName": "cozinha",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "8625b39d-878f-4ff9-bbea-070a6252869a",
-              "NextClean": "2025-01-01T00:00:00+00:00"
+              "RoomId": "7e85ce7f-c1fc-4ae0-83b8-12b118bc27f7",
+              "NextClean": "2025-01-04T00:00:00+00:00"
             },
             {
-              "RoomName": "sala de jantar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "bd4b62c9-8fee-43d7-8fe9-d8a08f5b69e9",
-              "NextClean": "2025-01-01T00:00:00+00:00"
-            },
-            {
-              "RoomName": "ala de estar",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 4,
-              "RoomId": "8e99a1d7-fd9f-44bc-83b6-fa1225a802cd",
-              "NextClean": "2025-01-01T00:00:00+00:00"
-            }
-          ]
-        },
-        {
-          "FloorName": "03",
-          "Rooms": [
-            {
-              "RoomName": "terraco",
-              "CleanTime": 10,
-              "DayClean": "2024-12-28T00:00:00+00:00",
-              "CleanInterval": 3,
-              "RoomId": "48b5f28a-03e8-481d-8a43-5260258e33e0",
-              "NextClean": "2024-12-31T00:00:00+00:00"
+              "RoomName": "fin",
+              "CleanTime": 12,
+              "DayClean": "2025-01-02T00:00:00+00:00",
+              "CleanInterval": 2,
+              "RoomId": "3462cdb2-863a-4977-b9a4-198dd22f3f67",
+              "NextClean": "2025-01-04T00:00:00+00:00"
             }
           ]
         }
       ]
     },
-    "UserId": "2f7b3a5a-82b6-4ee7-9c9c-872925cc0d8f"
+    "UserId": "bc29840e-639f-4474-a0f3-f4a6a4cbc728"
   },
   {
-    "Username": "Joao",
+    "Username": "Josue",
     "Residence": {
       "ResidenceName": "Lar",
       "ResidenceFloors": [
         {
-          "FloorName": "00",
+          "FloorName": "02",
           "Rooms": [
             {
-              "RoomName": "Garagem",
+              "RoomName": "Fin",
               "CleanTime": 10,
-              "DayClean": "2024-12-30T22:05:43.0161213+00:00",
+              "DayClean": "2025-01-02T00:00:00+00:00",
               "CleanInterval": 4,
-              "RoomId": "d3b8cb72-7f77-4592-8ead-564094a4cd9c",
-              "NextClean": "2025-01-03T22:05:43.0161213+00:00"
+              "RoomId": "351922ff-9383-4d0d-9cd2-18e56f642b71",
+              "NextClean": "2025-01-06T00:00:00+00:00"
             }
           ]
         }
       ]
     },
-    "UserId": "a4c40aa6-b613-44b5-b547-b8a5a87ee751"
-  },
-  {
-    "Username": "jessic",
-    "Residence": {
-      "ResidenceName": "kasa",
-      "ResidenceFloors": [
-        {
-          "FloorName": "00",
-          "Rooms": [
-            {
-              "RoomName": "saleta",
-              "CleanTime": 2,
-              "DayClean": "2024-12-29T00:00:00+00:00",
-              "CleanInterval": 2,
-              "RoomId": "fa0f5a7a-aa30-4027-a058-14ca88ab28fc",
-              "NextClean": "2024-12-31T00:00:00+00:00"
-            },
-            {
-              "RoomName": "saletinha",
-              "CleanTime": 10,
-              "DayClean": "2024-12-29T00:00:00+00:00",
-              "CleanInterval": 15,
-              "RoomId": "5263caaa-4745-4738-a302-3d422f896ec6",
-              "NextClean": "2025-01-13T00:00:00+00:00"
-            }
-          ]
-        }
-      ]
-    },
-    "UserId": "b56c620e-e733-47e4-9810-e42b2e8aa8ea"
+    "UserId": "2ab8de12-e886-4cfa-b118-1db20c8fa586"
   }
 ]

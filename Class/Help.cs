@@ -14,8 +14,8 @@ namespace ProjSuperClean.Class
     {
         private static void Options() 
         {
-            Console.WriteLine("1- Atalhos Super R'apidos: Incluir e Excluir limpeza");
-            Console.WriteLine("2- Gerenciar limpeza: Consulta das limpezas das Áreas");
+            Console.WriteLine("1 - Atalhos Super Rápidos: Incluir e Excluir Limpeza");
+            Console.WriteLine("2 - Gerenciar Limpeza: Consulta das Limpezas das Áreas");
             Console.WriteLine("3- Sobre os Utilizadores");
             Console.WriteLine("4- Sobre as Residências");
             Console.WriteLine("5- Sobre os Andares (Pisos)");

@@ -26,38 +26,41 @@ public class User
 
     public static void UserStart(string utilizador)
     {
-        utilizador = utilizador.Trim().ToLower();
+        utilizador = utilizador.Trim();
 
-        if (utilizador == "admin")
+        if (utilizador.Equals("admin", StringComparison.OrdinalIgnoreCase))
         {
             Console.Clear();
             Program.MainMenuAdmin();
-
+            return;
         }
         else
         {
             while (true)
             {
 
-                bool validationResult = User.ValidationNameUser(utilizador);
-
-                if (!validationResult)
+                if (!IsValidUsername(utilizador,out string errorMessage))
                 {
-                    Utils.PrintErrorMessage("O nome do utilizador não é válido. Tente novamente.");
+                    Utils.PrintErrorMessage(errorMessage);
                     Console.WriteLine("Informe um nome válido para o utilizador:");
                     utilizador = Console.ReadLine()?.Trim();
+                    continue;
                 }
-                else if (User.UserExists(utilizador))
+
+
+                if (UserExists(utilizador))
                 {
-                    Guid userId = User.GetUserId(utilizador);
+                    Guid userId = GetUserId(utilizador);
                     Console.Clear();
                     Program.MainMenuUser(userId, utilizador);
                     break;
                 }
-                else if (User.CreateUser(utilizador) != null)
+
+                if (CreateUser(utilizador) != null)
                 {
                     Utils.WaitForUser();
-                    Guid userId = User.GetUserId(utilizador);
+                    Guid userId = GetUserId(utilizador);
+                    Console.Clear();
                     Program.MainMenuUser(userId, utilizador);
                     break;
                 }
@@ -70,19 +73,23 @@ public class User
     {
         while (true)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Informe o nome da residência para o utilizador '{username}':");
+            Console.WriteLine($@"
+        Informe o nome da residência para o utilizador '{username}':
+        - Digite o nome desejado para a residência.
+        - Digite 'reiniciar' se desejar reiniciar o processo de cadastro do nome.
+        ");
             string residenceName = Console.ReadLine()?.Trim();
 
-            if (residenceName?.ToLower() == "reiniciar")
+            string command = Utils.CheckSpecialCommandsEndAndRestart(residenceName);
+            if (command == "reiniciar")
             {
                 Console.WriteLine("Reiniciando o cadastro...");
-                continue;
+                continue; 
             }
 
             if (string.IsNullOrEmpty(residenceName))
             {
-                Utils.PrintErrorMessage("O nome da residência não pode estar vazio. Tente novamente.");
+                Utils.PrintErrorMessage("O nome da residência não pode estar vazio.");
                 continue;
             }
 
@@ -91,36 +98,56 @@ public class User
 
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Por favor, informe o número do andar (piso) para criar a residência.");
-                Console.WriteLine("Use dois dígitos para representar o andar (exemplo: '00' para térreo, '01' para o primeiro andar...)");
-                Console.WriteLine("Digite 'fim' para encerrar ou 'reiniciar' para recomeçar o cadastro.");
-
+                Console.WriteLine($@"
+            Adicione um novo andar à residência:
+            - Digite o número do andar (exemplo: '00' para térreo, '01' para o primeiro andar...).
+            - Digite 'fim' para concluir a construção da residência.
+            - Digite 'reiniciar' para reiniciar o processo de cadastro.
+            ");
 
                 string floorName = GetValidFloorInput();
 
-                if (floorName?.ToLower() == "fim") break;
-                if (floorName?.ToLower() == "reiniciar") return CreateUser(username);
+                command = Utils.CheckSpecialCommandsEndAndRestart(floorName);
+                if (command == "fim") break;
+                if (command == "reiniciar") return CreateUser(username);
 
                 Floor floor = new Floor(floorName);
 
                 while (true)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine($"Informe o nome da divisão no piso {floorName} (ou 'fim' para voltar ao piso, 'reiniciar' para recomeçar):");
-                    Console.WriteLine("*** Exemplo: 'Sala de jantar' ***");
-                    string roomName = GetValidRoomInput();
+                    Console.WriteLine($@"
+                Informe o nome da divisão no piso {floorName}:
+                - Exemplo: 'Sala'
+                - Digite 'fim' para voltar ao piso.
+                - Digite 'reiniciar' para recomeçar o cadastro.
+                ");
+                    string roomName = Console.ReadLine()?.Trim();
 
-                    if (roomName?.ToLower() == "fim") break;
-                    if (roomName?.ToLower() == "reiniciar") return CreateUser(username);
+                    command = Utils.CheckSpecialCommandsEndAndRestart(roomName);
+                    if (command == "fim") break;
+                    if (command == "reiniciar") return CreateUser(username);
 
-                    Console.WriteLine();
-                    Console.WriteLine("Informe o tempo de limpeza (em minutos):");
+                    if (roomName.StartsWith("fi", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($@"
+                    Você digitou '{roomName}'. Deseja finalizar ou este é o nome do quarto?
+                    - Digite '1' para finalizar.
+                    - Digite '2' para usar '{roomName}' como o nome do quarto.
+                    ");
+                        string confirmation = Console.ReadLine()?.Trim();
+
+                        if (confirmation == "1") break;
+                        if (confirmation != "2")
+                        {
+                            Console.WriteLine("Opção inválida. Continuando...");
+                            continue;
+                        }
+                    }
+
+                    Console.WriteLine($"Informe o tempo de limpeza da(o) {roomName} (em minutos):");
                     int cleanTime = GetValidIntInput();
 
-
-                    Console.WriteLine();
-                    Console.WriteLine("Informe o intervalo de limpeza (em dias):");
+                    Console.WriteLine($"Informe o intervalo de limpeza da(o) {roomName} (em dias):");
                     int cleanInterval = GetValidIntInput();
 
                     Room room = new Room(roomName, cleanTime, cleanInterval);
@@ -137,6 +164,7 @@ public class User
             return newUser;
         }
     }
+
 
     public static string GetValidFloorInput()
     {
@@ -244,7 +272,6 @@ public class User
             }
             else
             {
-                Console.WriteLine("Arquivo não encontrado. Criando lista vazia de utilizadores.");
                 users = new List<User>();
                 return users;
             }
@@ -506,14 +533,14 @@ public class User
 
         try
         {
-            if (ValidationNameUser(newName))
+            if (IsValidUsername(newName, out string errorMessage))
             {
-                User.UpdateUserName(userId, newName);
+                UpdateUserName(userId, newName);
                 Utils.PrintSucessMessage("O nome do utilizador foi alterado com sucesso!");
             }
             else
             {
-                Utils.PrintErrorMessage($"username {newName} vazio ou com mais que 8 caracteres!");
+                Utils.PrintErrorMessage(errorMessage);
             }
         }
 
@@ -542,28 +569,33 @@ public class User
 
     }
 
-    public static bool ValidationNameUser(string name)
+    public static bool IsValidUsername(string username, out string errorMessage)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(username))
         {
+            errorMessage = "O nome de utilizador não pode estar vazio.";
             return false;
         }
 
-        if (name.Length > 8)
+        if (username.Length > 8)
         {
+            errorMessage = "O nome de utilizador deve ter no máximo 8 caracteres.";
             return false;
         }
 
-        foreach (char c in name)
+        foreach (char c in username)
         {
             if (!char.IsLetterOrDigit(c))
             {
+                errorMessage = "O nome de utilizador só pode conter letras e números.";
                 return false;
             }
         }
 
+        errorMessage = string.Empty; 
         return true;
     }
+
 
     public static void DeleteUser(Guid userId)
     {

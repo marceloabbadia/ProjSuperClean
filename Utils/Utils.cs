@@ -69,4 +69,15 @@ public static class Utils
         Console.WriteLine("=====================================================");
     }
 
+    public static string CheckSpecialCommandsEndAndRestart(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return null;
+
+        if (input.Equals("fim", StringComparison.OrdinalIgnoreCase))
+            return "fim";
+        if (input.StartsWith("reiniciar", StringComparison.OrdinalIgnoreCase))
+            return "reiniciar";
+
+        return null; 
+    }
 }
