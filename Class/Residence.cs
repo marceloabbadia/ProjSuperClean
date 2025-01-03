@@ -125,6 +125,8 @@ public class Residence
         Console.WriteLine();
     }
 
+ 
+    // Adiciona um ou mais pisos à residência do utilizador
     public static void AddFloorUser(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -172,6 +174,8 @@ public class Residence
         }
     }
 
+
+    // Deleta um ou mais pisos à residência do utilizador
     public static void DeleteFloorUser(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -221,5 +225,17 @@ public class Residence
     }
 
 
+    //Verifica se o utilizador possui pelo menos 1 piso em sua residência
+    public static bool HasFloors(Guid userId)
+    {
+        User user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user?.Residence?.ResidenceFloors == null || user.Residence.ResidenceFloors.Count == 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
 }

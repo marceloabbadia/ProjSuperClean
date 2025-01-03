@@ -24,6 +24,7 @@ public class User
         }
     }
 
+    // Determina o tipo de login a ser realizado: adm, navegação com utilizador existente ou criação de novo utilizador.
     public static void UserStart(string utilizador)
     {
         utilizador = utilizador.Trim();
@@ -34,41 +35,56 @@ public class User
             Program.MainMenuAdmin();
             return;
         }
-        else
+
+        Guid userId = Guid.Empty;
+
+
+        while (true)
         {
-            while (true)
+
+            if (!IsValidUsername(utilizador, out string errorMessage))
             {
+                Utils.PrintErrorMessage(errorMessage);
+                Console.WriteLine("Informe um nome válido para o utilizador:");
+                utilizador = Console.ReadLine()?.Trim();
+                continue;
+            }
 
-                if (!IsValidUsername(utilizador,out string errorMessage))
+
+            if (UserExists(utilizador))
+            {
+                userId = GetUserId(utilizador); 
+                Console.Clear();
+
+                if (!Residence.HasFloors(userId))
                 {
-                    Utils.PrintErrorMessage(errorMessage);
-                    Console.WriteLine("Informe um nome válido para o utilizador:");
-                    utilizador = Console.ReadLine()?.Trim();
-                    continue;
+                    Console.WriteLine("Parece que a sua residência ainda não está concluída. Vamos ajudá-lo a configurar os pisos agora...");
+                    Residence.AddFloorUser(userId, utilizador);
+                    break;
+
                 }
-
-
-                if (UserExists(utilizador))
+                else
                 {
-                    Guid userId = GetUserId(utilizador);
-                    Console.Clear();
                     Program.MainMenuUser(userId, utilizador);
                     break;
                 }
 
-                if (CreateUser(utilizador) != null)
-                {
-                    Utils.WaitForUser();
-                    Guid userId = GetUserId(utilizador);
-                    Console.Clear();
-                    Program.MainMenuUser(userId, utilizador);
-                    break;
-                }
+            }
+
+            if (CreateUser(utilizador) != null)
+            {
+                userId = GetUserId(utilizador);
+                Utils.WaitForUser();
+                Console.Clear();
+                Program.MainMenuUser(userId, utilizador);
+                break;
             }
         }
     }
+    
 
 
+    // Cria um novo utilizador, incluindo residência, pisos e divisões.
     public static User CreateUser(string username)
     {
         while (true)
@@ -84,7 +100,7 @@ public class User
             if (command == "reiniciar")
             {
                 Console.WriteLine("Reiniciando o cadastro...");
-                continue; 
+                continue;
             }
 
             if (string.IsNullOrEmpty(residenceName))
@@ -130,9 +146,9 @@ public class User
                     if (roomName.StartsWith("fi", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine($@"
-                    Você digitou '{roomName}'. Deseja finalizar ou este é o nome do quarto?
+                    Você digitou '{roomName}'. Deseja finalizar ou este é o nome da divisão no piso?
                     - Digite '1' para finalizar.
-                    - Digite '2' para usar '{roomName}' como o nome do quarto.
+                    - Digite '2' para usar '{roomName}' como o nome da divisão no piso.
                     ");
                         string confirmation = Console.ReadLine()?.Trim();
 
@@ -592,7 +608,7 @@ public class User
             }
         }
 
-        errorMessage = string.Empty; 
+        errorMessage = string.Empty;
         return true;
     }
 
@@ -629,6 +645,7 @@ public class User
 
 
     }
+
 
     public static Guid GetUserId(string username)
     {

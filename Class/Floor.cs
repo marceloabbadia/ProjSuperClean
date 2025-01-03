@@ -18,17 +18,19 @@ public class Floor
     public Floor() { }
 
 
-
+    //Adiciona Room
     public void AddRoom(Room room)
     {
         Rooms.Add(room);
     }
 
+    //Remover Room
     public void RemoveRoom(Room room)
     {
         Rooms.Remove(room);
     }
 
+    // Mudar nome Room
     public static void ChangeNameRoom(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -85,7 +87,7 @@ public class Floor
         Utils.PrintSucessMessage("Nome da área alterado com sucesso!");
     }
 
-
+    //Adicionar Room
     public static void AddRoomUser(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -195,7 +197,8 @@ public class Floor
             return;
         }
 
-        selectedFloor.Rooms.Remove(roomToDelete);
+        //selectedFloor.Rooms.Remove(roomToDelete);
+        selectedFloor.RemoveRoom(roomToDelete);
 
         User.SaveUsersToFile();
         Utils.PrintSucessMessage($"A área '{roomNameToDelete}' foi excluída com sucesso!");
@@ -254,7 +257,7 @@ public class Floor
 
     }
 
-
+    // Realizar a listagem limpeza 
     public static void CleaningRoomsList(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -267,9 +270,7 @@ public class Floor
         }
 
         Console.Clear();
-        Console.WriteLine("==================================================");
-        Console.WriteLine($"<<<  Lista de Áreas para efetuar a limpeza  >>>  ");
-        Console.WriteLine("==================================================");
+        Utils.Title("Lista de Áreas para efetuar a limpeza");
         Console.WriteLine();
         Console.WriteLine($"Utilizador: {utilizador}");
 
@@ -305,12 +306,10 @@ public class Floor
         else
         {
             Utils.PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
-        }
-
-        Console.WriteLine("==================================================");
-        
+        }        
     }
 
+    //Ordena Rooms
     public static void AutoSortFloors()
     {
         foreach (var user in User.users)
