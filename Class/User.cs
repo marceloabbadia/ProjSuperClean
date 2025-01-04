@@ -1,6 +1,7 @@
 ﻿namespace ProjSuperClean.Class;
 
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
@@ -50,16 +51,16 @@ public class User
                 continue;
             }
 
-
             if (UserExists(utilizador))
             {
-                userId = GetUserId(utilizador); 
+                userId = GetUserId(utilizador);
                 Console.Clear();
 
-                if (!Residence.HasFloors(userId))
+                // Caso o utilizador não tenha concluído o registo da residência, será redirecionado para finalizar o processo.
+                if (!Floor.HasFloors(userId))
                 {
                     Console.WriteLine("Parece que a sua residência ainda não está concluída. Vamos ajudá-lo a configurar os pisos agora...");
-                    Residence.AddFloorUser(userId, utilizador);
+                    Floor.AddFloorUser(userId, utilizador);
                     break;
 
                 }
@@ -81,7 +82,6 @@ public class User
             }
         }
     }
-    
 
 
     // Cria um novo utilizador, incluindo residência, pisos e divisões.
@@ -109,8 +109,8 @@ public class User
                 continue;
             }
 
-            User newUser = new User(username);
-            Residence residence = new Residence(residenceName);
+            User newUser = new(username);
+            Residence residence = new(residenceName);
 
             while (true)
             {
@@ -121,7 +121,7 @@ public class User
             - Digite 'reiniciar' para reiniciar o processo de cadastro.
             ");
 
-                string floorName = GetValidFloorInput();
+                string floorName = Utils.GetValidFloorInput();
 
                 command = Utils.CheckSpecialCommandsEndAndRestart(floorName);
                 if (command == "fim") break;
@@ -161,16 +161,16 @@ public class User
                     }
 
                     Console.WriteLine($"Informe o tempo de limpeza da(o) {roomName} (em minutos):");
-                    int cleanTime = GetValidIntInput();
+                    int cleanTime = Utils.GetValidClearAndIntervalInput();
 
                     Console.WriteLine($"Informe o intervalo de limpeza da(o) {roomName} (em dias):");
-                    int cleanInterval = GetValidIntInput();
+                    int cleanInterval = Utils.GetValidClearAndIntervalInput();
 
                     Room room = new Room(roomName, cleanTime, cleanInterval);
-                    floor.AddRoom(room);
+                    floor.FloorAddRoom(room);
                 }
 
-                residence.AddFloor(floor);
+                residence.ResidenceAddFloor(floor);
             }
 
             newUser.Residence = residence;
@@ -182,61 +182,7 @@ public class User
     }
 
 
-    public static string GetValidFloorInput()
-    {
-        while (true)
-        {
-            string input = Console.ReadLine()?.Trim();
-
-            if (input?.ToLower() == "fim" || input?.ToLower() == "reiniciar") return input;
-
-            if (!string.IsNullOrEmpty(input) && input.Length == 2 && int.TryParse(input, out _))
-            {
-                return input;
-            }
-            else
-            {
-                Utils.PrintErrorMessage("O número da área (piso) deve ter exatamente 2 dígitos.");
-            }
-        }
-    }
-
-    public static string GetValidRoomInput()
-    {
-        while (true)
-        {
-            string input = Console.ReadLine()?.Trim();
-
-            if (input?.ToLower() == "fim" || input?.ToLower() == "reiniciar") return input;
-
-            if (!string.IsNullOrEmpty(input) && input.Length <= 10)
-            {
-                return input;
-            }
-            else
-            {
-                Utils.PrintErrorMessage("O nome da divisão deve ter no máximo 10 caracteres e não pode estar vazio.");
-            }
-        }
-    }
-
-    public static int GetValidIntInput()
-    {
-        while (true)
-        {
-
-            if (int.TryParse(Console.ReadLine(), out int result))
-            {
-                return result;
-            }
-            else
-            {
-                Utils.PrintErrorMessage("Entrada inválida! Por favor, insira um número inteiro válido.");
-            }
-        }
-    }
-
-
+    //Salva alteracoes, inclusoes, exclusoes em arquivo
     public static void SaveUsersToFile()
     {
 
@@ -263,6 +209,8 @@ public class User
         }
     }
 
+
+    //Carrega arquivos salvos 
     public static List<User> LoadUsersFromFile()
     {
         var dirPath = @"C:\Users\marce\OneDrive\Área de Trabalho\cegid\c#\Restart-24\ProjSuperClean";
@@ -281,7 +229,7 @@ public class User
                 {
                     if (user.Residence != null && user.Residence.ResidenceFloors != null)
                     {
-                        Floor.AutoSortFloors();
+                        Floor.GlobalAutoSortFloors();
                     }
                 }
                 return users;
@@ -301,6 +249,7 @@ public class User
     }
 
 
+    //Simulador de datas de limpeza do utilizador- consolida com os PIPES
     public static void DisplayInfoUser(Guid userId, string username)
     {
         var user = users.FirstOrDefault(u =>
@@ -439,6 +388,8 @@ public class User
         }
     }
 
+
+    //Simulador de datas de limpeza de todos utilizadores - consolida com os PIPES
     public static void DisplayInfoCompleteAdmin()
     {
         DateTime today = DateTime.Today;
@@ -498,6 +449,8 @@ public class User
         }
     }
 
+
+    //Listagem de todas Rooms com Pipes
     public static void DisplayRoomsInfoAdmin(List<Room> rooms, DateTime today, ref int counter)
     {
         foreach (var room in rooms)
@@ -531,6 +484,7 @@ public class User
     }
 
 
+    //Altera o username do utilizador 
     public static void ChangeUsername(Guid userId, string utilizador)
     {
         var user = users.FirstOrDefault(u => u.UserId == userId);
@@ -547,36 +501,32 @@ public class User
         Console.WriteLine();
         string newName = Console.ReadLine()?.Trim();
 
-        try
+
+        if (IsValidUsername(newName, out string errorMessage))
         {
-            if (IsValidUsername(newName, out string errorMessage))
-            {
-                UpdateUserName(userId, newName);
-                Utils.PrintSucessMessage("O nome do utilizador foi alterado com sucesso!");
-            }
-            else
-            {
-                Utils.PrintErrorMessage(errorMessage);
-            }
+            Utils.PrintSucessMessage(errorMessage);
+            Utils.WaitForUser();
+            return;
         }
 
-        catch (ArgumentException ex)
+        try
         {
-            Utils.PrintErrorMessage($"Erro ao alterar o nome do utilizador: {ex.Message}");
+
+            UpdateUserName(user, newName);
+            Utils.PrintSucessMessage("O nome do utilizador foi alterado com sucesso!");
         }
+
         catch (Exception ex)
         {
-            Utils.PrintErrorMessage($"Erro inesperado: {ex.Message}");
+            Utils.PrintErrorMessage($"Erro ao alterar o nome do utilizador: {ex.Message}");
         }
 
         Utils.WaitForUser();
     }
 
-
-    public static void UpdateUserName(Guid userId, string newName)
+    //Atualiza o username do utilizador
+    public static void UpdateUserName(User user, string newName)
     {
-        var user = users.FirstOrDefault(u => u.UserId == userId);
-
         if (user == null)
             throw new ArgumentException("Utilizador não encontrado.");
 
@@ -585,6 +535,8 @@ public class User
 
     }
 
+
+    //Valida se o nome do utilizador atende os requisitos
     public static bool IsValidUsername(string username, out string errorMessage)
     {
         if (string.IsNullOrEmpty(username))
@@ -613,6 +565,7 @@ public class User
     }
 
 
+    //Deleta utilizador da base de dados
     public static void DeleteUser(Guid userId)
     {
         try
@@ -637,20 +590,24 @@ public class User
         }
     }
 
+
+    //Veirifca se existe o username do utilizador na base de dados
     public static bool UserExists(string username)
     {
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ArgumentException("O nome do utilizador não pode ser nulo ou vazio.", nameof(username));
+
         List<User> users = LoadUsersFromFile();
 
         return users.Any(u => u.Username.Equals(username));
-
-
     }
 
 
+    //Localiza o ID do utilizador pela pesquisa do username
     public static Guid GetUserId(string username)
     {
         if (string.IsNullOrWhiteSpace(username))
-            throw new ArgumentException("O nome do utilizador não pode ser vazio ou nulo.");
+            throw new ArgumentException("O nome do utilizador não pode ser vazio ou nulo.", nameof(username));
 
         var user = users.FirstOrDefault(u => string.Equals(u.Username, username, StringComparison.Ordinal));
 

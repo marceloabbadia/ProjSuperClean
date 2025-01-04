@@ -11,5 +11,142 @@
       ]
     },
     "UserId": "f873489e-2728-4347-89d9-27df96dd71f3"
+  },
+  {
+    "Username": "Marcelo",
+    "Residence": {
+      "ResidenceName": "Lar",
+      "ResidenceFloors": [
+        {
+          "FloorName": "00",
+          "Rooms": [
+            {
+              "RoomName": "Garagem",
+              "CleanTime": 10,
+              "DayClean": "2025-01-03T00:00:00+00:00",
+              "CleanInterval": 3,
+              "RoomId": "17eaf2d5-ab8b-4607-ba92-653aa4cf5d5a",
+              "NextClean": "2025-01-06T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "01",
+          "Rooms": [
+            {
+              "RoomName": "Sala",
+              "CleanTime": 20,
+              "DayClean": "2025-01-03T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "5f2a9521-ba6f-4b40-ab5a-e258045887a1",
+              "NextClean": "2025-01-08T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Cozinha",
+              "CleanTime": 30,
+              "DayClean": "2025-01-03T00:00:00+00:00",
+              "CleanInterval": 3,
+              "RoomId": "f2ce98dd-f0ca-4272-ade7-1a734d7fcbd6",
+              "NextClean": "2025-01-06T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "02",
+          "Rooms": [
+            {
+              "RoomName": "QUarto solteiro",
+              "CleanTime": 10,
+              "DayClean": "2025-01-03T00:00:00+00:00",
+              "CleanInterval": 2,
+              "RoomId": "7ee31243-bf55-478d-aa2a-d3f888d70c93",
+              "NextClean": "2025-01-05T00:00:00+00:00"
+            },
+            {
+              "RoomName": "Quarto Casal",
+              "CleanTime": 30,
+              "DayClean": "2025-01-04T14:03:59.8920019+00:00",
+              "CleanInterval": 4,
+              "RoomId": "422d3be6-5bf1-411c-b580-b4a18b854043",
+              "NextClean": "2025-01-08T14:03:59.8920019+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "03",
+          "Rooms": [
+            {
+              "RoomName": "Terraco",
+              "CleanTime": 30,
+              "DayClean": "2025-01-03T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "f43dc65c-a9cb-4714-a5d2-fbbc320e661a",
+              "NextClean": "2025-01-08T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    "UserId": "1fbf4b87-ede3-4244-9f16-49d235f4b769"
+  },
+  {
+    "Username": "Kiko123",
+    "Residence": {
+      "ResidenceName": "Lar",
+      "ResidenceFloors": [
+        {
+          "FloorName": "02",
+          "Rooms": [
+            {
+              "RoomName": "Garagem",
+              "CleanTime": 10,
+              "DayClean": "2025-01-04T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "4f39f1af-b9ff-4cb3-85e8-dc545621f28d",
+              "NextClean": "2025-01-09T00:00:00+00:00"
+            }
+          ]
+        },
+        {
+          "FloorName": "03",
+          "Rooms": [
+            {
+              "RoomName": "Terraco",
+              "CleanTime": 10,
+              "DayClean": "2025-01-04T00:00:00+00:00",
+              "CleanInterval": 5,
+              "RoomId": "495cab46-c366-4a1c-b05d-72dc39120b1f",
+              "NextClean": "2025-01-09T00:00:00+00:00"
+            },
+            {
+              "RoomName": "f",
+              "CleanTime": 10,
+              "DayClean": "2025-01-04T00:00:00+00:00",
+              "CleanInterval": 2,
+              "RoomId": "6edec7e5-efc7-499b-a21c-714d041e6ac7",
+              "NextClean": "2025-01-06T00:00:00+00:00"
+            }
+          ]
+        }
+      ]
+    },
+    "UserId": "690d1468-1282-467b-b0d6-22a349095b5a"
+  },
+  {
+    "Username": "kiko123",
+    "Residence": {
+      "ResidenceName": "fim",
+      "ResidenceFloors": [
+        {
+          "FloorName": "00",
+          "Rooms": []
+        },
+        {
+          "FloorName": "01",
+          "Rooms": []
+        }
+      ]
+    },
+    "UserId": "b5b3c9b0-2a06-44a1-ae0e-74c78c2f2974"
   }
 ]

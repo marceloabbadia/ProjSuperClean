@@ -2,6 +2,9 @@
 using ProjSuperClean.Class;
 using static ProjSuperClean.Utils.Utils;
 using static ProjSuperClean.Class.User;
+using static ProjSuperClean.Class.Room;
+using static ProjSuperClean.Class.Floor;
+using static ProjSuperClean.Class.Residence;
 using static ProjSuperClean.Class.Help;
 using System.Diagnostics.Metrics;
 
@@ -58,12 +61,12 @@ public class Program
             switch (GetOption(1, 3))
             {
                 case 1:
-                    Room.CleanDone(userId, utilizador);
+                    CleanDone(userId, utilizador);
                     WaitForUser();
                     break;
 
                 case 2:
-                    Room.DeleteLastClean(userId, utilizador);
+                    DeleteLastClean(userId, utilizador);
                     WaitForUser();
                     break;
 
@@ -91,12 +94,12 @@ public class Program
             switch (GetOption(1, 3))
             {
                 case 1:
-                    Floor.RoomsList(userId, utilizador);
+                    RoomsList(userId, utilizador);
                     WaitForUser();
                     break;
 
                 case 2:
-                    User.DisplayInfoUser(userId, utilizador);
+                    DisplayInfoUser(userId, utilizador);
                     break;
 
                 case 3:
@@ -151,7 +154,7 @@ public class Program
                     break;
 
                 case 5:
-                    Help.HelpMenu(userId, utilizador);
+                    HelpMenu(userId, utilizador);
                     WaitForUser();
                     break;
 
@@ -208,6 +211,7 @@ public class Program
                     DeleteUser(userId);
                     Console.WriteLine();
                     WaitForUser();
+                    Console.Clear();
                     HeaderProgramUserStart();
                     break;
 
@@ -253,7 +257,7 @@ public class Program
                     break;
 
                 case 3:
-                    Residence.ChangeNameResidence(userId, utilizador);
+                    ChangeNameResidence(userId, utilizador);
                     break;
 
                 case 4:
@@ -284,7 +288,7 @@ public class Program
             Console.WriteLine();
             Console.WriteLine("1 - Atalhos Rápidos");
             Console.WriteLine("2 - Gerenciar Limpezas");
-            Console.WriteLine("3 - Editar Numero do Piso");
+            Console.WriteLine("3 - Editar número do piso");
             Console.WriteLine("4 - Incluir Piso");
             Console.WriteLine("5 - Excluir Piso");
             Console.WriteLine("6 - Voltar Menu Residencia");
@@ -301,15 +305,15 @@ public class Program
                     break;
 
                 case 3:
-                    Residence.ChangeNumberFloor(userId, utilizador);
+                    ChangeNumberFloor(userId, utilizador);
                     break;
 
                 case 4:
-                    Residence.AddFloorUser(userId, utilizador);
+                    AddFloorUser(userId, utilizador);
                     break;
 
                 case 5:
-                    Residence.DeleteFloorUser(userId, utilizador);
+                    DeleteFloorUser(userId, utilizador);
                     break;
 
                 case 6:
@@ -349,17 +353,17 @@ public class Program
                     break;
 
                 case 3:
-                    Floor.ChangeNameRoom(userId, utilizador);
+                    ChangeNameRoom(userId, utilizador);
                     Console.WriteLine();
                     WaitForUser();
                     break;
 
                 case 4:
-                   Floor.AddRoomUser(userId, utilizador);
+                   AddRoomUser(userId, utilizador);
                     break;
 
                 case 5:
-                    Floor.DeleteRoomUser(userId, utilizador);
+                    DeleteRoomUser(userId, utilizador);
                     break;
 
                 case 6:

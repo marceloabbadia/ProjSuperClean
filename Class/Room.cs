@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Security.Cryptography.X509Certificates;
+using static ProjSuperClean.Utils.Utils;
 
 namespace ProjSuperClean.Class;
 
@@ -15,8 +16,6 @@ public class Room
 
     public Guid RoomId { get; set; }
     public DateTime NextClean { get; set; }
-
-    public static List<Room> rooms = new List<Room>();
 
     public Room(string name, int cleanTime, int cleanInterval)
     {
@@ -35,25 +34,33 @@ public class Room
 
     public Room() { }
 
+
+    //Realizar limpeza do Room
     public static void CleanDone(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId && u.Username == utilizador);
         if (user == null)
         {
-            Console.WriteLine("Utilizador não encontrado.");
+            Console.WriteLine($"Utilizador '{utilizador}' com ID '{userId}' não encontrado.");
             return;
         }
 
-        if (user.Residence == null || !user.Residence.ResidenceFloors.Any())
+        if (user.Residence == null || user.Residence.ResidenceFloors == null || !user.Residence.ResidenceFloors.Any())
         {
-            Console.WriteLine("Este utilizador não possui uma residência.");
+            Console.WriteLine("Este utilizador não possui uma residência ou andares cadastrados.");
             return;
         }
 
         Console.WriteLine("Áreas disponíveis para limpeza ordenadas por vencimento:");
         Console.WriteLine();
 
-        var rooms = user.Residence.ResidenceFloors.SelectMany(f => f.Rooms).OrderBy(r => r.NextClean).ToList();
+        var rooms = user.Residence.ResidenceFloors
+                     .Where(f => f.Rooms != null)
+                     .SelectMany(f => f.Rooms)
+                     .Where(r => r != null)
+                     .OrderBy(r => r.NextClean)
+                     .ToList();
+
         for (int i = 0; i < rooms.Count; i++)
         {
             Console.WriteLine($"{i + 1}: {rooms[i].RoomName} - vencimento dia: {rooms[i].NextClean:dd/MM/yyyy}");
@@ -61,19 +68,24 @@ public class Room
 
         Console.WriteLine();
 
-        Console.WriteLine("Informe o número da área que deseja limpar (ou digite 'fim' para retornar):");
-        string codeClean = Console.ReadLine();
-
-        if (codeClean.ToLower() == "fim")
+        if (!rooms.Any())
         {
+            Console.WriteLine("Não há áreas disponíveis para limpeza.");
             return;
         }
 
-        if (!int.TryParse(codeClean, out int roomIndex) || roomIndex < 1 || roomIndex > rooms.Count)
+        string codeClean;
+        int roomIndex;
+
+        do
         {
-            Console.WriteLine("Entrada inválida.");
-            return;
-        }
+            Console.WriteLine("Informe o número da área que deseja limpar (ou digite 'fim' para retornar):");
+            codeClean = Console.ReadLine();
+
+            if (codeClean.ToLower() == "fim")
+                return;
+
+        } while (!int.TryParse(codeClean, out roomIndex) || roomIndex < 1 || roomIndex > rooms.Count);
 
         var selectedRoom = rooms[roomIndex - 1];
 
@@ -84,7 +96,7 @@ public class Room
         Console.WriteLine($"Próxima limpeza agendada para: {selectedRoom.NextClean:dd/MM/yyyy}");
     }
 
-
+    //Remover ultima limpeza do room
     public static void DeleteLastClean(Guid userId, string utilizador)
     {
 
@@ -148,6 +160,7 @@ public class Room
     }
 
 
+    // Gerar barras de status da limpeza
     public static int[] GenerationPypes(Room room, DateTime today)
     {
         int greenPipe = 0, yellowPipe = 0, redPipe = 0;
@@ -179,8 +192,306 @@ public class Room
         redPipe = Math.Abs(redPipe);
 
 
-        return new int[] { greenPipe, yellowPipe, redPipe };
+        return [greenPipe, yellowPipe, redPipe];
     }
+
+
+
+    // Mudar nome Room
+    public static void ChangeNameRoom(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return;
+        }
+
+        RoomsList(userId, utilizador);
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o nome da área que gostaria de alterar (ex: 'Quarto casal'): ");
+        string roomName = Console.ReadLine()?.Trim();
+
+        Room roomToEdit = null;
+
+        foreach (var floor in user.Residence.ResidenceFloors)
+        {
+            roomToEdit = floor.Rooms.FirstOrDefault(r => r.RoomName.Equals(roomName, StringComparison.Ordinal));
+
+            if (roomToEdit != null)
+                break;
+        }
+
+        if (roomToEdit == null)
+        {
+            PrintErrorMessage($"Área {roomToEdit} não encontrada. Verifique o nome e tente novamente.");
+            WaitForUser();
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o novo nome da área (ex: 'Suite Casal'): ");
+        string newRoomName = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(newRoomName))
+        {
+            PrintErrorMessage("Nome da área inválido!");
+            return;
+        }
+
+        if (user.Residence.ResidenceFloors.Any(floor =>
+            floor.Rooms.Any(room => room.RoomName.Equals(newRoomName, StringComparison.Ordinal))))
+        {
+            PrintErrorMessage($"O nome '{newRoomName}' já está atribuído a outra área.");
+            return;
+        }
+
+        roomToEdit.RoomName = newRoomName;
+        User.SaveUsersToFile();
+        PrintSucessMessage("Nome da área alterado com sucesso!");
+    }
+
+    
+    //Adicionar Room
+    public static void AddRoomUser(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return;
+        }
+
+        RoomsList(userId, utilizador);
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o número do andar (piso) da área a ser incluída (ex: '03'):");
+        Console.WriteLine("⚠️ ATENÇÃO: O piso deve existir. Se necessário, crie o piso primeiro no menu principal.");
+        string floorNumber = Console.ReadLine()?.Trim();
+
+        var selectedFloor = user.Residence.ResidenceFloors
+            .FirstOrDefault(f => f.FloorName.Equals(floorNumber, StringComparison.Ordinal));
+
+        if (selectedFloor == null)
+        {
+            PrintErrorMessage("Número do andar (piso) inválido ou inexistente.");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o nome da área que gostaria de incluir (ex: 'Sala de Jantar'): ");
+        string addRoomName = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(addRoomName))
+        {
+            PrintErrorMessage("O nome da área não pode estar vazio.");
+            return;
+        }
+
+        if (selectedFloor.Rooms.Any(room => room.RoomName.Equals(addRoomName, StringComparison.Ordinal)))
+        {
+            PrintErrorMessage($"A área '{addRoomName}' já existe neste andar (piso).");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o tempo de limpeza (em minutos):");
+        int cleanTime = GetValidClearAndIntervalInput();
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o intervalo de limpeza (em dias):");
+        int cleanInterval = GetValidClearAndIntervalInput();
+
+
+
+        Room newRoom = new Room(addRoomName, cleanTime, cleanInterval);
+
+        selectedFloor.Rooms.Add(newRoom);
+
+
+        User.SaveUsersToFile();
+        PrintSucessMessage("Nova área incluída com sucesso!");
+    }
+
+
+    //Deletar Room
+    public static void DeleteRoomUser(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return;
+        }
+
+        RoomsList(userId, utilizador);
+
+        Console.WriteLine();
+        Console.WriteLine("Informe em qual piso está a área que deseja excluir (ex: '03'): ");
+        Console.WriteLine("ATENÇÃO! Deve ser escolhido um piso já existente.");
+        string floorNumber = Console.ReadLine()?.Trim();
+
+        var selectedFloor = user.Residence.ResidenceFloors
+            .FirstOrDefault(f => f.FloorName.Equals(floorNumber, StringComparison.Ordinal));
+
+        if (selectedFloor == null)
+        {
+            PrintErrorMessage("Número do piso inválido ou não encontrado!");
+            return;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Informe o nome da área que gostaria de excluir (ex: 'Sala de Jantar'): ");
+        string roomNameToDelete = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(roomNameToDelete))
+        {
+            PrintErrorMessage("Nome da área inválido!");
+            return;
+        }
+
+
+        var roomToDelete = selectedFloor.Rooms.FirstOrDefault(room => room.RoomName.Equals(roomNameToDelete, StringComparison.Ordinal));
+
+        if (roomToDelete == null)
+        {
+            PrintErrorMessage($"A área '{roomNameToDelete}' não foi encontrada no piso {floorNumber}.");
+            return;
+        }
+
+        //selectedFloor.Rooms.Remove(roomToDelete);
+        selectedFloor.FloorRemoveRoom(roomToDelete);
+
+        User.SaveUsersToFile();
+        PrintSucessMessage($"A área '{roomNameToDelete}' foi excluída com sucesso!");
+    }
+
+
+    //Consulta listagem de Rooms ordenada por vencimento separa por piso 
+    public static void RoomsList(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return;
+        }
+
+        Console.Clear();
+
+        Title($"Listagem de Áreas - Utilizador: {utilizador}");
+        Console.WriteLine();
+
+        DateTime currentDate = DateTime.Now;
+
+        int counter = 1;
+
+        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+        {
+            foreach (var floor in user.Residence.ResidenceFloors)
+            {
+                Console.WriteLine($"> Piso: {floor.FloorName}");
+                Console.WriteLine();
+
+                if (floor.Rooms != null && floor.Rooms.Count > 0)
+                {
+                    var sortedRooms = floor.Rooms.OrderBy(room =>
+                    {
+                        DateTime lastCleanDate = room.DayClean;
+                        int cleaningFrequency = room.CleanInterval;
+
+                        DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
+
+                        return (nextCleaningDate - currentDate).Days;
+                    }).ToList();
+
+                    foreach (var room in sortedRooms)
+                    {
+                        string counterFormatted = counter.ToString("D2");
+                        DateTime nextCleaningDate = room.DayClean.AddDays(room.CleanInterval);
+                        Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
+                        counter++;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("   Nenhuma área cadastrada neste piso.");
+                }
+
+                Console.WriteLine();
+            }
+
+            PrintSucessMessage("Fim da listagem das áreas.");
+            Console.WriteLine();
+        }
+        else
+        {
+            PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
+        }
+    }
+
+
+    // Realizar a listagem limpeza 
+    public static void CleaningRoomsList(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return;
+        }
+
+        Console.Clear();
+        Title("Lista de Áreas para efetuar a limpeza");
+        Console.WriteLine();
+        Console.WriteLine($"Utilizador: {utilizador}");
+
+        int counter = 1;
+
+        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+        {
+            foreach (var floor in user.Residence.ResidenceFloors)
+            {
+                Console.WriteLine($"> Piso: {floor.FloorName}");
+                Console.WriteLine();
+
+                if (floor.Rooms != null && floor.Rooms.Count > 0)
+                {
+                    foreach (var room in floor.Rooms)
+                    {
+                        string counterFormatted = counter.ToString("D2");
+                        Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Codigo para limpar: L-{counterFormatted}");
+                        counter++;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("   Nenhuma área cadastrada neste piso.");
+                }
+
+                Console.WriteLine();
+            }
+
+            PrintSucessMessage("Fim da listagem das áreas.");
+            Console.WriteLine();
+        }
+        else
+        {
+            PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
+        }
+    }
+
 
 
 }
