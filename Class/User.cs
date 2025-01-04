@@ -89,12 +89,34 @@ public class User
     {
         while (true)
         {
+            string residenceName = UserGetResidenceName(username);
+            if (residenceName == null) return null; 
+
+            User newUser = new(username);
+            Residence residence = new(residenceName);
+
+            if (!UserAddFloorsToResidence(residence)) return null; 
+
+            newUser.Residence = residence;
+            users.Add(newUser);
+            SaveUsersToFile();
+
+            Utils.PrintSucessMessage($"Usuário '{username}' e residência '{residenceName}' cadastrados com sucesso!");
+            return newUser;
+        }
+    }
+    
+    //Complemento do CreateUser para Residencia
+    private static string UserGetResidenceName(string username)
+    {
+        while (true)
+        {
             Console.WriteLine($@"
- Informe o nome da residência para o utilizador '{username}':
- - Digite o nome desejado para a residência.
- - Digite 'fim' para encerrar e retornar ao login.
- - Digite 'reiniciar' para reiniciar o processo de cadastro do nome.
- ");
+Informe o nome da residência para o utilizador '{username}':
+- Digite o nome desejado para a residência.
+- Digite 'fim' para encerrar e retornar ao login.
+- Digite 'reiniciar' para reiniciar o processo de cadastro do nome.
+");
             string residenceName = Console.ReadLine()?.Trim();
 
             string command = Utils.CheckSpecialCommandsEndAndRestart(residenceName);
@@ -119,90 +141,113 @@ public class User
                 continue;
             }
 
-            User newUser = new User(username);
-            Residence residence = new Residence(residenceName);
+            return residenceName;
+        }
+    }
+    
+    //Complemento do CreateUser para Pisos(Floor)
+    private static bool UserAddFloorsToResidence(Residence residence)
+    {
+        while (true)
+        {
+            Console.WriteLine($@"
+Adicione um novo andar à residência:
+- Digite o número do andar (exemplo: '00' para térreo, '01' para o primeiro andar...).
+- Digite 'fim' para concluir a construção da residência.
+- Digite 'reiniciar' para reiniciar o processo de cadastro.
+");
 
-            while (true)
+            string floorName = Console.ReadLine()?.Trim();
+
+            string command = Utils.CheckSpecialCommandsEndAndRestart(floorName);
+
+            if (command == "fim")
             {
-                Console.WriteLine($@"
- Adicione um novo andar à residência:
- - Digite o número do andar (exemplo: '00' para térreo, '01' para o primeiro andar...).
- - Digite 'fim' para concluir a construção da residência.
- - Digite 'reiniciar' para reiniciar o processo de cadastro.
- ");
-
-                string floorName = Console.ReadLine()?.Trim();
-
-                command = Utils.CheckSpecialCommandsEndAndRestart(floorName);
-
-                if (command == "fim")
-                {
-                    Console.WriteLine("Finalizando o cadastro de Pisos.");
-                    break;
-                }
-                if (command == "reiniciar")
-                {
-                    Console.WriteLine("Reiniciando o processo de cadastro...");
-                    return CreateUser(username);
-                }
-
-                string errorMessage;
-                string validFloorInput = Utils.GetValidFloorInput(floorName, out errorMessage);
-
-                if (validFloorInput == null)
-                {
-                    Utils.PrintErrorMessage(errorMessage);
-                    continue;
-                }
-
-                Floor floor = new Floor(validFloorInput);
-
-                while (true)
-                {
-                    Console.WriteLine($@"
- Informe o nome da divisão no piso {validFloorInput}:
- - Exemplo: 'Sala'
- - Digite 'fim' para voltar ao cadastro de pisos.
- - Digite 'reiniciar' para recomeçar o cadastro.
- ");
-                    string roomName = Console.ReadLine()?.Trim();
-
-                    command = Utils.CheckSpecialCommandsEndAndRestart(roomName);
-
-                    if (command == "fim") break;
-                    if (command == "reiniciar") return CreateUser(username);
-
-                    if (string.IsNullOrEmpty(roomName))
-                    {
-                        Utils.PrintErrorMessage("O nome da divisão não pode estar vazio.");
-                        continue;
-                    }
-
-                    Console.WriteLine($"Informe o tempo de limpeza da(o) {roomName} (em minutos):");
-                    int cleanTime = Utils.GetValidClearAndIntervalInput();
-
-                    Console.WriteLine($"Informe o intervalo de limpeza da(o) {roomName} (em dias):");
-                    int cleanInterval = Utils.GetValidClearAndIntervalInput();
-
-                    Room room = new Room(roomName, cleanTime, cleanInterval);
-                    floor.FloorAddRoom(room);
-
-                    Utils.PrintSucessMessage($"Divisão '{roomName}' adicionada ao piso {validFloorInput}.");
-                }
-
-                residence.ResidenceAddFloor(floor);
-                Utils.PrintSucessMessage($"Andar '{validFloorInput}' adicionado à residência '{residenceName}'.");
+                Console.WriteLine("Finalizando o cadastro de Pisos.");
+                return true;
+            }
+            if (command == "reiniciar")
+            {
+                Console.WriteLine("Reiniciando o processo de cadastro...");
+                return false;
             }
 
-            newUser.Residence = residence;
-            users.Add(newUser);
-            SaveUsersToFile();
+            string errorMessage;
+            string validFloorInput = Utils.GetValidFloorInput(floorName, out errorMessage);
 
-            Utils.PrintSucessMessage($"Usuário '{username}' e residência '{residenceName}' cadastrados com sucesso!");
-            return newUser;
+            if (validFloorInput == null)
+            {
+                Utils.PrintErrorMessage(errorMessage);
+                continue;
+            }
+
+            Floor floor = new(validFloorInput);
+
+            if (!UserAddRoomsToFloor(floor, validFloorInput)) return false;
+
+            residence.ResidenceAddFloor(floor);
+            Utils.PrintSucessMessage($"Andar '{validFloorInput}' adicionado à residência.");
         }
     }
 
+    //Complemento do CreateUser para Rooms (divisoes)
+    private static bool UserAddRoomsToFloor(Floor floor, string floorName)
+    {
+        while (true)
+        {
+            Console.WriteLine($@"
+Informe o nome da divisão no piso {floorName}:
+- Exemplo: 'Sala'
+- Digite 'fim' para voltar ao cadastro de pisos.
+- Digite 'reiniciar' para recomeçar o cadastro.
+");
+            string roomName = Console.ReadLine()?.Trim();
+
+            string command = Utils.CheckSpecialCommandsEndAndRestart(roomName);
+
+            if (command == "fim") return true;
+            if (command == "reiniciar") return false;
+
+            if (string.IsNullOrEmpty(roomName))
+            {
+                Utils.PrintErrorMessage("O nome da divisão não pode estar vazio.");
+                continue;
+            }
+
+            Console.WriteLine($"Informe o tempo de limpeza da(o) {roomName} (em minutos):");
+            int cleanTime = Utils.GetValidClearAndIntervalInput();
+
+            Console.WriteLine($"Informe o intervalo de limpeza da(o) {roomName} (em dias):");
+            int cleanInterval = Utils.GetValidClearAndIntervalInput();
+
+            Console.WriteLine($"Deseja realizar a primeira limpeza da(o) {roomName} (sim/não):");
+            string decisionCleaning = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(decisionCleaning))
+            {
+                Utils.PrintErrorMessage("O resposta da limpeza precisa ser sim ou não.");
+                continue;
+            }
+
+
+            DateTime? firstCleaning = null;
+
+            if (decisionCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase))
+            {
+                firstCleaning = DateTime.Now;
+            }
+            else if (!decisionCleaning.Equals("não", StringComparison.OrdinalIgnoreCase) && !decisionCleaning.Equals("nao", StringComparison.OrdinalIgnoreCase))
+            {
+                Utils.PrintErrorMessage("Resposta inválida. Digite 'sim' ou 'não'.");
+                continue;
+            }
+
+            Room room = new Room(roomName, cleanTime, cleanInterval, firstCleaning);
+            floor.FloorAddRoom(room);
+
+            Utils.PrintSucessMessage($"Divisão '{roomName}' adicionada ao piso {floorName}.");
+        }
+    }
 
 
     //Salva alteracoes, inclusoes, exclusoes em arquivo

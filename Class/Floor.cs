@@ -97,7 +97,7 @@ public class Floor
 
             if (!Utils.AskWantContinue())
             {
-                break;  
+                break;
             }
         }
     }
@@ -273,5 +273,38 @@ public class Floor
         return true;
     }
 
+    //Pesquisa o Piso de acordo com o input e retorna
+    public static Floor SearchFloor(Guid userId)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            Utils.PrintErrorMessage("Utilizador ou residência não encontrado.");
+            return null; 
+        }
+
+        Console.WriteLine("Informe o numero do piso que deseja buscar:");
+        string floorName = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrEmpty(floorName))
+        {
+            Utils.PrintErrorMessage("O nome do piso não pode estar vazio.");
+            Utils.WaitForUser();
+            return null; 
+        }
+
+        Floor floor = user.Residence.ResidenceFloors.FirstOrDefault(f => f.FloorName.Equals(floorName, StringComparison.OrdinalIgnoreCase));
+
+        if (floor == null)
+        {
+            Utils.PrintErrorMessage($"Piso '{floorName}' não encontrado na residência.");
+            Utils.WaitForUser();
+        }
+
+        return floor; 
+    }
 
 }
+
+

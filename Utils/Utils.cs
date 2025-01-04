@@ -140,26 +140,30 @@ public static class Utils
         return response == "sim" || response == "s" || response == "sin";
     }
 
+
     //Valida o input do Room do utilizador 
+    public static string GetValidRoomInput(string input, out string errorMessage)
+    {
 
-    //public static string GetValidRoomInput()
-    //{
-    //    while (true)
-    //    {
-    //        string input = Console.ReadLine()?.Trim();
+        while (true)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                errorMessage = "O nome da divisão não pode estar vazio.";
+                return null;
+            }
 
-    //        if (input?.ToLower() == "fim" || input?.ToLower() == "reiniciar") return input;
+            if (input.Length > 10)
+            {
+                errorMessage = "O nome da divisão deve ter no máximo 10 caracteres.";
+                return null;
+            }
 
-    //        if (!string.IsNullOrEmpty(input) && input.Length <= 10)
-    //        {
-    //            return input;
-    //        }
-    //        else
-    //        {
-    //            Utils.PrintErrorMessage("O nome da divisão deve ter no máximo 10 caracteres e não pode estar vazio.");
-    //        }
-    //    }
-    //}
 
+            errorMessage = null;
+            return input;
+        }
+    }
+        
 
 }
