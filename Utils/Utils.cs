@@ -80,12 +80,12 @@ public static class Utils
     {
         if (string.IsNullOrEmpty(input)) return null;
 
-        if (input.Equals("fim", StringComparison.OrdinalIgnoreCase))
+        if (input.Equals("fim", StringComparison.OrdinalIgnoreCase) || input.Equals("fin", StringComparison.OrdinalIgnoreCase))
             return "fim";
-        if (input.StartsWith("reiniciar", StringComparison.OrdinalIgnoreCase))
+        if (input.StartsWith("rein", StringComparison.OrdinalIgnoreCase))
             return "reiniciar";
 
-        return null; 
+        return null;
     }
 
     //Validacao do input de numeros inteiros para Clear e Interval
@@ -106,32 +106,38 @@ public static class Utils
     }
 
     //Validacao do input para Floor
-    public static string GetValidFloorInput()
+    public static string GetValidFloorInput(string input, out string errorMessage)
     {
+        errorMessage = null; 
+
         while (true)
         {
-            string input = Console.ReadLine()?.Trim();
-
-            if (input?.ToLower() == "fim" || input?.ToLower() == "reiniciar") return input;
-
-            if (!string.IsNullOrEmpty(input) && input.Length == 2 && int.TryParse(input, out _))
+            if (string.IsNullOrEmpty(input))
             {
-                return input;
+                errorMessage = "O piso não pode ser vazio.";
+                return null; 
             }
-            else
+
+            if (input.Length != 2)
             {
-                PrintErrorMessage("O número da área (piso) deve ter exatamente 2 dígitos.");
+                errorMessage = "O número da área (piso) deve ter exatamente 2 dígitos.";
+                return null; 
             }
+
+            
+            errorMessage = null;
+            return input; 
         }
     }
 
-    //Valida eventos de repeticao em loop
+
+    //Valida eventos de repeticao em loop para continuar
     public static bool AskWantContinue()
     {
         Console.WriteLine("Gostaria de alterar novamente? (sim/não): ");
         string response = Console.ReadLine()?.Trim().ToLower();
 
-        return response == "sim" || response == "s" || response =="sin";
+        return response == "sim" || response == "s" || response == "sin";
     }
 
     //Valida o input do Room do utilizador 

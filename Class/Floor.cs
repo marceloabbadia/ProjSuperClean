@@ -51,15 +51,21 @@ public class Floor
             ListFloor(userId, utilizador);
 
             Console.WriteLine();
-            Console.WriteLine("Informe o número do piso que gostaria de alterar (ex: '01'): ");
+            Console.WriteLine("Informe o número do piso que gostaria de alterar (ex: '01') ou 'fim' para retornar: ");
             string floorNumber = Console.ReadLine()?.Trim();
             Console.WriteLine();
+
+            if (floorNumber.Equals("fim", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Retornando ao Menu...");
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(floorNumber))
             {
                 Utils.PrintErrorMessage("Número do piso não pode ser vazio.");
-                Utils.WaitForUser();
-                return;
+                continue;
+
             }
 
             var floorToEdit = user.Residence.ResidenceFloors.FirstOrDefault(f => f.FloorName == floorNumber);
@@ -67,8 +73,7 @@ public class Floor
             if (floorToEdit == null)
             {
                 Utils.PrintErrorMessage($"Piso '{floorNumber}' não encontrado!");
-                Utils.WaitForUser();
-                return;
+                continue;
             }
 
             Console.WriteLine("Qual o novo número do piso que deseja (ex: '02')? ");
@@ -77,15 +82,13 @@ public class Floor
             if (string.IsNullOrWhiteSpace(newFloorNumber))
             {
                 Utils.PrintErrorMessage("Número inválido! Certifique-se de inserir APENAS dois dígitos.");
-                Utils.WaitForUser();
-                return;
+                continue;
             }
 
             if (user.Residence.ResidenceFloors.Any(f => f.FloorName == newFloorNumber))
             {
                 Utils.PrintErrorMessage($"O novo número informado '{newFloorNumber}' já está atribuído a outro piso.");
-                Utils.WaitForUser();
-                return;
+                continue;
             }
 
             floorToEdit.FloorName = newFloorNumber;
@@ -97,8 +100,6 @@ public class Floor
                 break;  
             }
         }
-
-        Utils.WaitForUser();
     }
 
 
@@ -204,6 +205,7 @@ public class Floor
             {
                 Utils.PrintErrorMessage("Entrada inválida. Certifique-se de informar exatamente 2 dígitos para o piso!");
             }
+
         }
     }
 

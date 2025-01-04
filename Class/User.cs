@@ -90,17 +90,27 @@ public class User
         while (true)
         {
             Console.WriteLine($@"
-        Informe o nome da residência para o utilizador '{username}':
-        - Digite o nome desejado para a residência.
-        - Digite 'reiniciar' se desejar reiniciar o processo de cadastro do nome.
-        ");
+ Informe o nome da residência para o utilizador '{username}':
+ - Digite o nome desejado para a residência.
+ - Digite 'fim' para encerrar e retornar ao login.
+ - Digite 'reiniciar' para reiniciar o processo de cadastro do nome.
+ ");
             string residenceName = Console.ReadLine()?.Trim();
 
             string command = Utils.CheckSpecialCommandsEndAndRestart(residenceName);
+
             if (command == "reiniciar")
             {
                 Console.WriteLine("Reiniciando o cadastro...");
                 continue;
+            }
+
+            if (command == "fim")
+            {
+                Console.WriteLine("Encerrando o cadastro. Retornando ao login...");
+                Console.Clear();
+                Program.HeaderProgramUserStart();
+                return null;
             }
 
             if (string.IsNullOrEmpty(residenceName))
@@ -109,55 +119,63 @@ public class User
                 continue;
             }
 
-            User newUser = new(username);
-            Residence residence = new(residenceName);
+            User newUser = new User(username);
+            Residence residence = new Residence(residenceName);
 
             while (true)
             {
                 Console.WriteLine($@"
-            Adicione um novo andar à residência:
-            - Digite o número do andar (exemplo: '00' para térreo, '01' para o primeiro andar...).
-            - Digite 'fim' para concluir a construção da residência.
-            - Digite 'reiniciar' para reiniciar o processo de cadastro.
-            ");
+ Adicione um novo andar à residência:
+ - Digite o número do andar (exemplo: '00' para térreo, '01' para o primeiro andar...).
+ - Digite 'fim' para concluir a construção da residência.
+ - Digite 'reiniciar' para reiniciar o processo de cadastro.
+ ");
 
-                string floorName = Utils.GetValidFloorInput();
+                string floorName = Console.ReadLine()?.Trim();
 
                 command = Utils.CheckSpecialCommandsEndAndRestart(floorName);
-                if (command == "fim") break;
-                if (command == "reiniciar") return CreateUser(username);
 
-                Floor floor = new Floor(floorName);
+                if (command == "fim")
+                {
+                    Console.WriteLine("Finalizando o cadastro de Pisos.");
+                    break;
+                }
+                if (command == "reiniciar")
+                {
+                    Console.WriteLine("Reiniciando o processo de cadastro...");
+                    return CreateUser(username);
+                }
+
+                string errorMessage;
+                string validFloorInput = Utils.GetValidFloorInput(floorName, out errorMessage);
+
+                if (validFloorInput == null)
+                {
+                    Utils.PrintErrorMessage(errorMessage);
+                    continue;
+                }
+
+                Floor floor = new Floor(validFloorInput);
 
                 while (true)
                 {
                     Console.WriteLine($@"
-                Informe o nome da divisão no piso {floorName}:
-                - Exemplo: 'Sala'
-                - Digite 'fim' para voltar ao piso.
-                - Digite 'reiniciar' para recomeçar o cadastro.
-                ");
+ Informe o nome da divisão no piso {validFloorInput}:
+ - Exemplo: 'Sala'
+ - Digite 'fim' para voltar ao cadastro de pisos.
+ - Digite 'reiniciar' para recomeçar o cadastro.
+ ");
                     string roomName = Console.ReadLine()?.Trim();
 
                     command = Utils.CheckSpecialCommandsEndAndRestart(roomName);
+
                     if (command == "fim") break;
                     if (command == "reiniciar") return CreateUser(username);
 
-                    if (roomName.StartsWith("fi", StringComparison.OrdinalIgnoreCase))
+                    if (string.IsNullOrEmpty(roomName))
                     {
-                        Console.WriteLine($@"
-                    Você digitou '{roomName}'. Deseja finalizar ou este é o nome da divisão no piso?
-                    - Digite '1' para finalizar.
-                    - Digite '2' para usar '{roomName}' como o nome da divisão no piso.
-                    ");
-                        string confirmation = Console.ReadLine()?.Trim();
-
-                        if (confirmation == "1") break;
-                        if (confirmation != "2")
-                        {
-                            Console.WriteLine("Opção inválida. Continuando...");
-                            continue;
-                        }
+                        Utils.PrintErrorMessage("O nome da divisão não pode estar vazio.");
+                        continue;
                     }
 
                     Console.WriteLine($"Informe o tempo de limpeza da(o) {roomName} (em minutos):");
@@ -168,18 +186,23 @@ public class User
 
                     Room room = new Room(roomName, cleanTime, cleanInterval);
                     floor.FloorAddRoom(room);
+
+                    Utils.PrintSucessMessage($"Divisão '{roomName}' adicionada ao piso {validFloorInput}.");
                 }
 
                 residence.ResidenceAddFloor(floor);
+                Utils.PrintSucessMessage($"Andar '{validFloorInput}' adicionado à residência '{residenceName}'.");
             }
 
             newUser.Residence = residence;
             users.Add(newUser);
             SaveUsersToFile();
 
+            Utils.PrintSucessMessage($"Usuário '{username}' e residência '{residenceName}' cadastrados com sucesso!");
             return newUser;
         }
     }
+
 
 
     //Salva alteracoes, inclusoes, exclusoes em arquivo
@@ -497,9 +520,15 @@ public class User
         }
 
         Console.WriteLine($"Atual nome do utilizador: {user.Username}");
-        Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres):");
+        Console.WriteLine("Digite o novo nome do seu utilizador (máximo 8 caracteres) ou 'fim' para retornar ao Menu:");
         Console.WriteLine();
         string newName = Console.ReadLine()?.Trim();
+
+        if (newName.Equals("fim", StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine("Retornando ao Menu...");
+            return;
+        }
 
 
         if (IsValidUsername(newName, out string errorMessage))

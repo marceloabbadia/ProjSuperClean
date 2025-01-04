@@ -94,7 +94,7 @@ public class Program
             switch (GetOption(1, 3))
             {
                 case 1:
-                    RoomsList(userId, utilizador);
+                    RoomsListConsole(userId, utilizador);
                     WaitForUser();
                     break;
 
