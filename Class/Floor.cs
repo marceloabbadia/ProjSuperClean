@@ -281,29 +281,41 @@ public class Floor
         if (user == null || user.Residence == null)
         {
             Utils.PrintErrorMessage("Utilizador ou residência não encontrado.");
-            return null; 
+            return null;
         }
 
-        Console.WriteLine("Informe o numero do piso que deseja buscar:");
-        string floorName = Console.ReadLine()?.Trim();
+        Console.WriteLine("Informe o número do piso que deseja buscar (ou digite 'fim' para sair):");
 
-        if (string.IsNullOrEmpty(floorName))
+        while (true)
         {
-            Utils.PrintErrorMessage("O nome do piso não pode estar vazio.");
-            Utils.WaitForUser();
-            return null; 
+            string floorName = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(floorName))
+            {
+                Utils.PrintErrorMessage("O nome do piso não pode estar vazio.");
+                continue;
+            }
+
+            if (floorName.Equals("fim", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Busca encerrada.");
+                return null; 
+            }
+
+            Floor floor = user.Residence.ResidenceFloors.FirstOrDefault(f => f.FloorName.Equals(floorName, StringComparison.OrdinalIgnoreCase));
+
+            if (floor == null)
+            {
+                Utils.PrintErrorMessage($"Piso '{floorName}' não encontrado na residência.");
+                Console.WriteLine("Tente novamente ou digite 'fim' para sair.");
+            }
+            else
+            {
+                return floor; 
+            }
         }
-
-        Floor floor = user.Residence.ResidenceFloors.FirstOrDefault(f => f.FloorName.Equals(floorName, StringComparison.OrdinalIgnoreCase));
-
-        if (floor == null)
-        {
-            Utils.PrintErrorMessage($"Piso '{floorName}' não encontrado na residência.");
-            Utils.WaitForUser();
-        }
-
-        return floor; 
     }
+
 
 }
 

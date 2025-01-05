@@ -54,95 +54,94 @@ public class Room
     public static void CleanDone(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
-        if (user == null)
+        if (user == null || user.Residence == null)
         {
-            Console.WriteLine($"Utilizador '{utilizador}' com ID '{userId}' não encontrado.");
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
             return;
         }
 
-        if (user.Residence?.ResidenceFloors?.Any() != true)
+        List<string> roomDetails = RoomsList(userId, utilizador);
+        if (roomDetails.Count == 0)
         {
-            Console.WriteLine("Este utilizador não possui uma residência ou andares cadastrados.");
+            Console.WriteLine("Nenhuma sala disponível para limpeza.");
             return;
         }
 
-        Console.WriteLine("Áreas disponíveis para limpeza ordenadas por vencimento:");
+        Console.Clear();
+        Title($"Áreas de Limpeza - Utilizador: {utilizador}");
         Console.WriteLine();
-
-        var rooms = user.Residence.ResidenceFloors
-                     .Where(f => f.Rooms != null)
-                     .SelectMany(f => f.Rooms)
-                     .Where(r => r != null)
-                     .OrderBy(r => r.NextClean)
-                     .ToList();
-
-        for (int i = 0; i < rooms.Count; i++)
+        for (int i = 0; i < roomDetails.Count; i++)
         {
-            if (rooms[i].FirstCleaning == null)
-
-            {
-                Console.WriteLine($"{i + 1}: {rooms[i].RoomName} - vencimento dia: {rooms[i].NextClean:dd/MM/yyyy}");
-
-            }
-            else
-            {
-
-                Console.WriteLine($"{i + 1}: {rooms[i].RoomName} - vencimento dia: {rooms[i].NextClean:dd/MM/yyyy}");
-            }
-        }
-
-        Console.WriteLine();
-
-        if (!rooms.Any())
-        {
-            Console.WriteLine("Não há áreas disponíveis para limpeza.");
-            return;
+            Console.WriteLine($"{i + 1}: {roomDetails[i]}");
         }
 
         string codeClean;
         int roomIndex;
-
         do
         {
-            Console.WriteLine("Informe o número da área que deseja limpar (ou digite 'fim' para retornar):");
-            codeClean = Console.ReadLine();
+            Console.WriteLine("\nInforme o número da área que deseja limpar (ou digite 'fim' para retornar):");
+            codeClean = Console.ReadLine()?.Trim();
 
-            if (codeClean.ToLower() == "fim")
+            if (codeClean.Equals("fim", StringComparison.OrdinalIgnoreCase))
                 return;
 
-        } while (!int.TryParse(codeClean, out roomIndex) || roomIndex < 1 || roomIndex > rooms.Count);
+        } while (!int.TryParse(codeClean, out roomIndex) || roomIndex < 1 || roomIndex > roomDetails.Count);
 
-        var selectedRoom = rooms[roomIndex - 1];
+        var selectedRoom = user.Residence.ResidenceFloors
+                                .SelectMany(f => f.Rooms)
+                                .ElementAt(roomIndex - 1);
 
-        // Verifica se a sala já foi limpa ou se a limpeza é antes do intervalo
+        DateTime currentDate = DateTime.Now;
         if (selectedRoom.DayClean.HasValue)
         {
-            // Se a limpeza foi realizada, verifica se a próxima limpeza já passou
-            if (selectedRoom.NextClean.HasValue && selectedRoom.NextClean.Value > DateTime.Now)
+            DateTime nextCleanDate = selectedRoom.DayClean.Value.AddDays(selectedRoom.CleanInterval);
+            if (nextCleanDate > currentDate)
             {
-                Console.WriteLine($"Aviso: A limpeza será realizada antes do intervalo previsto. A próxima limpeza seria em {selectedRoom.NextClean:dd/MM/yyyy}.");
+                Console.WriteLine($"Aviso: A limpeza será realizada antes do intervalo previsto. A próxima limpeza seria em {nextCleanDate:dd/MM/yyyy}.");
                 Console.WriteLine("Deseja continuar com a limpeza? (sim/não)");
 
                 string decision = Console.ReadLine()?.Trim().ToLower();
-                if (decision != "sim")
+                if (decision.Equals("sim", StringComparison.OrdinalIgnoreCase) || (decision.Equals("s", StringComparison.OrdinalIgnoreCase)) || (decision.Equals("sin", StringComparison.OrdinalIgnoreCase)))
                 {
-                    Console.WriteLine("Limpeza cancelada.");
-                    return;
+                    Console.WriteLine($"Realizando limpeza antecipada na sala: {selectedRoom.RoomName}...");
+                    selectedRoom.DayClean = DateTime.Now;
+                    selectedRoom.NextClean = selectedRoom.DayClean.Value.AddDays(selectedRoom.CleanInterval);
+                    Console.WriteLine($"Próxima limpeza agendada para: {selectedRoom.NextClean:dd/MM/yyyy}");
                 }
+                else
+                {
+                    Console.WriteLine("Operação de limpeza cancelada.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Realizando a limpeza na sala: {selectedRoom.RoomName}...");
+                selectedRoom.DayClean = DateTime.Now;
+                selectedRoom.NextClean = selectedRoom.DayClean.Value.AddDays(selectedRoom.CleanInterval);
+                Console.WriteLine($"Próxima limpeza agendada para: {selectedRoom.NextClean:dd/MM/yyyy}");
             }
         }
         else
         {
-            // Se não houve limpeza anterior, permite a limpeza sem aviso
             Console.WriteLine($"Primeira limpeza realizada na sala: {selectedRoom.RoomName}");
+            selectedRoom.DayClean = DateTime.Now;
+            selectedRoom.NextClean = selectedRoom.DayClean.Value.AddDays(selectedRoom.CleanInterval);
+            Console.WriteLine($"Próxima limpeza agendada para: {selectedRoom.NextClean:dd/MM/yyyy}");
         }
 
-        // Realiza a limpeza e atualiza as datas
-        selectedRoom.DayClean = DateTime.Now;
-        selectedRoom.NextClean = selectedRoom.DayClean.Value.AddDays(selectedRoom.CleanInterval);
+        User.SaveUsersToFile();
+        Console.WriteLine("\nDeseja realizar a limpeza de outra divisão? (sim/não)");
 
-        Console.WriteLine($"Limpeza concluída com sucesso na sala: {selectedRoom.RoomName}");
-        Console.WriteLine($"Próxima limpeza agendada para: {selectedRoom.NextClean:dd/MM/yyyy}");
+        string continueCleaning = Console.ReadLine()?.Trim().ToLower();
+        if (continueCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase) || (continueCleaning.Equals("s", StringComparison.OrdinalIgnoreCase)) || (continueCleaning.Equals("sin", StringComparison.OrdinalIgnoreCase)))
+        {
+            CleanDone(userId, utilizador);
+        }
+        else
+        {
+            Console.WriteLine("Voltando ao menu principal...");
+        }
     }
 
 
@@ -163,18 +162,15 @@ public class Room
             return;
         }
 
-        if (user.Residence.ResidenceFloors)
-
-            Console.WriteLine("Áreas disponíveis para excluir a última limpeza, ordenadas por vencimento:");
+        Console.WriteLine("Áreas disponíveis para excluir a última limpeza, ordenadas por vencimento:");
         Console.WriteLine();
 
         var rooms = user.Residence.ResidenceFloors.SelectMany(f => f.Rooms).OrderBy(r => r.NextClean).ToList();
         for (int i = 0; i < rooms.Count; i++)
         {
-            Console.WriteLine($"{i + 1}: {rooms[i].RoomName} - vencimento dia: {rooms[i].NextClean:dd/MM/yyyy}");
+            if (rooms[i].FirstCleaning != null)
+                Console.WriteLine($"{i + 1}: {rooms[i].RoomName} - vencimento dia: {rooms[i].NextClean:dd/MM/yyyy}");
         }
-
-
 
         Console.WriteLine();
         Console.WriteLine("Informe o número da área que deseja excluir a última limpeza (ou digite 'fim' para retornar):");
@@ -183,7 +179,7 @@ public class Room
         {
             string codeClean = Console.ReadLine()?.Trim();
 
-            if (codeClean.ToLower() == "fim")
+            if (codeClean.Equals("fim", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
@@ -196,20 +192,18 @@ public class Room
 
             var selectedRoom = rooms[roomIndex - 1];
 
-            DateTime previousClean = selectedRoom.DayClean.AddDays(-selectedRoom.CleanInterval);
-
-            if (selectedRoom. > previousClean)
+            if (selectedRoom.DayClean == null)
             {
-                selectedRoom.DayClean = selectedRoom.CreatedRoom_at;
-                selectedRoom.NextClean = selectedRoom.CreatedRoom_at.AddDays(selectedRoom.CleanInterval);
+                Console.WriteLine($"A sala '{selectedRoom.RoomName}' ainda não foi limpa, portanto não há última limpeza para excluir.");
+                return;
+            }
 
-                Console.WriteLine($"Aviso: A data da última limpeza foi ajustada para a data de criação da sala: {selectedRoom.CreatedRoom_at:dd/MM/yyyy}");
-            }
-            else
-            {
-                selectedRoom.DayClean = previousClean;
-                selectedRoom.NextClean = previousClean.AddDays(selectedRoom.CleanInterval);
-            }
+            DateTime previousClean = selectedRoom.DayClean.Value.AddDays(-selectedRoom.CleanInterval);
+
+            selectedRoom.DayClean = previousClean;
+            selectedRoom.NextClean = previousClean.AddDays(selectedRoom.CleanInterval);
+
+            User.SaveUsersToFile();
 
             Console.WriteLine($"Removida a última limpeza da sala: {selectedRoom.RoomName}");
             Console.WriteLine($"Data da última limpeza restaurada para: {selectedRoom.DayClean:dd/MM/yyyy}");
@@ -219,39 +213,48 @@ public class Room
     }
 
 
+
     // Gerar barras de status da limpeza
     public static int[] GenerationPypes(Room room, DateTime today)
     {
         int greenPipe = 0, yellowPipe = 0, redPipe = 0;
 
-        DateTime dayClean = room.DayClean;
-        DateTime nextClean = dayClean.AddDays(room.CleanInterval);
-
-        int daysSinceClean = (today - dayClean).Days;
-        int totalBars = Math.Min(Math.Abs(daysSinceClean), 20);
-
-        if (daysSinceClean <= room.CleanInterval - 1)
+        if (room.DayClean.HasValue)
         {
-            greenPipe = totalBars;
-        }
-        else if (daysSinceClean <= room.CleanInterval + 2)
-        {
-            greenPipe = room.CleanInterval - 1;
-            yellowPipe = Math.Min(daysSinceClean - greenPipe, totalBars - greenPipe);
-        }
-        else
-        {
-            greenPipe = room.CleanInterval - 1;
-            yellowPipe = 2;
-            redPipe = totalBars - (greenPipe + yellowPipe);
+            DateTime dayClean = room.DayClean.Value;
+            int daysSinceClean = (today - dayClean).Days;
+
+            // Limitar o número de barras a no máximo 20
+            int totalBars = Math.Min(Math.Abs(daysSinceClean), 20);
+
+            // Se ainda está dentro do intervalo de limpeza (verde)
+            if (daysSinceClean <= room.CleanInterval - 1)
+            {
+                greenPipe = totalBars;  // Toda a barra é verde
+            }
+            // Se está entre 1 dia antes da limpeza e 2 dias após (amarelo)
+            else if (daysSinceClean >= room.CleanInterval - 1 && daysSinceClean <= room.CleanInterval + 2)
+            {
+                greenPipe = room.CleanInterval - 1;  // Deixa a quantidade de verde até o intervalo de limpeza
+                yellowPipe = daysSinceClean - (room.CleanInterval - 1); // As amarelas vão crescendo de 1 até 4
+            }
+            // Se passou mais de 2 dias da data prevista de limpeza (vermelho)
+            else
+            {
+                greenPipe = room.CleanInterval - 1;  // Deixa o verde fixo até o intervalo de limpeza
+                yellowPipe = 4; // Máximo de 4 amarelas (depois do intervalo, as amarelas desaparecem)
+
+                // Começa a preencher com vermelho depois das 4 amarelas
+                redPipe = totalBars - (greenPipe + yellowPipe);
+            }
+
+            // Garantir que as barras não sejam negativas
+            greenPipe = Math.Max(0, greenPipe);
+            yellowPipe = Math.Max(0, yellowPipe);
+            redPipe = Math.Max(0, redPipe);
         }
 
-        greenPipe = Math.Abs(greenPipe);
-        yellowPipe = Math.Abs(yellowPipe);
-        redPipe = Math.Abs(redPipe);
-
-
-        return [greenPipe, yellowPipe, redPipe];
+        return new int[] { greenPipe, yellowPipe, redPipe };
     }
 
 
@@ -362,6 +365,12 @@ public class Room
         {
             Floor floor = Floor.SearchFloor(userId);
 
+            if (floor == null)
+            {
+                Console.WriteLine("Retornando ao Menu..");
+                return;
+            }
+
             Console.WriteLine($"Por favor, informe o nome da divisão que deseja adicionar ao piso {floor.FloorName} (ou digite 'fim' para encerrar):");
 
             string roomName = Console.ReadLine()?.Trim();
@@ -387,23 +396,32 @@ public class Room
             Console.WriteLine($"Informe o intervalo de limpeza da(o) {validRoomName} (em dias):");
             int cleanInterval = GetValidClearAndIntervalInput();
 
+
+
             Console.WriteLine($"Deseja realizar a primeira limpeza da(o) {validRoomName} (sim/não):");
             string decisionCleaning = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrEmpty(decisionCleaning))
             {
-                PrintErrorMessage("O resposta da limpeza precisa ser sim ou não.");
+                PrintErrorMessage("A resposta da limpeza precisa ser 'sim' ou 'não'.");
                 continue;
             }
 
-
             DateTime? firstCleaning = null;
 
-            if (decisionCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase))
+            if (decisionCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase) ||
+                decisionCleaning.Equals("s", StringComparison.OrdinalIgnoreCase) ||
+                decisionCleaning.Equals("sin", StringComparison.OrdinalIgnoreCase))
             {
                 firstCleaning = DateTime.Now;
             }
-            else if (!decisionCleaning.Equals("não", StringComparison.OrdinalIgnoreCase) && !decisionCleaning.Equals("nao", StringComparison.OrdinalIgnoreCase))
+            else if (decisionCleaning.Equals("não", StringComparison.OrdinalIgnoreCase) ||
+                     decisionCleaning.Equals("nao", StringComparison.OrdinalIgnoreCase) ||
+                    decisionCleaning.Equals("n", StringComparison.OrdinalIgnoreCase))
+            {
+                firstCleaning = null;
+            }
+            else
             {
                 PrintErrorMessage("Resposta inválida. Digite 'sim' ou 'não'.");
                 continue;
@@ -412,6 +430,8 @@ public class Room
             Room room = new Room(roomName, cleanTime, cleanInterval, firstCleaning);
 
             floor.FloorAddRoom(room);
+
+            User.SaveUsersToFile();
 
             PrintSucessMessage($"Divisão '{roomName}' adicionada ao piso .");
         }
@@ -473,7 +493,7 @@ public class Room
     }
 
 
-    //Consulta listagem de Rooms ordenada por vencimento separa por piso 
+    //Consulta listagem de Rooms ordenada por vencimento e sem primeira limpeza, separa por piso 
     public static void RoomsListConsole(Guid userId, string utilizador)
     {
         var user = User.users.FirstOrDefault(u => u.UserId == userId);
@@ -494,137 +514,7 @@ public class Room
 
         int counter = 1;
 
-        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
-        {
-            foreach (var floor in user.Residence.ResidenceFloors)
-            {
-                Console.WriteLine($"> Piso: {floor.FloorName}");
-                Console.WriteLine();
-
-                if (floor.Rooms != null && floor.Rooms.Count > 0)
-                {
-                    var sortedRooms = floor.Rooms.OrderBy(room =>
-                    {
-                        DateTime lastCleanDate = room.DayClean;
-                        int cleaningFrequency = room.CleanInterval;
-
-                        DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
-
-                        return (nextCleaningDate - currentDate).Days;
-                    }).ToList();
-
-                    foreach (var room in sortedRooms)
-                    {
-                        string counterFormatted = counter.ToString("D2");
-                        DateTime nextCleaningDate = room.DayClean.AddDays(room.CleanInterval);
-                        Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
-                        counter++;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("   Nenhuma área cadastrada neste piso.");
-                }
-
-                Console.WriteLine();
-            }
-
-            PrintSucessMessage("Fim da listagem das áreas.");
-            Console.WriteLine();
-        }
-        else
-        {
-            PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
-        }
-    }
-
-
-    public static List<string> RoomsList(Guid userId, string utilizador)
-    {
-        var user = User.users.FirstOrDefault(u => u.UserId == userId);
-
-        if (user == null || user.Residence == null)
-        {
-            PrintErrorMessage("Utilizador ou residência não encontrado.");
-            WaitForUser();
-            return null;
-        }
-
-        List<string> roomListUser = new List<string>();
-
-        Console.Clear();
-
-        Title($"Listagem de Áreas - Utilizador: {utilizador}");
-        Console.WriteLine();
-
-        DateTime currentDate = DateTime.Now;
-        int counter = 1;
-
-        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
-        {
-            foreach (var floor in user.Residence.ResidenceFloors)
-            {
-                Console.WriteLine($"> Piso: {floor.FloorName}");
-                Console.WriteLine();
-
-                if (floor.Rooms != null && floor.Rooms.Count > 0)
-                {
-                    var sortedRooms = floor.Rooms.OrderBy(room =>
-                    {
-                        DateTime lastCleanDate = room.DayClean;
-                        int cleaningFrequency = room.CleanInterval;
-                        DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
-                        return (nextCleaningDate - currentDate).Days;
-                    }).ToList();
-
-                    foreach (var room in sortedRooms)
-                    {
-                        string counterFormatted = counter.ToString("D2");
-                        DateTime nextCleaningDate = room.DayClean.AddDays(room.CleanInterval);
-                        roomListUser.Add($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
-                        counter++;
-                    }
-                }
-                else
-                {
-                    roomListUser.Add("   Nenhuma área cadastrada neste piso.");
-                }
-
-                Console.WriteLine();
-            }
-
-            PrintSucessMessage("Fim da listagem das áreas.");
-            Console.WriteLine();
-            return roomListUser;
-        }
-        else
-        {
-            PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
-            return null;
-        }
-    }
-
-
-
-
-    // Realizar a listagem limpeza 
-    public static void CleaningRoomsList(Guid userId, string utilizador)
-    {
-        var user = User.users.FirstOrDefault(u => u.UserId == userId);
-
-        if (user == null || user.Residence == null)
-        {
-            PrintErrorMessage("Utilizador ou residência não encontrado.");
-            WaitForUser();
-            return;
-        }
-
-        Console.Clear();
-        Title("Lista de Áreas para efetuar a limpeza");
-        Console.WriteLine();
-        Console.WriteLine($"Utilizador: {utilizador}");
-
-        int counter = 1;
+        List<Room> allRooms = new List<Room>();
 
         if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
         {
@@ -637,8 +527,39 @@ public class Room
                 {
                     foreach (var room in floor.Rooms)
                     {
+                        allRooms.Add(room);
+                    }
+
+                    var sortedRooms = allRooms.OrderBy(room =>
+                    {
+                        if (room.DayClean != null)
+                        {
+                            DateTime lastCleanDate = room.DayClean.Value;
+                            int cleaningFrequency = room.CleanInterval;
+
+                            DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
+                            return (nextCleaningDate - currentDate).Days;
+                        }
+                        else
+                        {
+                            return int.MaxValue;
+                        }
+                    }).ToList();
+
+                    foreach (var room in sortedRooms)
+                    {
                         string counterFormatted = counter.ToString("D2");
-                        Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Codigo para limpar: L-{counterFormatted}");
+
+                        if (room.DayClean != null)
+                        {
+                            DateTime nextCleaningDate = room.DayClean.Value.AddDays(room.CleanInterval);
+                            Console.WriteLine($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"   {counterFormatted} - {room.RoomName} - A primeira limpeza ainda não foi realizada.");
+                        }
+
                         counter++;
                     }
                 }
@@ -646,6 +567,8 @@ public class Room
                 {
                     Console.WriteLine("   Nenhuma área cadastrada neste piso.");
                 }
+
+                allRooms.Clear();
 
                 Console.WriteLine();
             }
@@ -659,6 +582,111 @@ public class Room
         }
     }
 
+
+
+    //public static List<string> RoomsList(Guid userId, string utilizador)
+    //{
+    //    var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+    //    if (user == null || user.Residence == null)
+    //    {
+    //        PrintErrorMessage("Utilizador ou residência não encontrado.");
+    //        WaitForUser();
+    //        return null;
+    //    }
+
+    //    List<string> roomListUser = new List<string>();
+
+    //    Console.Clear();
+
+    //    Title($"Listagem de Áreas - Utilizador: {utilizador}");
+    //    Console.WriteLine();
+
+    //    DateTime currentDate = DateTime.Now;
+    //    int counter = 1;
+
+    //    if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+    //    {
+    //        foreach (var floor in user.Residence.ResidenceFloors)
+    //        {
+    //            Console.WriteLine($"> Piso: {floor.FloorName}");
+    //            Console.WriteLine();
+
+    //            if (floor.Rooms != null && floor.Rooms.Count > 0)
+    //            {
+    //                var sortedRooms = floor.Rooms.OrderBy(room =>
+    //                {
+    //                    DateTime lastCleanDate = (DateTime)room.DayClean;
+    //                    int cleaningFrequency = room.CleanInterval;
+    //                    DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
+    //                    return (nextCleaningDate - currentDate).Days;
+    //                }).ToList();
+
+    //                foreach (var room in sortedRooms)
+    //                {
+    //                    string counterFormatted = counter.ToString("D2");
+    //                    DateTime nextCleaningDate = room.DayClean.Value.AddDays(room.CleanInterval);
+    //                    roomListUser.Add($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
+    //                    counter++;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                roomListUser.Add("   Nenhuma área cadastrada neste piso.");
+    //            }
+
+    //            Console.WriteLine();
+    //        }
+
+    //        PrintSucessMessage("Fim da listagem das áreas.");
+    //        Console.WriteLine();
+    //        return roomListUser;
+    //    }
+    //    else
+    //    {
+    //        PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
+    //        return null;
+    //    }
+    //}
+
+    public static List<string> RoomsList(Guid userId, string utilizador)
+    {
+        var user = User.users.FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null || user.Residence == null)
+        {
+            PrintErrorMessage("Utilizador ou residência não encontrado.");
+            WaitForUser();
+            return new List<string>();
+        }
+
+        List<string> roomDetails = new List<string>();
+        DateTime currentDate = DateTime.Now;
+
+        if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+        {
+            foreach (var floor in user.Residence.ResidenceFloors)
+            {
+                if (floor.Rooms != null && floor.Rooms.Count > 0)
+                {
+                    foreach (var room in floor.Rooms)
+                    {
+                        if (room.DayClean != null)
+                        {
+                            DateTime nextCleanDate = room.DayClean.Value.AddDays(room.CleanInterval);
+                            roomDetails.Add($"{room.RoomName} - Vencimento próxima limpeza: {nextCleanDate:dd/MM/yyyy}");
+                        }
+                        else
+                        {
+                            roomDetails.Add($"{room.RoomName} - A primeira limpeza ainda não foi realizada.");
+                        }
+                    }
+                }
+            }
+        }
+
+        return roomDetails;
+    }
 
 
 }

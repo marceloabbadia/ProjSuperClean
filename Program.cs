@@ -360,10 +360,12 @@ public class Program
 
                 case 4:
                    AddRoomUser(userId, utilizador);
+                    WaitForUser();
                     break;
 
                 case 5:
                     DeleteRoomUser(userId, utilizador);
+                    WaitForUser();
                     break;
 
                 case 6:

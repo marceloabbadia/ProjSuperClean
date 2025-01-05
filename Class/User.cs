@@ -90,12 +90,12 @@ public class User
         while (true)
         {
             string residenceName = UserGetResidenceName(username);
-            if (residenceName == null) return null; 
+            if (residenceName == null) return null;
 
             User newUser = new(username);
             Residence residence = new(residenceName);
 
-            if (!UserAddFloorsToResidence(residence)) return null; 
+            if (!UserAddFloorsToResidence(residence)) return null;
 
             newUser.Residence = residence;
             users.Add(newUser);
@@ -105,7 +105,7 @@ public class User
             return newUser;
         }
     }
-    
+
     //Complemento do CreateUser para Residencia
     private static string UserGetResidenceName(string username)
     {
@@ -144,7 +144,7 @@ Informe o nome da residência para o utilizador '{username}':
             return residenceName;
         }
     }
-    
+
     //Complemento do CreateUser para Pisos(Floor)
     private static bool UserAddFloorsToResidence(Residence residence)
     {
@@ -225,22 +225,30 @@ Informe o nome da divisão no piso {floorName}:
 
             if (string.IsNullOrEmpty(decisionCleaning))
             {
-                Utils.PrintErrorMessage("O resposta da limpeza precisa ser sim ou não.");
+                Utils.PrintErrorMessage("A resposta da limpeza precisa ser 'sim' ou 'não'.");
                 continue;
             }
 
-
             DateTime? firstCleaning = null;
 
-            if (decisionCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase))
+            if (decisionCleaning.Equals("sim", StringComparison.OrdinalIgnoreCase) ||
+               decisionCleaning.Equals("s", StringComparison.OrdinalIgnoreCase) ||
+               decisionCleaning.Equals("sin", StringComparison.OrdinalIgnoreCase))
             {
                 firstCleaning = DateTime.Now;
             }
-            else if (!decisionCleaning.Equals("não", StringComparison.OrdinalIgnoreCase) && !decisionCleaning.Equals("nao", StringComparison.OrdinalIgnoreCase))
+            else if (decisionCleaning.Equals("não", StringComparison.OrdinalIgnoreCase) ||
+                     decisionCleaning.Equals("nao", StringComparison.OrdinalIgnoreCase) ||
+                    decisionCleaning.Equals("n", StringComparison.OrdinalIgnoreCase))
+            {
+                firstCleaning = null;
+            }
+            else
             {
                 Utils.PrintErrorMessage("Resposta inválida. Digite 'sim' ou 'não'.");
                 continue;
             }
+
 
             Room room = new Room(roomName, cleanTime, cleanInterval, firstCleaning);
             floor.FloorAddRoom(room);
@@ -317,13 +325,14 @@ Informe o nome da divisão no piso {floorName}:
     }
 
 
-    //Simulador de datas de limpeza do utilizador- consolida com os PIPES
+    //Simulador de datas de limpeza de todos utilizadores - consolida com os UserDisplayRooms
     public static void DisplayInfoUser(Guid userId, string username)
     {
         var user = users.FirstOrDefault(u =>
-       (userId != Guid.Empty && u.UserId == userId) ||
-       (userId == Guid.Empty && string.Equals(u.Username, username, StringComparison.Ordinal))
-   );
+            (userId != Guid.Empty && u.UserId == userId) ||
+            (userId == Guid.Empty && string.Equals(u.Username, username, StringComparison.Ordinal))
+        );
+
         if (user != null)
         {
             DateTime today = DateTime.Today;
@@ -335,53 +344,73 @@ Informe o nome da divisão no piso {floorName}:
             Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
             Console.WriteLine();
             Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
-            int counter = 1;
+            Console.WriteLine();
 
+            var roomsWithCleaning = new List<(string FloorName, Room Room)>();
+            var roomsWithoutCleaning = new List<(string FloorName, Room Room)>();
 
-            if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+            foreach (var floor in user.Residence.ResidenceFloors)
             {
-
-                foreach (var floor in user.Residence.ResidenceFloors)
+                foreach (var room in floor.Rooms)
                 {
-                    Console.WriteLine($"\t - Piso: {floor.FloorName}");
-
-                    if (floor.Rooms != null && floor.Rooms.Count > 0)
+                    if (room.FirstCleaning.HasValue)
                     {
-                        foreach (var room in floor.Rooms)
-                        {
-                            string counterFormatted = counter.ToString("D2");
-                            string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
-                            counter++;
-
-                            int[] pipes = Room.GenerationPypes(room, today);
-                            int greenPipe = pipes[0];
-                            int yellowPipe = pipes[1];
-                            int redPipe = pipes[2];
-
-                            string greenBars = new string('|', greenPipe);
-                            string yellowBars = new string('|', yellowPipe);
-                            string redBars = new string('|', redPipe);
-
-                            Console.Write($"\t\t{roomInfo}\t");
-
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(greenBars);
-
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(yellowBars);
-
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(redBars);
-
-                            Console.ResetColor();
-                        }
+                        roomsWithCleaning.Add((floor.FloorName, room));
+                    }
+                    else
+                    {
+                        roomsWithoutCleaning.Add((floor.FloorName, room));
                     }
                 }
             }
 
+            if (roomsWithCleaning.Any())
+            {
+                foreach (var (floorName, room) in roomsWithCleaning)
+                {
+                    Console.WriteLine($"\t- Piso: {floorName}, Quarto: {room.RoomName}, Primeira Limpeza: {room.FirstCleaning.Value.ToShortDateString()}");
+                }
+                Console.WriteLine();
+            }
+
+            int counter = 1;
+            foreach (var floor in user.Residence.ResidenceFloors)
+            {
+                Console.WriteLine($"\t- Piso: {floor.FloorName}");
+
+                foreach (var room in floor.Rooms)
+                {
+                    string counterFormatted = counter.ToString("D2");
+                    string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+
+                    int[] pipes = Room.GenerationPypes(room, today);
+                    int greenPipe = pipes[0];
+                    int yellowPipe = pipes[1];
+                    int redPipe = pipes[2];
+
+                    string greenBars = new string('|', greenPipe);
+                    string yellowBars = new string('|', yellowPipe);
+                    string redBars = new string('|', redPipe);
+
+                    Console.Write($"\t\t{roomInfo}\t");
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(greenBars);
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(yellowBars);
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(redBars);
+
+                    Console.ResetColor();
+                    counter++;
+                }
+            }
+
             Console.WriteLine();
-            Console.WriteLine("Pressione qualquer uma das setas do teclado (<- ou ->) para iniciar o simulador da datas!");
-            Console.WriteLine("Pressione 'Enter' para finalizar.");
+            Console.WriteLine("Pressione as setas do teclado (<- ou ->) para avançar ou retroceder um dia.");
+            Console.WriteLine("Pressione 'Enter' para finalizar o simulador.");
 
             while (true)
             {
@@ -408,56 +437,53 @@ Informe o nome da divisão no piso {floorName}:
                 Console.WriteLine();
                 Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
 
-                counter = 1;
+                Console.WriteLine();
 
-                foreach (var floor in user.Residence.ResidenceFloors)
+                foreach (var (floorName, room) in roomsWithCleaning)
                 {
-                    Console.WriteLine($"\t - Piso: {floor.FloorName}");
-
-                    if (floor.Rooms != null && floor.Rooms.Count > 0)
-                    {
-                        foreach (var room in floor.Rooms)
-                        {
-                            string counterFormatted = counter.ToString("D2");
-                            string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
-                            counter++;
-
-                            int[] pipes = Room.GenerationPypes(room, today);
-                            int greenPipe = pipes[0];
-                            int yellowPipe = pipes[1];
-                            int redPipe = pipes[2];
-
-                            string greenBars = new string('|', greenPipe);
-                            string yellowBars = new string('|', yellowPipe);
-                            string redBars = new string('|', redPipe);
-
-                            Console.Write($"\t\t{roomInfo}\t");
-
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(greenBars);
-
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(yellowBars);
-
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(redBars);
-
-                            Console.ResetColor();
-                        }
-                    }
+                    Console.WriteLine($"\t- Piso: {floorName}, Quarto: {room.RoomName}, Primeira Limpeza: {room.FirstCleaning.Value.ToShortDateString()}");
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("Pressione a seta para a | direita  (->) | para avançar um dia");
-                Console.WriteLine("Pressione a seta para a | esquerda (<-) | para retroceder um dia.");
-                Console.WriteLine("Pressione 'Enter' para finalizar o simulador.");
-            }
+                counter = 1;
+                foreach (var floor in user.Residence.ResidenceFloors)
+                {
+                    Console.WriteLine($"\t- Piso: {floor.FloorName}");
+                    foreach (var room in floor.Rooms)
+                    {
+                        string counterFormatted = counter.ToString("D2");
+                        string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
 
+                        int[] pipes = Room.GenerationPypes(room, today);
+                        int greenPipe = pipes[0];
+                        int yellowPipe = pipes[1];
+                        int redPipe = pipes[2];
+
+                        string greenBars = new string('|', greenPipe);
+                        string yellowBars = new string('|', yellowPipe);
+                        string redBars = new string('|', redPipe);
+
+                        Console.Write($"\t\t{roomInfo}\t");
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write(greenBars);
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(yellowBars);
+
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(redBars);
+
+                        Console.ResetColor();
+                        counter++;
+                    }
+                }
+            }
         }
     }
 
 
-    //Simulador de datas de limpeza de todos utilizadores - consolida com os PIPES
+
     public static void DisplayInfoCompleteAdmin()
     {
         DateTime today = DateTime.Today;
@@ -701,4 +727,154 @@ Informe o nome da divisão no piso {floorName}:
 
 
 }
+
+//Simulador de datas de limpeza do utilizador- consolida com os PIPES
+// public static void DisplayInfoUser(Guid userId, string username)
+// {
+//     var user = users.FirstOrDefault(u =>
+//    (userId != Guid.Empty && u.UserId == userId) ||
+//    (userId == Guid.Empty && string.Equals(u.Username, username, StringComparison.Ordinal))
+//);
+//     if (user != null)
+//     {
+//         DateTime today = DateTime.Today;
+//         Console.Clear();
+
+//         Utils.Title("SIMULADOR DE DATAS SUPER CLEAN");
+//         Console.WriteLine();
+
+//         Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
+//         Console.WriteLine();
+//         Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
+//         int counter = 1;
+
+
+//         if (user.Residence?.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
+//         {
+
+//             foreach (var floor in user.Residence.ResidenceFloors)
+//             {
+//                 Console.WriteLine($"\t - Piso: {floor.FloorName}");
+
+//                 if (floor.Rooms != null && floor.Rooms.Count > 0)
+//                 {
+//                     foreach (var room in floor.Rooms)
+//                     {
+//                         if (room.FirstCleaning != null)
+//                         {
+//                             string counterFormatted = counter.ToString("D2");
+//                             string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+
+//                             int[] pipes = Room.GenerationPypes(room, today);
+//                             int greenPipe = pipes[0];
+//                             int yellowPipe = pipes[1];
+//                             int redPipe = pipes[2];
+
+//                             string greenBars = new string('|', greenPipe);
+//                             string yellowBars = new string('|', yellowPipe);
+//                             string redBars = new string('|', redPipe);
+
+//                             Console.Write($"\t\t{roomInfo}\t");
+
+//                             Console.ForegroundColor = ConsoleColor.Green;
+//                             Console.Write(greenBars);
+
+//                             Console.ForegroundColor = ConsoleColor.Yellow;
+//                             Console.Write(yellowBars);
+
+//                             Console.ForegroundColor = ConsoleColor.Red;
+//                             Console.WriteLine(redBars);
+
+//                             Console.ResetColor();
+//                         }
+//                         else
+//                         {
+//                             string counterFormatted = counter.ToString("D2");
+//                             string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+
+
+//                         }
+//                         counter++;
+
+//                     }
+//                 }
+//             }
+//         }
+
+//         Console.WriteLine();
+//         Console.WriteLine("Pressione qualquer uma das setas do teclado (<- ou ->) para iniciar o simulador da datas!");
+//         Console.WriteLine("Pressione 'Enter' para finalizar.");
+
+//         while (true)
+//         {
+//             var key = Console.ReadKey(true).Key;
+
+//             if (key == ConsoleKey.RightArrow)
+//             {
+//                 today = today.AddDays(1);
+//             }
+//             else if (key == ConsoleKey.LeftArrow)
+//             {
+//                 today = today.AddDays(-1);
+//             }
+//             else if (key == ConsoleKey.Enter)
+//             {
+//                 break;
+//             }
+
+//             Console.Clear();
+//             Utils.Title("SIMULADOR DE DATAS SUPER CLEAN");
+//             Console.WriteLine();
+//             Console.WriteLine($"Dia atual: {today.ToShortDateString()}");
+//             Console.WriteLine($"Utilizador: {user.Username}, Id: {user.UserId}");
+//             Console.WriteLine();
+//             Console.WriteLine($"Nome da residência: {user.Residence?.ResidenceName}");
+
+//             counter = 1;
+
+//             foreach (var floor in user.Residence.ResidenceFloors)
+//             {
+//                 Console.WriteLine($"\t - Piso: {floor.FloorName}");
+
+//                 if (floor.Rooms != null && floor.Rooms.Count > 0)
+//                 {
+//                     foreach (var room in floor.Rooms)
+//                     {
+//                         string counterFormatted = counter.ToString("D2");
+//                         string roomInfo = $" - {counterFormatted} {room.RoomName}".PadRight(20);
+//                         counter++;
+
+//                         int[] pipes = Room.GenerationPypes(room, today);
+//                         int greenPipe = pipes[0];
+//                         int yellowPipe = pipes[1];
+//                         int redPipe = pipes[2];
+
+//                         string greenBars = new string('|', greenPipe);
+//                         string yellowBars = new string('|', yellowPipe);
+//                         string redBars = new string('|', redPipe);
+
+//                         Console.Write($"\t\t{roomInfo}\t");
+
+//                         Console.ForegroundColor = ConsoleColor.Green;
+//                         Console.Write(greenBars);
+
+//                         Console.ForegroundColor = ConsoleColor.Yellow;
+//                         Console.Write(yellowBars);
+
+//                         Console.ForegroundColor = ConsoleColor.Red;
+//                         Console.WriteLine(redBars);
+
+//                         Console.ResetColor();
+//                     }
+//                 }
+//             }
+
+//             Console.WriteLine();
+//             Console.WriteLine("Pressione a seta para a | direita  (->) | para avançar um dia");
+//             Console.WriteLine("Pressione a seta para a | esquerda (<-) | para retroceder um dia.");
+//             Console.WriteLine("Pressione 'Enter' para finalizar o simulador.");
+//         }
+
+//     }
+// }
 
