@@ -224,31 +224,30 @@ public class Room
             DateTime dayClean = room.DayClean.Value;
             int daysSinceClean = (today - dayClean).Days;
 
-            // Limitar o número de barras a no máximo 20
+            
             int totalBars = Math.Min(Math.Abs(daysSinceClean), 20);
 
-            // Se ainda está dentro do intervalo de limpeza (verde)
+           
             if (daysSinceClean <= room.CleanInterval - 1)
             {
-                greenPipe = totalBars;  // Toda a barra é verde
+                greenPipe = totalBars;  
             }
-            // Se está entre 1 dia antes da limpeza e 2 dias após (amarelo)
+            
             else if (daysSinceClean >= room.CleanInterval - 1 && daysSinceClean <= room.CleanInterval + 2)
             {
-                greenPipe = room.CleanInterval - 1;  // Deixa a quantidade de verde até o intervalo de limpeza
-                yellowPipe = daysSinceClean - (room.CleanInterval - 1); // As amarelas vão crescendo de 1 até 4
+                greenPipe = room.CleanInterval - 1;  
+                yellowPipe = daysSinceClean - (room.CleanInterval - 1); 
             }
-            // Se passou mais de 2 dias da data prevista de limpeza (vermelho)
+           
             else
             {
-                greenPipe = room.CleanInterval - 1;  // Deixa o verde fixo até o intervalo de limpeza
-                yellowPipe = 4; // Máximo de 4 amarelas (depois do intervalo, as amarelas desaparecem)
+                greenPipe = room.CleanInterval - 1;  
+                yellowPipe = 4; 
 
-                // Começa a preencher com vermelho depois das 4 amarelas
+             
                 redPipe = totalBars - (greenPipe + yellowPipe);
             }
 
-            // Garantir que as barras não sejam negativas
             greenPipe = Math.Max(0, greenPipe);
             yellowPipe = Math.Max(0, yellowPipe);
             redPipe = Math.Max(0, redPipe);
@@ -583,71 +582,6 @@ public class Room
     }
 
 
-
-    //public static List<string> RoomsList(Guid userId, string utilizador)
-    //{
-    //    var user = User.users.FirstOrDefault(u => u.UserId == userId);
-
-    //    if (user == null || user.Residence == null)
-    //    {
-    //        PrintErrorMessage("Utilizador ou residência não encontrado.");
-    //        WaitForUser();
-    //        return null;
-    //    }
-
-    //    List<string> roomListUser = new List<string>();
-
-    //    Console.Clear();
-
-    //    Title($"Listagem de Áreas - Utilizador: {utilizador}");
-    //    Console.WriteLine();
-
-    //    DateTime currentDate = DateTime.Now;
-    //    int counter = 1;
-
-    //    if (user.Residence.ResidenceFloors != null && user.Residence.ResidenceFloors.Count > 0)
-    //    {
-    //        foreach (var floor in user.Residence.ResidenceFloors)
-    //        {
-    //            Console.WriteLine($"> Piso: {floor.FloorName}");
-    //            Console.WriteLine();
-
-    //            if (floor.Rooms != null && floor.Rooms.Count > 0)
-    //            {
-    //                var sortedRooms = floor.Rooms.OrderBy(room =>
-    //                {
-    //                    DateTime lastCleanDate = (DateTime)room.DayClean;
-    //                    int cleaningFrequency = room.CleanInterval;
-    //                    DateTime nextCleaningDate = lastCleanDate.AddDays(cleaningFrequency);
-    //                    return (nextCleaningDate - currentDate).Days;
-    //                }).ToList();
-
-    //                foreach (var room in sortedRooms)
-    //                {
-    //                    string counterFormatted = counter.ToString("D2");
-    //                    DateTime nextCleaningDate = room.DayClean.Value.AddDays(room.CleanInterval);
-    //                    roomListUser.Add($"   {counterFormatted} - {room.RoomName} - Vencimento próxima limpeza: {nextCleaningDate.ToShortDateString()}");
-    //                    counter++;
-    //                }
-    //            }
-    //            else
-    //            {
-    //                roomListUser.Add("   Nenhuma área cadastrada neste piso.");
-    //            }
-
-    //            Console.WriteLine();
-    //        }
-
-    //        PrintSucessMessage("Fim da listagem das áreas.");
-    //        Console.WriteLine();
-    //        return roomListUser;
-    //    }
-    //    else
-    //    {
-    //        PrintErrorMessage("Nenhum piso ou área cadastrada na residência.");
-    //        return null;
-    //    }
-    //}
 
     public static List<string> RoomsList(Guid userId, string utilizador)
     {
