@@ -44,7 +44,7 @@ identificado pelo identificador do utilizador.
 anterior, usando as setas direcionais para a esquerda e direita. A representação deverá adaptar
 se corretamente de acordo com a data selecionada. 
 
-() R11 – Disponibilize uma vista que permita listar todas divisões, por ordem de necessidade de 
+(X) R11 – Disponibilize uma vista que permita listar todas divisões, por ordem de necessidade de 
 limpeza.
 
 Como entregar o projeto 

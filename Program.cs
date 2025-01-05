@@ -375,47 +375,6 @@ public class Program
         }
     }
 
-
-    public static void MainMenuAdmin()
-    {
-        Title("MENU ADMIN SUPER CLEAN");
-        Console.WriteLine();
-
-        while (true)
-        {
-
-            Console.WriteLine("Escolha uma opcao abaixo:");
-
-            Console.WriteLine("1 - Listagem completa");
-            Console.WriteLine("2 - Sair");
-
-
-
-            switch (GetOption(1, 2))
-            {
-                case 1:
-                    Console.Clear();
-                    DisplayInfoCompleteAdmin();
-                    Console.WriteLine();
-                    PrintSucessMessage("Listagem de Utilizadores criada com sucesso!");
-                    WaitForUser();
-                    break;
-
-                case 2:
-                    Console.Clear();
-                    Console.Write("Saindo...");
-                    Thread.Sleep(1000);
-                    Console.Write(".....");
-                    Thread.Sleep(1000);
-                    Console.Write("........");
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                    HeaderProgramUserStart();
-                    break;
-            }
-        }
-    }
-
 }
 
 

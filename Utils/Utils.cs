@@ -93,10 +93,16 @@ public static class Utils
     {
         while (true)
         {
-
             if (int.TryParse(Console.ReadLine(), out int result))
             {
-                return result;
+                if (result > 0)
+                {
+                    return result;
+                }
+                else
+                {
+                    Utils.PrintErrorMessage("O número deve ser maior que 0.");
+                }
             }
             else
             {
@@ -105,28 +111,34 @@ public static class Utils
         }
     }
 
+
     //Validacao do input para Floor
     public static string GetValidFloorInput(string input, out string errorMessage)
     {
-        errorMessage = null; 
+        errorMessage = null;
 
         while (true)
         {
             if (string.IsNullOrEmpty(input))
             {
                 errorMessage = "O piso não pode ser vazio.";
-                return null; 
+                return null;
             }
 
             if (input.Length != 2)
             {
                 errorMessage = "O número da área (piso) deve ter exatamente 2 dígitos.";
-                return null; 
+                return null;
             }
 
-            
+            if (!int.TryParse(input, out _))
+            {
+                errorMessage = "O número do piso deve ser composto apenas por 2 números.";
+                return null;
+            }
+
             errorMessage = null;
-            return input; 
+            return input;
         }
     }
 
@@ -145,25 +157,23 @@ public static class Utils
     public static string GetValidRoomInput(string input, out string errorMessage)
     {
 
-        while (true)
+        if (string.IsNullOrEmpty(input))
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                errorMessage = "O nome da divisão não pode estar vazio.";
-                return null;
-            }
-
-            if (input.Length > 10)
-            {
-                errorMessage = "O nome da divisão deve ter no máximo 10 caracteres.";
-                return null;
-            }
-
-
-            errorMessage = null;
-            return input;
+            errorMessage = "O nome da divisão não pode estar vazio.";
+            return null;
         }
+
+        if (input.Length > 10)
+        {
+            errorMessage = "O nome da divisão deve ter no máximo 10 caracteres.";
+            return null;
+        }
+
+
+        errorMessage = null;
+        return input;
+
     }
-        
+
 
 }
